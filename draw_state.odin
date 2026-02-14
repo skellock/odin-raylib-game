@@ -2,13 +2,11 @@ package main
 
 import rl "vendor:raylib"
 
-@(private)
+@(private = "file")
 NORMAL_DOT_SIZE :: 10.0
-
-@(private)
+@(private = "file")
 BIG_DOT_SIZE :: 20.0
-
-@(private)
+@(private = "file")
 DOT_GROW_SPEED :: 10.0
 
 DrawState :: struct {
