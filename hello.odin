@@ -29,9 +29,8 @@ draw :: proc(state: ^GameState, input: Input) {
 	rl.ClearBackground(rl.SKYBLUE)
 
 	x := input.screen_width / 2
-	sh := input.screen_height
-	rl.DrawRectangle(0, 0, x, sh, rl.BLUE)
-	rl.DrawRectangle(x - 1, 0, 2, sh, rl.ColorAlpha(rl.WHITE, 0.5))
+	rl.DrawRectangle(0, 0, x, input.screen_height, rl.BLUE)
+	rl.DrawRectangle(x - 1, 0, 2, input.screen_height, rl.ColorAlpha(rl.WHITE, 0.5))
 
 	rl.DrawText("This is a test using Odin and Raylib!", 10, 10, 20, rl.WHITE)
 
