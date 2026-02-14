@@ -4,6 +4,8 @@ import rl "vendor:raylib"
 
 main :: proc() {
 	state := GameState{}
+	reset_game(&state)
+
 	input: Input
 	rl.InitWindow(1024, 768, "OdinRaylib")
 	rl.SetTargetFPS(60)
@@ -13,14 +15,9 @@ main :: proc() {
 		free_all(context.temp_allocator)
 
 		process_input(&input)
-
-		update(&state, input)
+		update_game(&state, input)
 		draw(&state, input)
 	}
-}
-
-update :: proc(state: ^GameState, input: Input) {
-	state.big = input.mouse_x < input.screen_width / 2
 }
 
 draw :: proc(state: ^GameState, input: Input) {
@@ -34,7 +31,16 @@ draw :: proc(state: ^GameState, input: Input) {
 
 	rl.DrawText("This is a test using Odin and Raylib!", 10, 10, 20, rl.WHITE)
 
-	rl.DrawCircle(input.mouse_x, input.mouse_y, state.big ? 20 : 10, rl.YELLOW)
+	dot_color: rl.Color
+	switch state.color {
+	case .Red:
+		dot_color = rl.RED
+	case .Green:
+		dot_color = rl.GREEN
+	case .Yellow:
+		dot_color = rl.YELLOW
+	}
+	rl.DrawCircle(input.mouse_x, input.mouse_y, state.big ? 20 : 10, dot_color)
 
 	draw_debug(input)
 }
