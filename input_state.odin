@@ -2,7 +2,7 @@ package main
 
 import rl "vendor:raylib"
 
-Input :: struct {
+InputState :: struct {
 	mouse_x:            i32,
 	mouse_y:            i32,
 	screen_width:       i32,
@@ -11,8 +11,8 @@ Input :: struct {
 	delta:              f32,
 }
 
-process_input :: proc(input: ^Input) {
-	input^ = Input {
+update_input_state :: proc(input_state: ^InputState) {
+	input_state^ = InputState {
 		mouse_x            = rl.GetMouseX(),
 		mouse_y            = rl.GetMouseY(),
 		screen_width       = rl.GetScreenWidth(),

@@ -24,7 +24,7 @@ reset_game_state :: proc(state: ^GameState) {
 	}
 }
 
-update_game_state :: proc(state: ^GameState, input: ^Input) {
+update_game_state :: proc(state: ^GameState, input: ^InputState) {
 	state.big = input.mouse_x < input.screen_width / 2
 
 	if input.left_mouse_pressed {
