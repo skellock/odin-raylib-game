@@ -6,7 +6,7 @@ main :: proc() {
 	// setup state
 	game_state := new_game_state()
 	draw_state := new_draw_state()
-	input_state: InputState
+	input_state := new_input_state()
 
 	// setup raylib
 	rl.InitWindow(1024, 768, "OdinRaylib")

@@ -11,6 +11,10 @@ InputState :: struct {
 	delta:              f32,
 }
 
+new_input_state :: proc() -> InputState {
+	return InputState{}
+}
+
 update_input_state :: proc(input_state: ^InputState) {
 	input_state^ = InputState {
 		mouse_x            = rl.GetMouseX(),
