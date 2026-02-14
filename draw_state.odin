@@ -20,11 +20,9 @@ reset_draw_state :: proc(draw_state: ^DrawState) {
 }
 
 update_draw_state :: proc(draw_state: ^DrawState, game_state: ^GameState, input: ^Input) {
-	draw_state^ = DrawState {
-		current_dot_size = rl.Lerp(
-			draw_state.current_dot_size,
-			game_state.big ? NORMAL_DOT_SIZE : BIG_DOT_SIZE,
-			DOT_GROW_SPEED * input.delta,
-		),
-	}
+	draw_state.current_dot_size = rl.Lerp(
+		draw_state.current_dot_size,
+		game_state.big ? NORMAL_DOT_SIZE : BIG_DOT_SIZE,
+		DOT_GROW_SPEED * input.delta,
+	)
 }
