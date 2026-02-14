@@ -10,6 +10,7 @@ main :: proc() {
 	defer rl.CloseWindow()
 
 	for !rl.WindowShouldClose() {
+		free_all(context.temp_allocator)
 		update()
 		draw()
 	}
