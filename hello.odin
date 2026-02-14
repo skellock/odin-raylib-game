@@ -20,11 +20,11 @@ main :: proc() {
 		process_input(&input)
 		update_game(&game_state, &input)
 		update_draw_state(&draw_state, &game_state, &input)
-		draw(&game_state, &draw_state, &input)
+		draw(&draw_state, &game_state, &input)
 	}
 }
 
-draw :: proc(game_state: ^GameState, draw_state: ^DrawState, input: ^Input) {
+draw :: proc(draw_state: ^DrawState, game_state: ^GameState, input: ^Input) {
 	rl.BeginDrawing()
 	defer rl.EndDrawing()
 	rl.ClearBackground(rl.SKYBLUE)
@@ -35,12 +35,13 @@ draw :: proc(game_state: ^GameState, draw_state: ^DrawState, input: ^Input) {
 
 	rl.DrawText("This is a test using Odin and Raylib!", 10, 10, 20, rl.WHITE)
 
-	draw_dot(game_state, draw_state, input)
+	draw_dot(draw_state, game_state, input)
 	draw_debug(input)
 }
 
-draw_dot :: proc(game_state: ^GameState, draw_state: ^DrawState, input: ^Input) {
+draw_dot :: proc(draw_state: ^DrawState, game_state: ^GameState, input: ^Input) {
 	dot_color: rl.Color
+
 	switch game_state.color {
 	case .Red:
 		dot_color = rl.RED
