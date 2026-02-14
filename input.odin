@@ -9,7 +9,7 @@ Input :: struct {
 	screen_height: i32,
 }
 
-process_user_input :: proc(input: ^Input) {
+process_input :: proc(input: ^Input) {
 	input^ = Input {
 		mouse_x       = rl.GetMouseX(),
 		mouse_y       = rl.GetMouseY(),

@@ -12,7 +12,7 @@ main :: proc() {
 	for !rl.WindowShouldClose() {
 		free_all(context.temp_allocator)
 
-		process_user_input(&input)
+		process_input(&input)
 
 		update(&state, input)
 		draw(&state, input)
