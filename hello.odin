@@ -3,8 +3,11 @@ package main
 import rl "vendor:raylib"
 
 main :: proc() {
-	state := GameState{}
-	reset_game(&state)
+	game_state := GameState{}
+	reset_game(&game_state)
+
+	draw_state := DrawState{}
+	reset_draw_state(&draw_state)
 
 	input: Input
 	rl.InitWindow(1024, 768, "OdinRaylib")
@@ -15,12 +18,13 @@ main :: proc() {
 		free_all(context.temp_allocator)
 
 		process_input(&input)
-		update_game(&state, input)
-		draw(&state, input)
+		update_game(&game_state, &input)
+		update_draw_state(&draw_state, &game_state, &input)
+		draw(&game_state, &draw_state, &input)
 	}
 }
 
-draw :: proc(state: ^GameState, input: Input) {
+draw :: proc(game_state: ^GameState, draw_state: ^DrawState, input: ^Input) {
 	rl.BeginDrawing()
 	defer rl.EndDrawing()
 	rl.ClearBackground(rl.SKYBLUE)
@@ -31,8 +35,13 @@ draw :: proc(state: ^GameState, input: Input) {
 
 	rl.DrawText("This is a test using Odin and Raylib!", 10, 10, 20, rl.WHITE)
 
+	draw_dot(game_state, draw_state, input)
+	draw_debug(input)
+}
+
+draw_dot :: proc(game_state: ^GameState, draw_state: ^DrawState, input: ^Input) {
 	dot_color: rl.Color
-	switch state.color {
+	switch game_state.color {
 	case .Red:
 		dot_color = rl.RED
 	case .Green:
@@ -40,7 +49,6 @@ draw :: proc(state: ^GameState, input: Input) {
 	case .Yellow:
 		dot_color = rl.YELLOW
 	}
-	rl.DrawCircle(input.mouse_x, input.mouse_y, state.big ? 20 : 10, dot_color)
 
-	draw_debug(input)
+	rl.DrawCircle(input.mouse_x, input.mouse_y, draw_state.current_dot_size, dot_color)
 }

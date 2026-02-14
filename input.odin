@@ -8,6 +8,7 @@ Input :: struct {
 	screen_width:       i32,
 	screen_height:      i32,
 	left_mouse_pressed: bool,
+	delta:              f32,
 }
 
 process_input :: proc(input: ^Input) {
@@ -17,5 +18,6 @@ process_input :: proc(input: ^Input) {
 		screen_width       = rl.GetScreenWidth(),
 		screen_height      = rl.GetScreenHeight(),
 		left_mouse_pressed = rl.IsMouseButtonPressed(.LEFT),
+		delta              = rl.GetFrameTime(),
 	}
 }
