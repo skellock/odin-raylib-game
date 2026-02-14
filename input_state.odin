@@ -16,12 +16,10 @@ new_input_state :: proc() -> InputState {
 }
 
 update_input_state :: proc(input_state: ^InputState) {
-	input_state^ = InputState {
-		mouse_x            = rl.GetMouseX(),
-		mouse_y            = rl.GetMouseY(),
-		screen_width       = rl.GetScreenWidth(),
-		screen_height      = rl.GetScreenHeight(),
-		left_mouse_pressed = rl.IsMouseButtonPressed(.LEFT),
-		delta              = rl.GetFrameTime(),
-	}
+	input_state.mouse_x = rl.GetMouseX()
+	input_state.mouse_y = rl.GetMouseY()
+	input_state.screen_width = rl.GetScreenWidth()
+	input_state.screen_height = rl.GetScreenHeight()
+	input_state.left_mouse_pressed = rl.IsMouseButtonPressed(.LEFT)
+	input_state.delta = rl.GetFrameTime()
 }
