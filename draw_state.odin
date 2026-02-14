@@ -1,6 +1,6 @@
 package main
 
-import rl "vendor:raylib"
+import "core:math"
 
 @(private = "file")
 NORMAL_DOT_SIZE :: 10.0
@@ -30,7 +30,7 @@ update_draw_state :: proc(
 	game_state: ^GameState,
 	input_state: ^InputState,
 ) {
-	draw_state.current_dot_size = rl.Lerp(
+	draw_state.current_dot_size = math.lerp(
 		draw_state.current_dot_size,
 		game_state.big ? NORMAL_DOT_SIZE : BIG_DOT_SIZE,
 		DOT_GROW_SPEED * input_state.delta,
