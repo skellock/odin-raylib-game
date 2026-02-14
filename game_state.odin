@@ -11,14 +11,20 @@ GameState :: struct {
 	color: DotColor,
 }
 
-reset_game :: proc(state: ^GameState) {
+new_game_state :: proc() -> GameState {
+	state := GameState{}
+	reset_game_state(&state)
+	return state
+}
+
+reset_game_state :: proc(state: ^GameState) {
 	state^ = GameState {
 		big   = false,
 		color = DotColor.Yellow,
 	}
 }
 
-update_game :: proc(state: ^GameState, input: ^Input) {
+update_game_state :: proc(state: ^GameState, input: ^Input) {
 	state.big = input.mouse_x < input.screen_width / 2
 
 	if input.left_mouse_pressed {
