@@ -18,10 +18,8 @@ new_game_state :: proc() -> GameState {
 }
 
 reset_game_state :: proc(state: ^GameState) {
-	state^ = GameState {
-		big   = false,
-		color = .Yellow,
-	}
+	state.big = false
+	state.color = .Yellow
 }
 
 update_game_state :: proc(game: ^GameState, input: ^InputState) {
