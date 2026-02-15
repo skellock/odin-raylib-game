@@ -1,0 +1,5 @@
+package main
+
+DOT_GROW_SPEED :: 10.0
+NORMAL_DOT_SIZE :: 10.0
+BIG_DOT_SIZE :: 20.0

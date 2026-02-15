@@ -20,7 +20,7 @@ new_game_state :: proc() -> GameState {
 reset_game_state :: proc(state: ^GameState) {
 	state^ = GameState {
 		big   = false,
-		color = DotColor.Yellow,
+		color = .Yellow,
 	}
 }
 
