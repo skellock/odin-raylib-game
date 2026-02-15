@@ -4,9 +4,9 @@ import rl "vendor:raylib"
 
 main :: proc() {
 	// setup state
-	game_state := new_game_state()
-	draw_state := new_draw_state()
-	input_state := new_input_state()
+	game := new_game_state()
+	draw := new_draw_state()
+	input := new_input_state()
 
 	// setup raylib
 	rl.InitWindow(1024, 768, "OdinRaylib")
@@ -17,10 +17,11 @@ main :: proc() {
 	for !rl.WindowShouldClose() {
 		free_all(context.temp_allocator)
 
-		update_input_state(&input_state)
-		update_game_state(&game_state, &input_state)
-		update_draw_state(&draw_state, &game_state, &input_state)
+		update_input_state(&input)
+		update_game_state(&game, &input)
+		update_draw_state(&draw, &game, &input)
 
-		draw(&draw_state, &game_state, &input_state)
+		draw_game(&draw, &game, &input)
+		draw_debug(&input)
 	}
 }

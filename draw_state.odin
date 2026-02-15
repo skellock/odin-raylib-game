@@ -12,22 +12,18 @@ new_draw_state :: proc() -> DrawState {
 	return state
 }
 
-reset_draw_state :: proc(draw_state: ^DrawState) {
-	draw_state^ = DrawState{}
+reset_draw_state :: proc(draw: ^DrawState) {
+	draw^ = DrawState{}
 }
 
-update_draw_state :: proc(
-	draw_state: ^DrawState,
-	game_state: ^GameState,
-	input_state: ^InputState,
-) {
+update_draw_state :: proc(draw: ^DrawState, game: ^GameState, input: ^InputState) {
 	DOT_GROW_SPEED :: 10.0
 	NORMAL_DOT_SIZE :: 10.0
 	BIG_DOT_SIZE :: 20.0
 
-	draw_state.current_dot_size = math.lerp(
-		draw_state.current_dot_size,
-		game_state.big ? NORMAL_DOT_SIZE : BIG_DOT_SIZE,
-		DOT_GROW_SPEED * input_state.delta,
+	draw.current_dot_size = math.lerp(
+		draw.current_dot_size,
+		game.big ? NORMAL_DOT_SIZE : BIG_DOT_SIZE,
+		DOT_GROW_SPEED * input.delta,
 	)
 }

@@ -24,11 +24,11 @@ reset_game_state :: proc(state: ^GameState) {
 	}
 }
 
-update_game_state :: proc(state: ^GameState, input: ^InputState) {
-	state.big = input.mouse_x < input.screen_width / 2
+update_game_state :: proc(game: ^GameState, input: ^InputState) {
+	game.big = input.mouse.x < input.screen_width / 2
 
-	if input.left_mouse_pressed {
-		state.color = next_color(state.color)
+	if input.mouse.left_pressed {
+		game.color = next_color(game.color)
 	}
 }
 
