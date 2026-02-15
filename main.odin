@@ -9,8 +9,9 @@ main :: proc() {
 	input := new_input_state()
 
 	// setup raylib
-	rl.InitWindow(1024, 768, "OdinRaylib")
+	rl.SetTraceLogLevel(.NONE)
 	rl.SetTargetFPS(60)
+	rl.InitWindow(1024, 768, "OdinRaylib")
 	defer rl.CloseWindow()
 
 	// main loop
