@@ -47,6 +47,9 @@ update_dot_size :: proc(draw: ^DrawState, input: ^InputState) {
 @(private)
 update_dot_location :: proc(draw: ^DrawState, input: ^InputState) {
 	DURATION :: time.Millisecond * 500
-	_ = ease.flux_to(&draw.movements, &draw.dot_x, f32(input.mouse.x), duration = DURATION)
-	_ = ease.flux_to(&draw.movements, &draw.dot_y, f32(input.mouse.y), duration = DURATION)
+	EASE :: ease.Ease.Quadratic_Out
+	DELAY: f64 : 0
+
+	_ = ease.flux_to(&draw.movements, &draw.dot_x, f32(input.mouse.x), EASE, DURATION, DELAY)
+	_ = ease.flux_to(&draw.movements, &draw.dot_y, f32(input.mouse.y), EASE, DURATION, DELAY)
 }
