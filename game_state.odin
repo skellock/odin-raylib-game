@@ -7,7 +7,6 @@ DotColor :: enum {
 }
 
 GameState :: struct {
-	big:   bool,
 	color: DotColor,
 }
 
@@ -18,13 +17,10 @@ new_game_state :: proc() -> GameState {
 }
 
 reset_game_state :: proc(state: ^GameState) {
-	state.big = false
 	state.color = .Yellow
 }
 
 update_game_state :: proc(game: ^GameState, input: ^InputState) {
-	game.big = input.mouse.x < input.screen_width / 2
-
 	if input.mouse.left_pressed {
 		game.color = next_color(game.color)
 	}

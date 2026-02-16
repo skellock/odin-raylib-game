@@ -28,5 +28,5 @@ draw_dot :: proc(draw: ^DrawState, game: ^GameState, input: ^InputState) {
 		dot_color = rl.YELLOW
 	}
 
-	rl.DrawCircle(input.mouse.x, input.mouse.y, draw.current_dot_size, dot_color)
+	rl.DrawCircle(i32(draw.dot_x), i32(draw.dot_y), draw.current_dot_size, dot_color)
 }
