@@ -16,7 +16,7 @@ main :: proc() {
 
 	// main loop
 	for !rl.WindowShouldClose() {
-		free_all(context.temp_allocator)
+		defer free_all(context.temp_allocator)
 
 		update_input_state(&input)
 		update_game_state(&game, &input)
