@@ -13,7 +13,7 @@ main :: proc() {
 	rl.SetTargetFPS(500)
 
 	// setup window
-	rl.InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "OdinRaylib")
+	rl.InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Game")
 	defer rl.CloseWindow()
 
 	// main game loop -- continues until <esc> or window closed
