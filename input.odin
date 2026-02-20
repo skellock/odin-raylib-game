@@ -22,8 +22,8 @@ ViewportInput :: struct {
 }
 
 TimeInput :: struct {
-	dt:      f32, // The frame delta time as a f32
-	elapsed: f64,
+	dt:      f32, // the frame's delta time
+	elapsed: f64, // how long the game has been running
 }
 
 Input :: struct {
