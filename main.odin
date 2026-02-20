@@ -2,6 +2,11 @@ package main
 
 import rl "vendor:raylib"
 
+WINDOW_WIDTH :: 1024
+WINDOW_HEIGHT :: 1024
+VIEWPORT_WIDTH :: 512
+VIEWPORT_HEIGHT :: 512
+
 main :: proc() {
 	// setup raylib
 	rl.SetConfigFlags({.VSYNC_HINT})

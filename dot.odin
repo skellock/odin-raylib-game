@@ -5,6 +5,10 @@ import "core:math/ease"
 import "core:time"
 import rl "vendor:raylib"
 
+DOT_GROW_SPEED :: 10.0
+NORMAL_DOT_SIZE :: 4.0
+BIG_DOT_SIZE :: 10.0
+
 DotColor :: enum {
 	Yellow,
 	Red,
