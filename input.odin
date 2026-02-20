@@ -23,7 +23,7 @@ ViewportInput :: struct {
 TimeInput :: struct {
 	frame32: f32,
 	frame64: f64,
-	game:    f64,
+	elapsed: f64,
 }
 
 Input :: struct {
@@ -59,5 +59,5 @@ capture_input :: proc(game: ^Game, input: ^Input) {
 	// time
 	input.time.frame32 = rl.GetFrameTime()
 	input.time.frame64 = f64(input.time.frame32)
-	input.time.game = rl.GetTime()
+	input.time.elapsed = rl.GetTime()
 }
