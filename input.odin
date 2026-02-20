@@ -38,20 +38,25 @@ init_input :: proc() -> Input {
 }
 
 capture_input :: proc(game: ^Game, input: ^Input) {
+	// mouse coordinates
 	screen_pos := rl.GetMousePosition()
-	world_pos := rl.GetScreenToWorld2D(screen_pos, game.camera)
 	input.mouse.screen_x = i32(screen_pos.x)
 	input.mouse.screen_y = i32(screen_pos.y)
+
+	world_pos := rl.GetScreenToWorld2D(screen_pos, game.camera)
 	input.mouse.world_x = i32(world_pos.x)
 	input.mouse.world_y = i32(world_pos.y)
 
+	// button presses
 	input.mouse.left_pressed = rl.IsMouseButtonPressed(.LEFT)
 
+	// screen stuff
 	input.screen.width = rl.GetScreenWidth()
 	input.screen.height = rl.GetScreenHeight()
 	input.viewport.width = VIEWPORT_WIDTH
 	input.viewport.height = VIEWPORT_HEIGHT
 
+	// time
 	input.time.frame32 = rl.GetFrameTime()
 	input.time.frame64 = f64(input.time.frame32)
 	input.time.game = rl.GetTime()
