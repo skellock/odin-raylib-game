@@ -25,8 +25,11 @@ init_dot :: proc() -> Dot {
 
 update_dot :: proc(dot: ^Dot, input: ^Input) {
 	if input.mouse.left_pressed {
-		cycle_dot_color(dot)
 		move_dot_location(dot, input)
+	}
+
+	if input.mouse.right_pressed {
+		cycle_dot_color(dot)
 	}
 
 	update_dot_size(dot, input)

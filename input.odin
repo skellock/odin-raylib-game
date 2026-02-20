@@ -3,11 +3,12 @@ package main
 import rl "vendor:raylib"
 
 MouseInput :: struct {
-	screen_x:     i32,
-	screen_y:     i32,
-	world_x:      i32,
-	world_y:      i32,
-	left_pressed: bool,
+	screen_x:      i32,
+	screen_y:      i32,
+	world_x:       i32,
+	world_y:       i32,
+	left_pressed:  bool,
+	right_pressed: bool,
 }
 
 ScreenInput :: struct {
@@ -49,6 +50,7 @@ capture_input :: proc(game: ^Game, input: ^Input) {
 
 	// button presses
 	input.mouse.left_pressed = rl.IsMouseButtonPressed(.LEFT)
+	input.mouse.right_pressed = rl.IsMouseButtonPressed(.RIGHT)
 
 	// screen stuff
 	input.screen.width = rl.GetScreenWidth()
