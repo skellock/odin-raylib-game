@@ -45,6 +45,13 @@ draw_dot :: proc(dot: ^Dot, input: ^Input) {
 		dot_color = rl.YELLOW
 	}
 
+	rl.DrawLineEx(
+		{dot.x, dot.y},
+		{f32(input.mouse.x), f32(input.mouse.y)},
+		2,
+		rl.ColorAlpha(rl.WHITE, 0.25),
+	)
+
 	rl.DrawCircle(i32(dot.x), i32(dot.y), dot.size, dot_color)
 }
 
