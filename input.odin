@@ -22,8 +22,7 @@ ViewportInput :: struct {
 }
 
 TimeInput :: struct {
-	frame32: f32,
-	frame64: f64,
+	dt:      f32, // The frame delta time as a f32
 	elapsed: f64,
 }
 
@@ -59,7 +58,6 @@ capture_input :: proc(game: ^Game, input: ^Input) {
 	input.viewport.height = VIEWPORT_HEIGHT
 
 	// time
-	input.time.frame32 = rl.GetFrameTime()
-	input.time.frame64 = f64(input.time.frame32)
+	input.time.dt = rl.GetFrameTime()
 	input.time.elapsed = rl.GetTime()
 }

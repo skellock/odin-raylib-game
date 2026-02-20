@@ -60,7 +60,7 @@ draw_dot :: proc(dot: ^Dot, input: ^Input) {
 
 @(private = "file")
 update_dot_tweens :: proc(dot: ^Dot, input: ^Input) {
-	ease.flux_update(&dot.tweens, input.time.frame64)
+	ease.flux_update(&dot.tweens, f64(input.time.dt))
 }
 
 @(private = "file")
@@ -68,7 +68,7 @@ update_dot_size :: proc(dot: ^Dot, input: ^Input) {
 	big := dot.x < f32(input.viewport.width / 2)
 	to_size := f32(big ? BIG_DOT_SIZE : NORMAL_DOT_SIZE)
 
-	dot.size = math.lerp(dot.size, to_size, DOT_GROW_SPEED * input.time.frame32)
+	dot.size = math.lerp(dot.size, to_size, DOT_GROW_SPEED * input.time.dt)
 }
 
 @(private = "file")
