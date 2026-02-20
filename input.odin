@@ -37,9 +37,9 @@ init_input :: proc() -> Input {
 	return Input{}
 }
 
-capture_input :: proc(input: ^Input, camera: rl.Camera2D) {
+capture_input :: proc(game: ^Game, input: ^Input) {
 	screen_pos := rl.GetMousePosition()
-	world_pos := rl.GetScreenToWorld2D(screen_pos, camera)
+	world_pos := rl.GetScreenToWorld2D(screen_pos, game.camera)
 	input.mouse.screen_x = i32(screen_pos.x)
 	input.mouse.screen_y = i32(screen_pos.y)
 	input.mouse.world_x = i32(world_pos.x)

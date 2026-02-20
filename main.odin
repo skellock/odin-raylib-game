@@ -3,10 +3,6 @@ package main
 import rl "vendor:raylib"
 
 main :: proc() {
-	// setup state
-	game := init_game()
-	input := init_input()
-
 	// setup raylib
 	rl.SetConfigFlags({.VSYNC_HINT})
 	rl.SetTraceLogLevel(.NONE)
@@ -16,9 +12,13 @@ main :: proc() {
 	rl.InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Game")
 	defer rl.CloseWindow()
 
+	// setup state
+	game := init_game()
+	input := init_input()
+
 	// main game loop -- continues until <esc> or window closed
 	for !rl.WindowShouldClose() {
-		capture_input(&input, game.camera)
+		capture_input(&game, &input)
 		update(&game, &input)
 		draw(&game, &input)
 
