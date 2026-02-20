@@ -4,25 +4,23 @@ import rl "vendor:raylib"
 
 main :: proc() {
 	// setup state
-	game := new_game_state()
-	draw := new_draw_state()
-	input := new_input_state()
+	game := init_game()
+	input := init_input()
 
 	// setup raylib
 	rl.SetTraceLogLevel(.NONE)
 	rl.SetTargetFPS(60)
+
+	// setup window
 	rl.InitWindow(1024, 768, "OdinRaylib")
 	defer rl.CloseWindow()
 
-	// main loop
+	// main game loop -- continues until <esc> or window closed
 	for !rl.WindowShouldClose() {
-		defer free_all(context.temp_allocator)
+		capture_input(&input)
+		update(&game, &input)
+		draw(&game, &input)
 
-		update_input_state(&input)
-		update_game_state(&game, &input)
-		update_draw_state(&draw, &game, &input)
-
-		draw_game(&draw, &game, &input)
-		draw_debug(&input)
+		free_all(context.temp_allocator) // free any frame allocations
 	}
 }
