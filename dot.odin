@@ -47,7 +47,7 @@ draw_dot :: proc(dot: ^Dot, input: ^Input) {
 
 	rl.DrawLineEx(
 		{dot.x, dot.y},
-		{f32(input.mouse.x), f32(input.mouse.y)},
+		{f32(input.mouse.world_x), f32(input.mouse.world_y)},
 		2,
 		rl.ColorAlpha(rl.WHITE, 0.25),
 	)
@@ -62,7 +62,7 @@ update_dot_tweens :: proc(dot: ^Dot, input: ^Input) {
 
 @(private = "file")
 update_dot_size :: proc(dot: ^Dot, input: ^Input) {
-	big := dot.x < f32(input.screen.width / 2)
+	big := dot.x < f32(input.viewport.width / 2)
 	to_size := f32(big ? BIG_DOT_SIZE : NORMAL_DOT_SIZE)
 
 	dot.size = math.lerp(dot.size, to_size, DOT_GROW_SPEED * input.time.frame32)
@@ -74,8 +74,8 @@ move_dot_location :: proc(dot: ^Dot, input: ^Input) {
 	EASE :: ease.Ease.Quadratic_Out
 	DELAY: f64 : 0
 
-	_ = ease.flux_to(&dot.tweens, &dot.x, f32(input.mouse.x), EASE, DURATION, DELAY)
-	_ = ease.flux_to(&dot.tweens, &dot.y, f32(input.mouse.y), EASE, DURATION, DELAY)
+	_ = ease.flux_to(&dot.tweens, &dot.x, f32(input.mouse.world_x), EASE, DURATION, DELAY)
+	_ = ease.flux_to(&dot.tweens, &dot.y, f32(input.mouse.world_y), EASE, DURATION, DELAY)
 }
 
 @(private = "file")

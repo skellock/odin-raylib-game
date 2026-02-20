@@ -3,12 +3,19 @@ package main
 import rl "vendor:raylib"
 
 MouseInput :: struct {
-	x:            i32,
-	y:            i32,
+	screen_x:     i32,
+	screen_y:     i32,
+	world_x:      i32,
+	world_y:      i32,
 	left_pressed: bool,
 }
 
 ScreenInput :: struct {
+	width:  i32,
+	height: i32,
+}
+
+ViewportInput :: struct {
 	width:  i32,
 	height: i32,
 }
@@ -20,22 +27,30 @@ TimeInput :: struct {
 }
 
 Input :: struct {
-	mouse:  MouseInput,
-	screen: ScreenInput,
-	time:   TimeInput,
+	mouse:    MouseInput,
+	screen:   ScreenInput,
+	viewport: ViewportInput,
+	time:     TimeInput,
 }
 
 init_input :: proc() -> Input {
 	return Input{}
 }
 
-capture_input :: proc(input: ^Input) {
-	input.mouse.x = rl.GetMouseX()
-	input.mouse.y = rl.GetMouseY()
+capture_input :: proc(input: ^Input, camera: rl.Camera2D) {
+	screen_pos := rl.GetMousePosition()
+	world_pos := rl.GetScreenToWorld2D(screen_pos, camera)
+	input.mouse.screen_x = i32(screen_pos.x)
+	input.mouse.screen_y = i32(screen_pos.y)
+	input.mouse.world_x = i32(world_pos.x)
+	input.mouse.world_y = i32(world_pos.y)
+
 	input.mouse.left_pressed = rl.IsMouseButtonPressed(.LEFT)
 
 	input.screen.width = rl.GetScreenWidth()
 	input.screen.height = rl.GetScreenHeight()
+	input.viewport.width = VIEWPORT_WIDTH
+	input.viewport.height = VIEWPORT_HEIGHT
 
 	input.time.frame32 = rl.GetFrameTime()
 	input.time.frame64 = f64(input.time.frame32)

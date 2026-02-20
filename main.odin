@@ -13,12 +13,12 @@ main :: proc() {
 	rl.SetTargetFPS(500)
 
 	// setup window
-	rl.InitWindow(1024, 768, "OdinRaylib")
+	rl.InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "OdinRaylib")
 	defer rl.CloseWindow()
 
 	// main game loop -- continues until <esc> or window closed
 	for !rl.WindowShouldClose() {
-		capture_input(&input)
+		capture_input(&input, game.camera)
 		update(&game, &input)
 		draw(&game, &input)
 
