@@ -8,8 +8,9 @@ main :: proc() {
 	input := init_input()
 
 	// setup raylib
+	rl.SetConfigFlags({.VSYNC_HINT})
 	rl.SetTraceLogLevel(.NONE)
-	rl.SetTargetFPS(60)
+	rl.SetTargetFPS(500)
 
 	// setup window
 	rl.InitWindow(1024, 768, "OdinRaylib")
