@@ -11,6 +11,7 @@ draw :: proc(game: ^Game, input: ^Input) {
 
 	draw_background(input)
 	draw_title()
+	draw_cards(game, input)
 	draw_dot(&game.dot, input)
 	// draw_debug(input)
 }
@@ -28,4 +29,10 @@ draw_background :: proc(input: ^Input) {
 @(private = "file")
 draw_title :: proc() {
 	rl.DrawText("This is a test using Odin and Raylib!", 10, 10, 8, rl.WHITE)
+}
+
+@(private = "file")
+draw_cards :: proc(game: ^Game, input: ^Input) {
+	rl.DrawTextureEx(game.card_images.ac, {200, 200}, 0, 0.5, rl.WHITE)
+	rl.DrawTextureEx(game.card_images.qh, {300, 200}, 0, 0.5, rl.WHITE)
 }

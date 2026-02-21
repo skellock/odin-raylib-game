@@ -29,4 +29,6 @@ main :: proc() {
 
 		free_all(context.temp_allocator) // free any frame allocations
 	}
+
+	destroy_game(&game)
 }
