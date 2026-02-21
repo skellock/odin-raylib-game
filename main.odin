@@ -13,6 +13,10 @@ main :: proc() {
 	rl.SetTraceLogLevel(.NONE)
 	rl.SetTargetFPS(500)
 
+	// setup audio device
+	rl.InitAudioDevice()
+	defer rl.CloseAudioDevice()
+
 	// setup window
 	rl.InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Game")
 	defer rl.CloseWindow()
