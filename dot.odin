@@ -30,7 +30,7 @@ init_dot :: proc() -> Dot {
 update_dot :: proc(dot: ^Dot, input: ^Input, sounds: ^Sounds) {
 	if input.mouse.left_pressed {
 		move_dot_location(dot, input)
-		play_sound(sounds.jump)
+		play_jump_sound(sounds)
 	}
 
 	if input.mouse.right_pressed {
