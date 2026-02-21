@@ -2,10 +2,10 @@ package main
 
 import rl "vendor:raylib"
 
-WINDOW_WIDTH :: 1024
-WINDOW_HEIGHT :: 1024
-VIEWPORT_WIDTH :: 512
-VIEWPORT_HEIGHT :: 512
+WINDOW_WIDTH :: 1920
+WINDOW_HEIGHT :: 1080
+VIEWPORT_WIDTH :: 1920 / 2
+VIEWPORT_HEIGHT :: 1080 / 2
 
 main :: proc() {
 	// setup raylib
