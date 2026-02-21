@@ -1,6 +1,5 @@
 package main
 
-import "core:fmt"
 import rl "vendor:raylib"
 
 CardImages :: struct {
@@ -73,9 +72,9 @@ init_card_images :: proc() -> CardImages {
 }
 
 destroy_card_images :: proc(card_images: ^CardImages) {
-
-	for card_name in CARD_NAMES {
+	for card_name in card_images.cards {
 		rl.UnloadTexture(card_images.cards[card_name])
 	}
+
 	delete(card_images.cards)
 }
