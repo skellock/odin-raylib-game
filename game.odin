@@ -7,6 +7,7 @@ Game :: struct {
 	camera:      rl.Camera2D,
 	card_images: CardImages,
 	music:       Music,
+	sounds:      Sounds,
 }
 
 init_game :: proc() -> Game {
@@ -15,6 +16,7 @@ init_game :: proc() -> Game {
 		camera = rl.Camera2D{zoom = f32(WINDOW_HEIGHT / VIEWPORT_HEIGHT)},
 		card_images = init_card_images(),
 		music = init_music(),
+		sounds = init_sounds(),
 	}
 
 	play_music(&game.music)
@@ -25,4 +27,5 @@ init_game :: proc() -> Game {
 destroy_game :: proc(game: ^Game) {
 	destroy_card_images(&game.card_images)
 	destroy_music(&game.music)
+	destroy_sounds(&game.sounds)
 }
