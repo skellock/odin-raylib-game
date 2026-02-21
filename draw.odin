@@ -33,6 +33,9 @@ draw_title :: proc() {
 
 @(private = "file")
 draw_cards :: proc(game: ^Game, input: ^Input) {
-	rl.DrawTextureEx(game.card_images.ac, {200, 200}, 0, 0.5, rl.WHITE)
-	rl.DrawTextureEx(game.card_images.qh, {300, 200}, 0, 0.5, rl.WHITE)
+	rl.DrawTextureEx(game.card_images.cards["ah"], {200, 200}, 0, 0.5, rl.WHITE)
+	rl.DrawTextureEx(game.card_images.cards["qc"], {231, 200}, 0, 0.5, rl.WHITE)
+	rl.DrawTextureEx(game.card_images.cards["3d"], {262, 200}, 0, 0.5, rl.WHITE)
+	rl.DrawTextureEx(game.card_images.cards["th"], {293, 200}, 0, 0.5, rl.WHITE)
+	rl.DrawTextureEx(game.card_images.cards["ks"], {324, 200}, 0, 0.5, rl.WHITE)
 }
