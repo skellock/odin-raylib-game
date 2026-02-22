@@ -1,5 +1,6 @@
 package main
 
+import "core:fmt"
 import rl "vendor:raylib"
 
 Game :: struct {
@@ -8,6 +9,7 @@ Game :: struct {
 	card_images: CardImages,
 	music:       Music,
 	sounds:      Sounds,
+	deck:        Deck,
 }
 
 init_game :: proc() -> Game {
@@ -17,6 +19,7 @@ init_game :: proc() -> Game {
 		card_images = init_card_images(),
 		music = init_music(),
 		sounds = init_sounds(),
+		deck = init_shuffled_deck(),
 	}
 
 	play_music(&game.music)

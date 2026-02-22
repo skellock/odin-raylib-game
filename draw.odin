@@ -13,7 +13,7 @@ draw :: proc(game: ^Game, input: ^Input) {
 	draw_title()
 	draw_cards(game, input)
 	draw_dot(&game.dot, input)
-	// draw_debug(input)
+	draw_debug(input)
 }
 
 @(private = "file")
@@ -33,10 +33,17 @@ draw_title :: proc() {
 
 @(private = "file")
 draw_cards :: proc(game: ^Game, input: ^Input) {
-	cards := [5]string{"ah", "qc", "3d", "th", "ks"}
+	SHADOW_OFFSET :: rl.Vector2{1, 1}
 	pos := rl.Vector2{200, 200}
-	for card in cards {
-		rl.DrawTextureEx(game.card_images.cards[card], pos, 0, 0.5, rl.WHITE)
-		pos += {31, 0}
+	rot := f32(-10)
+	hand := game.deck.cards[:5]
+
+	for card in hand {
+		card_code := get_card_code(card)
+		tex := game.card_images.cards[card_code]
+		rl.DrawTextureEx(tex, pos + SHADOW_OFFSET, rot, 1.0 / 3.0, rl.ColorAlpha(rl.BLACK, 0.1))
+		rl.DrawTextureEx(tex, pos, rot, 1.0 / 3.0, rl.WHITE)
+		pos += {25, rot}
+		rot += 5
 	}
 }
