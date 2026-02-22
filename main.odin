@@ -15,6 +15,7 @@ main :: proc() {
 
 	// setup audio device
 	rl.InitAudioDevice()
+	rl.SetMasterVolume(0)
 	defer rl.CloseAudioDevice()
 
 	// setup window
