@@ -34,9 +34,9 @@ draw_title :: proc() {
 @(private = "file")
 draw_cards :: proc(game: ^Game, input: ^Input) {
 	cards := [5]string{"ah", "qc", "3d", "th", "ks"}
-	x := f32(200)
+	pos := rl.Vector2{200, 200}
 	for card in cards {
-		rl.DrawTextureEx(game.card_images.cards[card], {x, 200}, 0, 0.5, rl.WHITE)
-		x += 31
+		rl.DrawTextureEx(game.card_images.cards[card], pos, 0, 0.5, rl.WHITE)
+		pos += {31, 0}
 	}
 }
