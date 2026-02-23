@@ -9,9 +9,7 @@ CardImages :: struct {
 init_card_images :: proc() -> CardImages {
 	card_images := CardImages{}
 
-	deck := init_deck()
-
-	for card in deck.cards {
+	for card in STANDARD_DECK {
 		card_code := get_card_code(card)
 		texture := rl.LoadTexture(rl.TextFormat("images/card-%s@2x.png", card_code))
 		rl.SetTextureFilter(texture, .BILINEAR)
