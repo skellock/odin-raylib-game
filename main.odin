@@ -9,9 +9,9 @@ VIEWPORT_HEIGHT :: 1080 / 2
 
 main :: proc() {
 	// setup raylib
+	rl.SetTraceLogLevel(.NONE)
 	rl.SetConfigFlags({.VSYNC_HINT, .MSAA_4X_HINT})
 	rl.SetTargetFPS(500)
-	rl.SetTraceLogLevel(.NONE)
 
 	// setup audio device
 	rl.InitAudioDevice()
