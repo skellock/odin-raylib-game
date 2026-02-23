@@ -120,7 +120,7 @@ init_deck :: proc() -> Deck {
 }
 
 get_card_code :: proc(card: Card) -> string {
-	return fmt.tprintf("%v%v", card_pip_codes[card.pip], card_suit_codes[card.suit])
+	return fmt.aprintf("%v%v", card_pip_codes[card.pip], card_suit_codes[card.suit])
 }
 
 shuffle_deck :: proc(deck: ^Deck) {

@@ -32,7 +32,7 @@ main :: proc() {
 		update(&game, &input)
 		draw(&game, &input)
 
-		// free_all(context.temp_allocator) // free any frame allocations
+		free_all(context.temp_allocator) // free any frame allocations
 	}
 
 	destroy_game(&game)
