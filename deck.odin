@@ -35,6 +35,61 @@ Deck :: struct {
 	cards: [52]Card,
 }
 
+STANDARD_DECK :: [52]Card {
+	Card{.Two, .Club},
+	Card{.Three, .Club},
+	Card{.Four, .Club},
+	Card{.Five, .Club},
+	Card{.Six, .Club},
+	Card{.Seven, .Club},
+	Card{.Eight, .Club},
+	Card{.Nine, .Club},
+	Card{.Ten, .Club},
+	Card{.Jack, .Club},
+	Card{.Queen, .Club},
+	Card{.King, .Club},
+	Card{.Ace, .Club},
+	Card{.Two, .Heart},
+	Card{.Three, .Heart},
+	Card{.Four, .Heart},
+	Card{.Five, .Heart},
+	Card{.Six, .Heart},
+	Card{.Seven, .Heart},
+	Card{.Eight, .Heart},
+	Card{.Nine, .Heart},
+	Card{.Ten, .Heart},
+	Card{.Jack, .Heart},
+	Card{.Queen, .Heart},
+	Card{.King, .Heart},
+	Card{.Ace, .Heart},
+	Card{.Two, .Spade},
+	Card{.Three, .Spade},
+	Card{.Four, .Spade},
+	Card{.Five, .Spade},
+	Card{.Six, .Spade},
+	Card{.Seven, .Spade},
+	Card{.Eight, .Spade},
+	Card{.Nine, .Spade},
+	Card{.Ten, .Spade},
+	Card{.Jack, .Spade},
+	Card{.Queen, .Spade},
+	Card{.King, .Spade},
+	Card{.Ace, .Spade},
+	Card{.Two, .Diamond},
+	Card{.Three, .Diamond},
+	Card{.Four, .Diamond},
+	Card{.Five, .Diamond},
+	Card{.Six, .Diamond},
+	Card{.Seven, .Diamond},
+	Card{.Eight, .Diamond},
+	Card{.Nine, .Diamond},
+	Card{.Ten, .Diamond},
+	Card{.Jack, .Diamond},
+	Card{.Queen, .Diamond},
+	Card{.King, .Diamond},
+	Card{.Ace, .Diamond},
+}
+
 @(private = "file")
 card_pip_codes := [CardPip]string {
 	.Two   = "2",
@@ -61,17 +116,7 @@ card_suit_codes := [CardSuit]string {
 }
 
 init_deck :: proc() -> Deck {
-	deck := Deck{}
-
-	i := 0
-	for suit in CardSuit {
-		for pip in CardPip {
-			deck.cards[i] = Card{pip, suit}
-			i += 1
-		}
-	}
-
-	return deck
+	return Deck{STANDARD_DECK}
 }
 
 get_card_code :: proc(card: Card) -> string {
