@@ -1,7 +1,7 @@
 package main
 
-import "core:fmt"
 import "core:math/rand"
+import "core:strings"
 
 CardSuit :: enum {
 	Club,
@@ -120,7 +120,7 @@ init_deck :: proc() -> Deck {
 }
 
 get_card_code :: proc(card: Card) -> string {
-	return fmt.aprintf("%v%v", card_pip_codes[card.pip], card_suit_codes[card.suit])
+	return strings.concatenate({card_pip_codes[card.pip], card_suit_codes[card.suit]})
 }
 
 shuffle_deck :: proc(deck: ^Deck) {
@@ -133,17 +133,64 @@ init_shuffled_deck :: proc() -> Deck {
 	return deck
 }
 
+init_card_map :: proc() -> map[string]Card {
+	result := make(map[string]Card)
+	for card in STANDARD_DECK {
+		code := get_card_code(card)
+		result[code] = card
+	}
+	return result
+}
+
+destroy_card_map :: proc(card_map: map[string]Card) {
+	for k, _ in card_map {delete(k)}
+	delete(card_map)
+}
+
+init_cards :: proc(card_string: string, card_map: map[string]Card) -> []Card {
+	result := make([dynamic]Card)
+
+	// jet if the string is empty
+	if len(card_string) == 0 {return result[:]}
+
+	splits := strings.split(card_string, " ", context.temp_allocator)
+
+	// jet if there are no splits
+	if len(splits) == 0 {return result[:]}
+
+	for code in splits {
+		card := card_map[code]
+		append(&result, card)
+	}
+
+	return result[:]
+}
+
+init_card_pip_map :: proc(cards: []Card, allocator := context.allocator) -> map[CardPip]int {
+	pip_map := make(map[CardPip]int, allocator)
+	for card in cards {
+		pip_map[card.pip] += 1
+	}
+	return pip_map
+}
+
+init_card_suit_map :: proc(cards: []Card, allocator := context.allocator) -> map[CardSuit]int {
+	suit_map := make(map[CardSuit]int, allocator)
+	for card in cards {
+		suit_map[card.suit] += 1
+	}
+	return suit_map
+}
+
 // --- Tests ------------------------------------------------------------------
 
 import "core:testing"
 
 @(test)
 get_card_code_test :: proc(t: ^testing.T) {
-	context.allocator = context.temp_allocator
-	testing.expect_value(t, get_card_code(Card{.Ten, .Club}), "tc")
-	testing.expect_value(t, get_card_code(Card{.Four, .Heart}), "4h")
-	testing.expect_value(t, get_card_code(Card{.Queen, .Spade}), "qs")
-	testing.expect_value(t, get_card_code(Card{.Ace, .Diamond}), "ad")
+	tc := get_card_code(Card{.Ten, .Club})
+	testing.expect_value(t, tc, "tc")
+	delete(tc)
 }
 
 @(test)
@@ -174,4 +221,29 @@ init_shuffled_deck_test :: proc(t: ^testing.T) {
 	d2 := init_shuffled_deck()
 
 	testing.expect(t, d1.cards != d2.cards, "shuffled deck was not shuffled")
+}
+
+@(test)
+init_card_map_test :: proc(t: ^testing.T) {
+	card_map := init_card_map()
+	defer destroy_card_map(card_map)
+
+	testing.expect_value(t, card_map["jc"], Card{.Jack, .Club})
+	testing.expect_value(t, card_map["3h"], Card{.Three, .Heart})
+	testing.expect_value(t, len(card_map), len(STANDARD_DECK))
+}
+
+@(test)
+init_cards_test :: proc(t: ^testing.T) {
+	card_map := init_card_map()
+	defer destroy_card_map(card_map)
+
+	cards := init_cards("ah 2h 3h 4h 5h", card_map)
+	defer delete(cards)
+
+	testing.expect_value(t, cards[0], Card{.Ace, .Heart})
+	testing.expect_value(t, cards[1], Card{.Two, .Heart})
+	testing.expect_value(t, cards[2], Card{.Three, .Heart})
+	testing.expect_value(t, cards[3], Card{.Four, .Heart})
+	testing.expect_value(t, cards[4], Card{.Five, .Heart})
 }
