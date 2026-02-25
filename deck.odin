@@ -139,6 +139,7 @@ import "core:testing"
 
 @(test)
 get_card_code_test :: proc(t: ^testing.T) {
+	context.allocator = context.temp_allocator
 	testing.expect_value(t, get_card_code(Card{.Ten, .Club}), "tc")
 	testing.expect_value(t, get_card_code(Card{.Four, .Heart}), "4h")
 	testing.expect_value(t, get_card_code(Card{.Queen, .Spade}), "qs")
