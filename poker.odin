@@ -4,6 +4,7 @@ import "core:fmt"
 import "core:sort"
 
 PokerHand :: enum {
+	None,
 	HighCard,
 	Pair,
 	TwoPair,
@@ -64,6 +65,8 @@ has_straight :: proc(cards: []Card) -> bool {
 		map_insert(&pip_set, card.pip, 0)
 	}
 
+	if len(pip_set) != 5 {return false}
+
 	pips := make([dynamic]int, context.temp_allocator)
 	for pip, _ in pip_set {
 		append(&pips, int(pip))
@@ -105,6 +108,20 @@ has_royal_flush :: proc(cards: []Card) -> bool {
 	if !has_straight_flush(cards) {return false}
 	pip_map := init_card_pip_map(cards, context.temp_allocator)
 	return pip_map[.Ten] == 1 && pip_map[.Ace] == 1
+}
+
+score_hand :: proc(cards: []Card) -> PokerHand {
+	if has_royal_flush(cards) {return .RoyalFlush}
+	if has_straight_flush(cards) {return .StraightFlush}
+	if has_four_of_a_kind(cards) {return .FourOfAKind}
+	if has_full_house(cards) {return .FullHouse}
+	if has_flush(cards) {return .Flush}
+	if has_straight(cards) {return .Straight}
+	if has_three_of_a_kind(cards) {return .ThreeOfAKind}
+	if has_two_pair(cards) {return .TwoPair}
+	if has_pair(cards) {return .Pair}
+	if has_high_card(cards) {return .HighCard}
+	return .None
 }
 
 // --- Tests ------------------------------------------------------------------
@@ -158,6 +175,7 @@ has_straight_test :: proc(t: ^testing.T) {
 	expect_poker_hand(t, "2c 3c 4h 5h 7d", has_straight, false)
 	expect_poker_hand(t, "ac 2c 3c 4h 5h", has_straight, false)
 	expect_poker_hand(t, "9h jh qc kd as", has_straight, false)
+	expect_poker_hand(t, "2h 2c 2d 3c 4h", has_straight, false)
 	expect_poker_hand(t, "2c 3c 4h 5h 6h", has_straight)
 	expect_poker_hand(t, "th jh qc kd as", has_straight)
 }
@@ -200,4 +218,34 @@ has_royal_flush_test :: proc(t: ^testing.T) {
 	expect_poker_hand(t, "tc js qc kc ac", has_royal_flush, false)
 	expect_poker_hand(t, "2c 3c 4c 5c 6c", has_royal_flush, false)
 	expect_poker_hand(t, "tc jc qc kc ac", has_royal_flush)
+}
+
+expect_poker_hand_score :: proc(t: ^testing.T, hand_string: string, hand: PokerHand) {
+	context.allocator = context.temp_allocator
+	card_map := init_card_map()
+	cards := init_cards(hand_string, card_map)
+	score := score_hand(cards)
+	testing.expect(
+		t,
+		score == hand,
+		fmt.tprintf("expected (%s) to be %v but was %v", hand_string, hand, score),
+	)
+}
+
+@(test)
+score_hand_test :: proc(t: ^testing.T) {
+	expect_poker_hand_score(t, "tc jc qc kc ac", .RoyalFlush)
+	expect_poker_hand_score(t, "9c tc jc qc kc", .StraightFlush)
+	expect_poker_hand_score(t, "2c 2s 2d 2h 3c", .FourOfAKind)
+	expect_poker_hand_score(t, "3c 3s 3d 2h 2c", .FullHouse)
+	expect_poker_hand_score(t, "2h 3h 4h 5h 7h", .Flush)
+	expect_poker_hand_score(t, "2c 3c 4h 5h 6h", .Straight)
+	expect_poker_hand_score(t, "2h 2c 2d 3c 4h", .ThreeOfAKind)
+	expect_poker_hand_score(t, "2h 2c 3h 3c 5h", .TwoPair)
+	expect_poker_hand_score(t, "2h 3h 4h 5h 5c", .Pair)
+	expect_poker_hand_score(t, "2h 3h 4h 5h tc", .HighCard)
+	expect_poker_hand_score(t, "2h", .None)
+	expect_poker_hand_score(t, "2h 3h", .None)
+	expect_poker_hand_score(t, "2h 3h 4h", .None)
+	expect_poker_hand_score(t, "2h 3h 4h 5h", .None)
 }
