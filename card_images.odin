@@ -20,7 +20,8 @@ init_card_images :: proc() -> CardImages {
 }
 
 destroy_card_images :: proc(card_images: ^CardImages) {
-	for _, value in card_images.cards {
+	for key, value in card_images.cards {
+		delete(key)
 		rl.UnloadTexture(value)
 	}
 
