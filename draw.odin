@@ -12,6 +12,7 @@ draw :: proc(game: ^Game, input: ^Input) {
 	draw_background(input)
 	draw_title()
 	draw_cards(game, input)
+	draw_poker_hand(game, input)
 	draw_dot(&game.dot, input)
 	draw_debug(input)
 }
@@ -45,4 +46,35 @@ draw_cards :: proc(game: ^Game, input: ^Input) {
 		pos += {25, rot}
 		rot += 5
 	}
+}
+
+@(private = "file")
+draw_poker_hand :: proc(game: ^Game, input: ^Input) {
+	text: cstring
+	switch game.poker_hand {
+	case .None:
+		text = "Nothing"
+	case .HighCard:
+		text = "High Card"
+	case .Pair:
+		text = "Pair"
+	case .TwoPair:
+		text = "Two Pair"
+	case .ThreeOfAKind:
+		text = "Three of a Kind"
+	case .Straight:
+		text = "Straight"
+	case .Flush:
+		text = "Flush"
+	case .FullHouse:
+		text = "Full House"
+	case .FourOfAKind:
+		text = "Four of a Kind"
+	case .StraightFlush:
+		text = "Straight Flush"
+	case .RoyalFlush:
+		text = "Royal Flush"
+	}
+
+	rl.DrawText(text, 200, 300, 20, rl.WHITE)
 }

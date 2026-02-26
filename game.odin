@@ -10,6 +10,7 @@ Game :: struct {
 	sounds:      Sounds,
 	deck:        Deck,
 	hand:        [dynamic]Card,
+	poker_hand:  PokerHand,
 }
 
 init_game :: proc() -> Game {
@@ -37,6 +38,7 @@ deal_to_hand :: proc(game: ^Game) {
 	for i in 0 ..< 5 {
 		append(&game.hand, game.deck.cards[i])
 	}
+	game.poker_hand = score_hand(game.hand[:])
 }
 
 destroy_game :: proc(game: ^Game) {
