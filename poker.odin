@@ -139,7 +139,7 @@ expect_poker_hand :: proc(
 	hand := init_cards(hand_string, card_map)
 	testing.expect(
 		t,
-		hand_fn(hand) == value,
+		hand_fn(hand[:]) == value,
 		fmt.tprintf("expected (%s) to be %v", hand_string, value),
 	)
 }
@@ -224,7 +224,7 @@ expect_poker_hand_score :: proc(t: ^testing.T, hand_string: string, hand: PokerH
 	context.allocator = context.temp_allocator
 	card_map := init_card_map()
 	cards := init_cards(hand_string, card_map)
-	score := score_hand(cards)
+	score := score_hand(cards[:])
 	testing.expect(
 		t,
 		score == hand,

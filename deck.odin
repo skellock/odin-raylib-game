@@ -119,8 +119,8 @@ init_deck :: proc() -> Deck {
 	return Deck{STANDARD_DECK}
 }
 
-get_card_code :: proc(card: Card) -> string {
-	return strings.concatenate({card_pip_codes[card.pip], card_suit_codes[card.suit]})
+get_card_code :: proc(card: Card, allocator := context.allocator) -> string {
+	return strings.concatenate({card_pip_codes[card.pip], card_suit_codes[card.suit]}, allocator)
 }
 
 shuffle_deck :: proc(deck: ^Deck) {
@@ -147,23 +147,23 @@ destroy_card_map :: proc(card_map: map[string]Card) {
 	delete(card_map)
 }
 
-init_cards :: proc(card_string: string, card_map: map[string]Card) -> []Card {
+init_cards :: proc(card_string: string, card_map: map[string]Card) -> [dynamic]Card {
 	result := make([dynamic]Card)
 
 	// jet if the string is empty
-	if len(card_string) == 0 {return result[:]}
+	if len(card_string) == 0 {return result}
 
 	splits := strings.split(card_string, " ", context.temp_allocator)
 
 	// jet if there are no splits
-	if len(splits) == 0 {return result[:]}
+	if len(splits) == 0 {return result}
 
 	for code in splits {
 		card := card_map[code]
 		append(&result, card)
 	}
 
-	return result[:]
+	return result
 }
 
 init_card_pip_map :: proc(cards: []Card, allocator := context.allocator) -> map[CardPip]int {

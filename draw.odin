@@ -38,8 +38,7 @@ draw_cards :: proc(game: ^Game, input: ^Input) {
 	pos := rl.Vector2{200, 200}
 	rot := f32(-10)
 	for card in game.hand {
-		card_code := get_card_code(card)
-		defer delete(card_code)
+		card_code := get_card_code(card, context.temp_allocator)
 		tex := game.card_images.cards[card_code]
 		rl.DrawTextureEx(tex, pos + SHADOW_OFFSET, rot, 1.0 / 3.0, rl.ColorAlpha(rl.BLACK, 0.1))
 		rl.DrawTextureEx(tex, pos, rot, 1.0 / 3.0, rl.WHITE)
