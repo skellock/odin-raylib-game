@@ -7,8 +7,8 @@ MouseInput :: struct {
 	screen_y:      i32,
 	world_x:       i32,
 	world_y:       i32,
-	left_pressed:  bool,
-	right_pressed: bool,
+	left_pressed:  bool, // Has the left button been pressed?
+	right_pressed: bool, // Has the right button been pressed?
 }
 
 ScreenInput :: struct {
@@ -22,8 +22,8 @@ ViewportInput :: struct {
 }
 
 TimeInput :: struct {
-	dt:      f32, // the frame's delta time
-	elapsed: f64, // how long the game has been running
+	dt:      f32, // The frame's delta time.
+	elapsed: f64, // How long the game has been running
 }
 
 Input :: struct {
