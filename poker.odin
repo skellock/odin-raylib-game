@@ -220,6 +220,7 @@ has_royal_flush_test :: proc(t: ^testing.T) {
 	expect_poker_hand(t, "tc jc qc kc ac", has_royal_flush)
 }
 
+// A helper function for testing if a hand is a certain type of Poker Hand.
 expect_poker_hand_score :: proc(t: ^testing.T, hand_string: string, hand: PokerHand) {
 	context.allocator = context.temp_allocator
 	card_map := init_card_map()
@@ -232,6 +233,7 @@ expect_poker_hand_score :: proc(t: ^testing.T, hand_string: string, hand: PokerH
 	)
 }
 
+// Tests all the things.
 @(test)
 score_hand_test :: proc(t: ^testing.T) {
 	expect_poker_hand_score(t, "tc jc qc kc ac", .RoyalFlush)
