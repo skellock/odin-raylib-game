@@ -73,6 +73,11 @@ has_straight :: proc(cards: []Card) -> bool {
 	}
 	sort.bubble_sort(pips[:])
 
+	// Check for the wheel (A-2-3-4-5) where Ace acts as low.
+	if pips[4] == int(CardPip.Ace) && pips[3] == int(CardPip.Five) {
+		return true
+	}
+
 	for i in 0 ..< len(pips) - 1 {
 		if pips[i + 1] - pips[i] != 1 {return false}
 	}
@@ -173,9 +178,9 @@ is_three_of_a_kind_test :: proc(t: ^testing.T) {
 has_straight_test :: proc(t: ^testing.T) {
 	expect_poker_hand(t, "", has_straight, false)
 	expect_poker_hand(t, "2c 3c 4h 5h 7d", has_straight, false)
-	expect_poker_hand(t, "ac 2c 3c 4h 5h", has_straight, false)
 	expect_poker_hand(t, "9h jh qc kd as", has_straight, false)
 	expect_poker_hand(t, "2h 2c 2d 3c 4h", has_straight, false)
+	expect_poker_hand(t, "ac 2c 3c 4h 5h", has_straight)
 	expect_poker_hand(t, "2c 3c 4h 5h 6h", has_straight)
 	expect_poker_hand(t, "th jh qc kd as", has_straight)
 }
