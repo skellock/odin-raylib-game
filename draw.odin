@@ -50,7 +50,7 @@ draw_cards :: proc(game: ^Game, input: ^Input) {
 draw_poker_hand :: proc(game: ^Game, input: ^Input) {
 	text: cstring
 	switch game.poker_hand {
-	case .None:
+	case .Nothing:
 		text = "Nothing"
 	case .HighCard:
 		text = "High Card"

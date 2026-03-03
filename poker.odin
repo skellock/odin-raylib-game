@@ -4,7 +4,7 @@ import "core:fmt"
 import "core:sort"
 
 PokerHand :: enum {
-	None,
+	Nothing,
 	HighCard,
 	Pair,
 	TwoPair,
@@ -126,7 +126,7 @@ score_hand :: proc(cards: []Card) -> PokerHand {
 	if has_two_pair(cards) {return .TwoPair}
 	if has_pair(cards) {return .Pair}
 	if has_high_card(cards) {return .HighCard}
-	return .None
+	return .Nothing
 }
 
 // --- Tests ------------------------------------------------------------------
@@ -251,8 +251,8 @@ score_hand_test :: proc(t: ^testing.T) {
 	expect_poker_hand_score(t, "2h 2c 3h 3c 5h", .TwoPair)
 	expect_poker_hand_score(t, "2h 3h 4h 5h 5c", .Pair)
 	expect_poker_hand_score(t, "2h 3h 4h 5h tc", .HighCard)
-	expect_poker_hand_score(t, "2h", .None)
-	expect_poker_hand_score(t, "2h 3h", .None)
-	expect_poker_hand_score(t, "2h 3h 4h", .None)
-	expect_poker_hand_score(t, "2h 3h 4h 5h", .None)
+	expect_poker_hand_score(t, "2h", .Nothing)
+	expect_poker_hand_score(t, "2h 3h", .Nothing)
+	expect_poker_hand_score(t, "2h 3h 4h", .Nothing)
+	expect_poker_hand_score(t, "2h 3h 4h 5h", .Nothing)
 }
