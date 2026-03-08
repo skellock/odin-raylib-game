@@ -87,7 +87,6 @@ move_dot_location :: proc(dot: ^Dot, input: ^Input) {
 	_ = ease.flux_to(&dot.tweens, &dot.y, f32(input.mouse.world_y), EASE, DURATION, DELAY)
 }
 
-@(private = "file")
 cycle_dot_color :: proc(dot: ^Dot) {
 	current := int(dot.color)
 	next_color := current >= len(DotColor) - 1 ? 0 : current + 1
@@ -96,21 +95,4 @@ cycle_dot_color :: proc(dot: ^Dot) {
 
 destroy_dot :: proc(dot: ^Dot) {
 	ease.flux_destroy(dot.tweens)
-}
-
-// --- Testing ----------------------------------------------------------------
-
-import "core:testing"
-
-@(test)
-cycle_dot_color_test :: proc(t: ^testing.T) {
-	dot := init_dot()
-	defer destroy_dot(&dot)
-
-	testing.expect_value(t, dot.color, DotColor.Yellow)
-	cycle_dot_color(&dot)
-	testing.expect_value(t, dot.color, DotColor.Red)
-	cycle_dot_color(&dot)
-	cycle_dot_color(&dot)
-	testing.expect_value(t, dot.color, DotColor.Yellow)
 }
