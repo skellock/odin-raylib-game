@@ -4,6 +4,7 @@ import rl "vendor:raylib"
 
 CARD_SCALE :: f32(1.0 / 3.0)
 
+// The main update statement called once per frame.
 update :: proc(game: ^Game, input: ^Input) {
 	update_music(&game.music)
 	update_dot(&game.dot, input, &game.sounds)

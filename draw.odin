@@ -2,6 +2,7 @@ package main
 
 import rl "vendor:raylib"
 
+// The main drawing function called once per frame.
 draw :: proc(game: ^Game, input: ^Input) {
 	rl.BeginDrawing()
 	defer rl.EndDrawing()
