@@ -53,13 +53,18 @@ draw_cards :: proc(game: ^Game, input: ^Input) {
 @(private = "file")
 draw_card_hover :: proc(tex: rl.Texture2D, pos: rl.Vector2) {
 	INSET :: f32(2)
+	THICKNESS :: 3
+	ROUNDNESS :: 0.25
+	SEGMENTS :: 4
+
 	card_w := f32(tex.width) * CARD_SCALE - INSET * 2
 	card_h := f32(tex.height) * CARD_SCALE - INSET * 2
+
 	rl.DrawRectangleRoundedLinesEx(
 		{pos.x + INSET, pos.y + INSET, card_w, card_h},
-		0.25,
-		4,
-		3,
+		ROUNDNESS,
+		SEGMENTS,
+		THICKNESS,
 		rl.GREEN,
 	)
 }
