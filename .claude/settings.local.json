@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(odin test:*)",
-      "Bash(odin build:*)"
+      "Bash(odin build:*)",
+      "Bash(odin check:*)"
     ]
   }
 }
