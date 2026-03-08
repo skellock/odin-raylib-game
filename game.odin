@@ -11,6 +11,8 @@ Game :: struct {
 	deck:        Deck,
 	hand:        [dynamic]Card,
 	poker_hand:  PokerHand,
+	tooltip:     Tooltip,
+	card_positions: [5]rl.Vector2,
 }
 
 init_game :: proc() -> Game {

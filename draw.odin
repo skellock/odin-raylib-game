@@ -1,6 +1,5 @@
 package main
 
-import "core:fmt"
 import rl "vendor:raylib"
 
 draw :: proc(game: ^Game, input: ^Input) {
@@ -13,6 +12,7 @@ draw :: proc(game: ^Game, input: ^Input) {
 	draw_background(input)
 	draw_title()
 	draw_cards(game, input)
+	draw_tooltip(&game.tooltip)
 	draw_poker_hand(game, input)
 	draw_dot(&game.dot, input)
 	draw_debug(input)
@@ -36,53 +36,13 @@ draw_title :: proc() {
 @(private = "file")
 draw_cards :: proc(game: ^Game, input: ^Input) {
 	SHADOW_OFFSET :: rl.Vector2{1, 1}
-	SCALE :: f32(1.0 / 3.0)
-	pos := rl.Vector2{200, 200}
-
-	positions: [5]rl.Vector2
 
 	for card, idx in game.hand {
 		tex := game.card_images.cards[card]
-		rl.DrawTextureEx(tex, pos + SHADOW_OFFSET, 0, SCALE, rl.ColorAlpha(rl.BLACK, 0.1))
-		rl.DrawTextureEx(tex, pos, 0, SCALE, rl.WHITE)
-		positions[idx] = pos
-		pos += {25, 0}
+		pos := game.card_positions[idx]
+		rl.DrawTextureEx(tex, pos + SHADOW_OFFSET, 0, CARD_SCALE, rl.ColorAlpha(rl.BLACK, 0.1))
+		rl.DrawTextureEx(tex, pos, 0, CARD_SCALE, rl.WHITE)
 	}
-
-	draw_card_tooltip(game, input, positions, SCALE)
-}
-
-@(private = "file")
-draw_card_tooltip :: proc(game: ^Game, input: ^Input, positions: [5]rl.Vector2, scale: f32) {
-	mouse := rl.Vector2{f32(input.mouse.world_x), f32(input.mouse.world_y)}
-	for i := len(game.hand) - 1; i >= 0; i -= 1 {
-		card := game.hand[i]
-		tex := game.card_images.cards[card]
-		card_w := f32(tex.width) * scale
-		card_h := f32(tex.height) * scale
-		card_pos := positions[i]
-		rect := rl.Rectangle{card_pos.x, card_pos.y, card_w, card_h}
-		if rl.CheckCollisionPointRec(mouse, rect) {
-			text := fmt.ctprintf("%v of %vs", card.pip, card.suit)
-			draw_tooltip(text, input.mouse.world_x + 10, input.mouse.world_y + 10)
-			break
-		}
-	}
-}
-
-@(private = "file")
-draw_tooltip :: proc(text: cstring, x: i32, y: i32) {
-	FONT_SIZE :: i32(8)
-	PADDING :: i32(4)
-	text_w := rl.MeasureText(text, FONT_SIZE)
-	bg_rect := rl.Rectangle {
-		f32(x - PADDING),
-		f32(y - PADDING),
-		f32(text_w + PADDING * 2),
-		f32(FONT_SIZE + PADDING * 2),
-	}
-	rl.DrawRectangleRounded(bg_rect, 0.4, 4, rl.WHITE)
-	rl.DrawText(text, x, y, FONT_SIZE, rl.BLACK)
 }
 
 @(private = "file")
