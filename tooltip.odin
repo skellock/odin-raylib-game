@@ -13,7 +13,7 @@ Tooltip :: struct {
 
 update_tooltip :: proc(game: ^Game, input: ^Input) {
 	mouse := rl.Vector2{f32(input.mouse.world_x), f32(input.mouse.world_y)}
-	hovered := false
+	game.hovered_card = -1
 
 	OFFSET_X :: 10
 	OFFSET_Y :: 10
@@ -33,12 +33,12 @@ update_tooltip :: proc(game: ^Game, input: ^Input) {
 				input.mouse.world_x + OFFSET_X,
 				input.mouse.world_y + OFFSET_Y,
 			)
-			hovered = true
+			game.hovered_card = i
 			break
 		}
 	}
 
-	if !hovered && game.tooltip.alpha > 0 {
+	if game.hovered_card < 0 && game.tooltip.alpha > 0 {
 		// move the tooltip along with mouse as it fades
 		game.tooltip.x = input.mouse.world_x + OFFSET_X
 		game.tooltip.y = input.mouse.world_y + OFFSET_Y

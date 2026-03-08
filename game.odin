@@ -13,6 +13,7 @@ Game :: struct {
 	poker_hand:     PokerHand,
 	tooltip:        Tooltip,
 	card_positions: [5]rl.Vector2,
+	hovered_card:   int,
 }
 
 init_game :: proc() -> Game {

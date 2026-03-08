@@ -42,7 +42,26 @@ draw_cards :: proc(game: ^Game, input: ^Input) {
 		pos := game.card_positions[idx]
 		rl.DrawTextureEx(tex, pos + SHADOW_OFFSET, 0, CARD_SCALE, rl.ColorAlpha(rl.BLACK, 0.1))
 		rl.DrawTextureEx(tex, pos, 0, CARD_SCALE, rl.WHITE)
+
+		// are we hovering over this card?
+		if idx == game.hovered_card {
+			draw_card_hover(tex, pos)
+		}
 	}
+}
+
+@(private = "file")
+draw_card_hover :: proc(tex: rl.Texture2D, pos: rl.Vector2) {
+	INSET :: f32(2)
+	card_w := f32(tex.width) * CARD_SCALE - INSET * 2
+	card_h := f32(tex.height) * CARD_SCALE - INSET * 2
+	rl.DrawRectangleRoundedLinesEx(
+		{pos.x + INSET, pos.y + INSET, card_w, card_h},
+		0.25,
+		4,
+		3,
+		rl.GREEN,
+	)
 }
 
 @(private = "file")
