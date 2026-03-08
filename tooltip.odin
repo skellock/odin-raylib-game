@@ -8,11 +8,15 @@ Tooltip :: struct {
 	len:   int,
 	x, y:  i32,
 	alpha: f32,
+	delay: f32,
 }
 
 update_tooltip :: proc(game: ^Game, input: ^Input) {
 	mouse := rl.Vector2{f32(input.mouse.world_x), f32(input.mouse.world_y)}
 	hovered := false
+
+	OFFSET_X :: 10
+	OFFSET_Y :: 10
 
 	for i := len(game.hand) - 1; i >= 0; i -= 1 {
 		card := game.hand[i]
@@ -23,15 +27,27 @@ update_tooltip :: proc(game: ^Game, input: ^Input) {
 		rect := rl.Rectangle{card_pos.x, card_pos.y, card_w, card_h}
 		if rl.CheckCollisionPointRec(mouse, rect) {
 			text := fmt.ctprintf("%v of %vs", card.pip, card.suit)
-			set_tooltip(&game.tooltip, text, input.mouse.world_x + 10, input.mouse.world_y + 10)
+			set_tooltip(
+				&game.tooltip,
+				text,
+				input.mouse.world_x + OFFSET_X,
+				input.mouse.world_y + OFFSET_Y,
+			)
 			hovered = true
 			break
 		}
 	}
 
-	if !hovered {
+	if !hovered && game.tooltip.alpha > 0 {
+		// move the tooltip along with mouse as it fades
+		game.tooltip.x = input.mouse.world_x + OFFSET_X
+		game.tooltip.y = input.mouse.world_y + OFFSET_Y
+		FADE_DELAY :: f32(0.25)
 		FADE_SPEED :: f32(4.0)
-		game.tooltip.alpha -= FADE_SPEED * input.time.dt
+		game.tooltip.delay += input.time.dt
+		if game.tooltip.delay >= FADE_DELAY {
+			game.tooltip.alpha -= FADE_SPEED * input.time.dt
+		}
 		if game.tooltip.alpha < 0 do game.tooltip.alpha = 0
 	}
 }
@@ -40,6 +56,7 @@ set_tooltip :: proc(tooltip: ^Tooltip, text: cstring, x: i32, y: i32) {
 	tooltip.x = x
 	tooltip.y = y
 	tooltip.alpha = 1.0
+	tooltip.delay = 0
 	bytes := transmute([^]u8)text
 	n := 0
 	for n < len(tooltip.text) - 1 && bytes[n] != 0 {
