@@ -3,15 +3,15 @@ package main
 import rl "vendor:raylib"
 
 Game :: struct {
-	dot:         Dot,
-	camera:      rl.Camera2D,
-	card_images: CardImages,
-	music:       Music,
-	sounds:      Sounds,
-	deck:        Deck,
-	hand:        [dynamic]Card,
-	poker_hand:  PokerHand,
-	tooltip:     Tooltip,
+	dot:            Dot,
+	camera:         rl.Camera2D,
+	card_images:    CardImages,
+	music:          Music,
+	sounds:         Sounds,
+	deck:           Deck,
+	hand:           [dynamic]Card,
+	poker_hand:     PokerHand,
+	tooltip:        Tooltip,
 	card_positions: [5]rl.Vector2,
 }
 

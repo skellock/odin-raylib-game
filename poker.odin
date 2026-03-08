@@ -127,3 +127,4 @@ score_hand :: proc(cards: []Card) -> PokerHand {
 	if has_high_card(cards) {return .HighCard}
 	return .Nothing
 }
+
