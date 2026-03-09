@@ -6,12 +6,59 @@ import rl "vendor:raylib"
 Tooltip :: struct {
 	text:  [64]u8,
 	len:   int,
-	x, y:  i32,
+	x:     i32,
+	y:     i32,
 	alpha: f32,
 	delay: f32,
 }
 
-update_tooltip :: proc(game: ^Game, input: ^Input) {
+update_tooltip :: proc(game: ^Game, input: Input) {
+	update_hovered_card(game, input)
+	update_tooltip_position(game, input)
+	update_tooltip_text(game)
+	update_tooltip_alpha(game, input)
+}
+
+draw_tooltip :: proc(tooltip: ^Tooltip) {
+	if tooltip.alpha <= 0 do return
+
+	FONT_SIZE :: i32(8)
+	PADDING :: i32(4)
+	text := cstring(raw_data(tooltip.text[:]))
+
+	// calculate text size
+	text_w := rl.MeasureText(text, FONT_SIZE)
+
+	// the background
+	bg_rect := rl.Rectangle {
+		f32(tooltip.x - PADDING),
+		f32(tooltip.y - PADDING),
+		f32(text_w + PADDING * 2),
+		f32(FONT_SIZE + PADDING * 2),
+	}
+	rl.DrawRectangleRounded(bg_rect, 0.4, 4, rl.ColorAlpha(rl.WHITE, tooltip.alpha))
+
+	// the text
+	rl.DrawText(text, tooltip.x, tooltip.y, FONT_SIZE, rl.ColorAlpha(rl.BLACK, tooltip.alpha))
+}
+
+@(private = "file")
+update_tooltip_alpha :: proc(game: ^Game, input: Input) {
+	if game.tooltip.alpha <= 0 do return
+	if game.hovered_card >= 0 do return
+
+	// move the tooltip along with mouse as it fades
+	FADE_DELAY :: f32(0.25)
+	FADE_SPEED :: f32(4.0)
+	game.tooltip.delay += input.time.dt
+	if game.tooltip.delay >= FADE_DELAY {
+		game.tooltip.alpha -= FADE_SPEED * input.time.dt
+	}
+	if game.tooltip.alpha < 0 do game.tooltip.alpha = 0
+}
+
+@(private = "file")
+update_hovered_card :: proc(game: ^Game, input: Input) {
 	mouse := rl.Vector2{f32(input.mouse.world_x), f32(input.mouse.world_y)}
 	game.hovered_card = -1
 
@@ -23,35 +70,37 @@ update_tooltip :: proc(game: ^Game, input: ^Input) {
 		card_pos := game.card_positions[i]
 		rect := rl.Rectangle{card_pos.x, card_pos.y, card_w, card_h}
 		if rl.CheckCollisionPointRec(mouse, rect) {
-			text := fmt.ctprintf("%v of %vs", card.pip, card.suit)
-			set_tooltip_text(&game.tooltip, text)
 			game.hovered_card = i
 			break
 		}
 	}
+}
 
-	// sync the tooltip to the mouse position
+@(private = "file")
+update_tooltip_text :: proc(game: ^Game) {
+	// nothing to do if we're not over a card
+	if game.hovered_card < 0 do return
+
+	card := game.hand[game.hovered_card]
+	text := fmt.ctprintf("%v of %vs", card.pip, card.suit)
+	set_tooltip_text(&game.tooltip, text)
+}
+
+@(private = "file")
+update_tooltip_position :: proc(game: ^Game, input: Input) {
 	OFFSET_X :: 10
 	OFFSET_Y :: 10
 	game.tooltip.x = input.mouse.world_x + OFFSET_X
 	game.tooltip.y = input.mouse.world_y + OFFSET_Y
-
-	if game.hovered_card < 0 && game.tooltip.alpha > 0 {
-		// move the tooltip along with mouse as it fades
-		FADE_DELAY :: f32(0.25)
-		FADE_SPEED :: f32(4.0)
-		game.tooltip.delay += input.time.dt
-		if game.tooltip.delay >= FADE_DELAY {
-			game.tooltip.alpha -= FADE_SPEED * input.time.dt
-		}
-		if game.tooltip.alpha < 0 do game.tooltip.alpha = 0
-	}
 }
 
-@(private = "file")
 set_tooltip_text :: proc(tooltip: ^Tooltip, text: cstring) {
+	// reset the alpha & timer
 	tooltip.alpha = 1.0
 	tooltip.delay = 0
+
+	// update the text
+	// TODO: simplify this
 	bytes := transmute([^]u8)text
 	n := 0
 	for n < len(tooltip.text) - 1 && bytes[n] != 0 {
@@ -60,21 +109,4 @@ set_tooltip_text :: proc(tooltip: ^Tooltip, text: cstring) {
 	}
 	tooltip.text[n] = 0
 	tooltip.len = n
-}
-
-draw_tooltip :: proc(tooltip: ^Tooltip) {
-	if tooltip.alpha <= 0 do return
-
-	FONT_SIZE :: i32(8)
-	PADDING :: i32(4)
-	text := cstring(raw_data(tooltip.text[:]))
-	text_w := rl.MeasureText(text, FONT_SIZE)
-	bg_rect := rl.Rectangle {
-		f32(tooltip.x - PADDING),
-		f32(tooltip.y - PADDING),
-		f32(text_w + PADDING * 2),
-		f32(FONT_SIZE + PADDING * 2),
-	}
-	rl.DrawRectangleRounded(bg_rect, 0.4, 4, rl.ColorAlpha(rl.WHITE, tooltip.alpha))
-	rl.DrawText(text, tooltip.x, tooltip.y, FONT_SIZE, rl.ColorAlpha(rl.BLACK, tooltip.alpha))
 }

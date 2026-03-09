@@ -9,7 +9,7 @@ update :: proc(game: ^Game, input: ^Input) {
 	update_music(&game.music)
 	update_dot(&game.dot, input, &game.sounds)
 	update_card_positions(game)
-	update_tooltip(game, input)
+	update_tooltip(game, input^)
 
 	if input.mouse.right_pressed {
 		shuffle_deck(&game.deck)
