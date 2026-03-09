@@ -19,7 +19,8 @@ update_tooltip :: proc(game: ^Game, input: Input) {
 	update_tooltip_alpha(game, input)
 }
 
-draw_tooltip :: proc(tooltip: ^Tooltip) {
+draw_tooltip :: proc(game: Game) {
+	tooltip := game.tooltip
 	if tooltip.alpha <= 0 do return
 
 	FONT_SIZE :: i32(8)

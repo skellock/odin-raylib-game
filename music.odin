@@ -14,7 +14,7 @@ init_music :: proc() -> Music {
 	return music
 }
 
-play_music :: proc(music: ^Music) {
+play_music :: proc(music: Music) {
 	if rl.IsMusicValid(music.cvb) {
 		rl.PlayMusicStream(music.cvb)
 	}

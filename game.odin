@@ -31,7 +31,7 @@ init_game :: proc() -> Game {
 	}
 	deal_to_hand(&game)
 
-	play_music(&game.music)
+	play_music(game.music)
 
 	return game
 }

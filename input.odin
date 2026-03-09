@@ -37,7 +37,7 @@ init_input :: proc() -> Input {
 	return Input{}
 }
 
-capture_input :: proc(game: ^Game, input: ^Input) {
+capture_input :: proc(game: Game, input: ^Input) {
 	// mouse coordinates
 	screen_pos := rl.GetMousePosition()
 	input.mouse.screen_x = i32(screen_pos.x)

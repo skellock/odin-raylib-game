@@ -16,7 +16,7 @@ play_sound :: proc(sound: rl.Sound) {
 	rl.PlaySound(sound)
 }
 
-play_jump_sound :: proc(sounds: ^Sounds) {
+play_jump_sound :: proc(sounds: Sounds) {
 	pitch := rand.float32_range(0.8, 1.2)
 	rl.SetSoundVolume(sounds.jump, 0.3)
 	rl.SetSoundPitch(sounds.jump, pitch)

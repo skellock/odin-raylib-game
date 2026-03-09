@@ -3,7 +3,7 @@ package main
 import rl "vendor:raylib"
 
 // The main drawing function called once per frame.
-draw :: proc(game: ^Game, input: Input) {
+draw :: proc(game: Game, input: Input) {
 	rl.BeginDrawing()
 	defer rl.EndDrawing()
 
@@ -12,9 +12,9 @@ draw :: proc(game: ^Game, input: Input) {
 
 	draw_background(input)
 	draw_cards(game, input)
-	draw_tooltip(&game.tooltip)
+	draw_tooltip(game)
 	draw_poker_hand(game, input)
-	draw_dot(&game.dot, input)
+	draw_dot(game, input)
 	draw_debug(input)
 }
 
@@ -29,7 +29,7 @@ draw_background :: proc(input: Input) {
 }
 
 @(private = "file")
-draw_cards :: proc(game: ^Game, input: Input) {
+draw_cards :: proc(game: Game, input: Input) {
 	SHADOW_OFFSET :: rl.Vector2{1, 1}
 
 	for card, idx in game.hand {
@@ -65,7 +65,7 @@ draw_card_hover :: proc(tex: rl.Texture2D, pos: rl.Vector2) {
 }
 
 @(private = "file")
-draw_poker_hand :: proc(game: ^Game, input: Input) {
+draw_poker_hand :: proc(game: Game, input: Input) {
 	text: cstring
 	switch game.poker_hand {
 	case .Nothing:
