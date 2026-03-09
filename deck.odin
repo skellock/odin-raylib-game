@@ -151,12 +151,12 @@ init_cards :: proc(card_string: string, card_map: map[string]Card) -> [dynamic]C
 	result := make([dynamic]Card)
 
 	// jet if the string is empty
-	if len(card_string) == 0 {return result}
+	if len(card_string) == 0 do return result
 
 	splits := strings.split(card_string, " ", context.temp_allocator)
 
 	// jet if there are no splits
-	if len(splits) == 0 {return result}
+	if len(splits) == 0 do return result
 
 	for code in splits {
 		card := card_map[code]
