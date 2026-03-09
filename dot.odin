@@ -27,7 +27,7 @@ init_dot :: proc() -> Dot {
 	return Dot{color = .Yellow, size = NORMAL_DOT_SIZE, x = 0, y = 0, tweens = ease.flux_init(f32)}
 }
 
-update_dot :: proc(dot: ^Dot, input: ^Input, sounds: ^Sounds) {
+update_dot :: proc(dot: ^Dot, input: Input, sounds: ^Sounds) {
 	if input.mouse.left_pressed {
 		move_dot_location(dot, input)
 		play_jump_sound(sounds)
@@ -42,7 +42,7 @@ update_dot :: proc(dot: ^Dot, input: ^Input, sounds: ^Sounds) {
 	update_dot_tweens(dot, input)
 }
 
-draw_dot :: proc(dot: ^Dot, input: ^Input) {
+draw_dot :: proc(dot: ^Dot, input: Input) {
 	dot_color: rl.Color
 
 	switch dot.color {
@@ -65,12 +65,12 @@ draw_dot :: proc(dot: ^Dot, input: ^Input) {
 }
 
 @(private = "file")
-update_dot_tweens :: proc(dot: ^Dot, input: ^Input) {
+update_dot_tweens :: proc(dot: ^Dot, input: Input) {
 	ease.flux_update(&dot.tweens, f64(input.time.dt))
 }
 
 @(private = "file")
-update_dot_size :: proc(dot: ^Dot, input: ^Input) {
+update_dot_size :: proc(dot: ^Dot, input: Input) {
 	big := dot.x < f32(input.viewport.width / 2)
 	to_size := f32(big ? BIG_DOT_SIZE : NORMAL_DOT_SIZE)
 
@@ -78,7 +78,7 @@ update_dot_size :: proc(dot: ^Dot, input: ^Input) {
 }
 
 @(private = "file")
-move_dot_location :: proc(dot: ^Dot, input: ^Input) {
+move_dot_location :: proc(dot: ^Dot, input: Input) {
 	DURATION :: time.Millisecond * 500
 	EASE :: ease.Ease.Quadratic_Out
 	DELAY: f64 : 0

@@ -5,11 +5,11 @@ import rl "vendor:raylib"
 CARD_SCALE :: f32(1.0 / 3.0)
 
 // The main update statement called once per frame.
-update :: proc(game: ^Game, input: ^Input) {
+update :: proc(game: ^Game, input: Input) {
 	update_music(&game.music)
 	update_dot(&game.dot, input, &game.sounds)
 	update_card_positions(game)
-	update_tooltip(game, input^)
+	update_tooltip(game, input)
 
 	if input.mouse.right_pressed {
 		shuffle_deck(&game.deck)

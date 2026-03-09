@@ -29,8 +29,8 @@ main :: proc() {
 	// main game loop -- continues until <esc> or window closed
 	for !rl.WindowShouldClose() {
 		capture_input(&game, &input)
-		update(&game, &input)
-		draw(&game, &input)
+		update(&game, input)
+		draw(&game, input)
 
 		free_all(context.temp_allocator) // free any frame allocations
 	}
