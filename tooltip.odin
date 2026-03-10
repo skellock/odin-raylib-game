@@ -4,11 +4,12 @@ import "core:fmt"
 import rl "vendor:raylib"
 
 Tooltip :: struct {
-	text:  string,
-	x:     i32,
-	y:     i32,
-	alpha: f32,
-	delay: f32,
+	text_buf: [256]byte,
+	text_len: int,
+	x:        i32,
+	y:        i32,
+	alpha:    f32,
+	delay:    f32,
 }
 
 update_tooltip :: proc(game: ^Game, input: Input) {
@@ -24,7 +25,9 @@ draw_tooltip :: proc(game: Game) {
 
 	FONT_SIZE :: i32(8)
 	PADDING :: i32(4)
-	text := fmt.ctprintf("%s", tooltip.text)
+
+	// make a cstring for the raylib text
+	text := fmt.ctprintf("%s", tooltip.text_buf[:tooltip.text_len])
 
 	// calculate text size
 	text_w := rl.MeasureText(text, FONT_SIZE)
@@ -93,8 +96,10 @@ update_tooltip_position :: proc(game: ^Game, input: Input) {
 	game.tooltip.y = input.mouse.world_y + OFFSET_Y
 }
 
+@(private = "file")
 set_tooltip_text :: proc(tooltip: ^Tooltip, text: string) {
 	tooltip.alpha = 1.0
 	tooltip.delay = 0
-	tooltip.text = text
+	tooltip.text_len = min(len(text), len(tooltip.text_buf))
+	copy(tooltip.text_buf[:tooltip.text_len], text[:tooltip.text_len])
 }
