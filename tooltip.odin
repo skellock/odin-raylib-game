@@ -4,8 +4,7 @@ import "core:fmt"
 import rl "vendor:raylib"
 
 Tooltip :: struct {
-	text:  [64]u8,
-	len:   int,
+	text:  string,
 	x:     i32,
 	y:     i32,
 	alpha: f32,
@@ -25,7 +24,7 @@ draw_tooltip :: proc(game: Game) {
 
 	FONT_SIZE :: i32(8)
 	PADDING :: i32(4)
-	text := cstring(raw_data(tooltip.text[:]))
+	text := fmt.ctprintf("%s", tooltip.text)
 
 	// calculate text size
 	text_w := rl.MeasureText(text, FONT_SIZE)
@@ -83,8 +82,7 @@ update_tooltip_text :: proc(game: ^Game) {
 	if game.hovered_card < 0 do return
 
 	card := game.hand[game.hovered_card]
-	text := fmt.ctprintf("%v of %vs", card.pip, card.suit)
-	set_tooltip_text(&game.tooltip, text)
+	set_tooltip_text(&game.tooltip, fmt.tprintf("%v of %vs", card.pip, card.suit))
 }
 
 @(private = "file")
@@ -95,19 +93,8 @@ update_tooltip_position :: proc(game: ^Game, input: Input) {
 	game.tooltip.y = input.mouse.world_y + OFFSET_Y
 }
 
-set_tooltip_text :: proc(tooltip: ^Tooltip, text: cstring) {
-	// reset the alpha & timer
+set_tooltip_text :: proc(tooltip: ^Tooltip, text: string) {
 	tooltip.alpha = 1.0
 	tooltip.delay = 0
-
-	// update the text
-	// TODO: simplify this
-	bytes := transmute([^]u8)text
-	n := 0
-	for n < len(tooltip.text) - 1 && bytes[n] != 0 {
-		tooltip.text[n] = bytes[n]
-		n += 1
-	}
-	tooltip.text[n] = 0
-	tooltip.len = n
+	tooltip.text = text
 }
