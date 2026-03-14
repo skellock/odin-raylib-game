@@ -93,5 +93,19 @@ draw_poker_hand :: proc(game: Game, input: Input) {
 		text = "Royal Flush"
 	}
 
-	rl.DrawText(text, 200, 300, 20, rl.WHITE)
+	FONT_SIZE :: i32(20)
+	MARGIN_TOP :: i32(10)
+
+	// center text with the hand of cards
+	first := game.card_positions[0]
+	last := game.card_positions[len(game.hand) - 1]
+	card := game.card_images.cards[game.hand[0]]
+	card_w := f32(card.width) * CARD_SCALE
+	card_h := f32(card.height) * CARD_SCALE
+	hand_center_x := (first.x + last.x + card_w) / 2
+	text_w := f32(rl.MeasureText(text, FONT_SIZE))
+	x := i32(hand_center_x - text_w / 2)
+	y := i32(first.y + card_h) + MARGIN_TOP
+
+	rl.DrawText(text, x, y, FONT_SIZE, rl.WHITE)
 }
