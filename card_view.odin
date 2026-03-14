@@ -15,14 +15,20 @@ init_card_view :: proc(card: Card, texture: rl.Texture2D) -> CardView {
 	return CardView{card = card, texture = texture}
 }
 
-draw_cards :: proc(hand: []CardView, hovered_card: int) {
+draw_cards :: proc(game: Game) {
 	SHADOW_OFFSET :: rl.Vector2{1, 1}
 
-	for cv, idx in hand {
-		rl.DrawTextureEx(cv.texture, cv.pos + SHADOW_OFFSET, 0, CARD_SCALE, rl.ColorAlpha(rl.BLACK, 0.1))
+	for cv, idx in game.hand {
+		rl.DrawTextureEx(
+			cv.texture,
+			cv.pos + SHADOW_OFFSET,
+			0,
+			CARD_SCALE,
+			rl.ColorAlpha(rl.BLACK, 0.1),
+		)
 		rl.DrawTextureEx(cv.texture, cv.pos, 0, CARD_SCALE, rl.WHITE)
 
-		if idx == hovered_card {
+		if idx == game.hovered_card {
 			draw_card_hover(cv.texture, cv.pos)
 		}
 	}

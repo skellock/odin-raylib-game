@@ -26,18 +26,13 @@ main :: proc() {
 	game := init_game()
 	input := init_input()
 
+	play_music(game.music)
+
 	// main game loop -- continues until <esc> or window closed
 	for !rl.WindowShouldClose() {
-		// grab the inputs
 		capture_input(game, &input)
-
-		// update the game state
 		update(&game, input)
-
-		// draw everything
 		draw(game, input)
-
-		// free any temporary allocations this frame
 		free_all(context.temp_allocator)
 	}
 
@@ -56,17 +51,15 @@ update :: proc(game: ^Game, input: Input) {
 // The main drawing function called once per frame.
 draw :: proc(game: Game, input: Input) {
 	rl.BeginDrawing()
-	defer rl.EndDrawing()
-
 	rl.BeginMode2D(game.camera)
-	defer rl.EndMode2D()
-
 	draw_background(input)
-	draw_cards(game.hand[:], game.hovered_card)
+	draw_cards(game)
 	draw_poker_hand_type_text(game, input)
 	draw_poker_odds(game)
 	draw_dot(game, input)
 	draw_reshuffler(game, input)
 	draw_tooltip(game)
 	draw_debug(input)
+	rl.EndMode2D()
+	rl.EndDrawing()
 }
