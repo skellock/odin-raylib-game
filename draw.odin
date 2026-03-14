@@ -12,7 +12,7 @@ draw :: proc(game: Game, input: Input) {
 	defer rl.EndMode2D()
 
 	draw_background(input)
-	draw_cards(game, input)
+	draw_cards(game.hand[:], game.hovered_card)
 	draw_poker_hand_type_text(game, input)
 	draw_poker_odds(game)
 	draw_dot(game, input)
@@ -29,40 +29,6 @@ draw_background :: proc(input: Input) {
 	rl.DrawRectangle(0, 0, x, input.viewport.height, rl.BLUE)
 	rl.DrawRectangle(x, 0, x, input.viewport.height, rl.SKYBLUE)
 	rl.DrawRectangle(x - 1, 0, 2, input.viewport.height, rl.ColorAlpha(rl.WHITE, 0.5))
-}
-
-@(private = "file")
-draw_cards :: proc(game: Game, input: Input) {
-	SHADOW_OFFSET :: rl.Vector2{1, 1}
-
-	for cv, idx in game.hand {
-		rl.DrawTextureEx(cv.texture, cv.pos + SHADOW_OFFSET, 0, CARD_SCALE, rl.ColorAlpha(rl.BLACK, 0.1))
-		rl.DrawTextureEx(cv.texture, cv.pos, 0, CARD_SCALE, rl.WHITE)
-
-		// are we hovering over this card?
-		if idx == game.hovered_card {
-			draw_card_hover(cv.texture, cv.pos)
-		}
-	}
-}
-
-@(private = "file")
-draw_card_hover :: proc(tex: rl.Texture2D, pos: rl.Vector2) {
-	INSET :: f32(2)
-	THICKNESS :: 3
-	ROUNDNESS :: 0.25
-	SEGMENTS :: 4
-
-	card_w := f32(tex.width) * CARD_SCALE - INSET * 2
-	card_h := f32(tex.height) * CARD_SCALE - INSET * 2
-
-	rl.DrawRectangleRoundedLinesEx(
-		{pos.x + INSET, pos.y + INSET, card_w, card_h},
-		ROUNDNESS,
-		SEGMENTS,
-		THICKNESS,
-		rl.GREEN,
-	)
 }
 
 @(private = "file")
