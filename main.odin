@@ -52,6 +52,7 @@ update :: proc(game: ^Game, input: Input) {
 draw :: proc(game: Game, input: Input) {
 	rl.BeginDrawing()
 	rl.BeginMode2D(game.camera)
+
 	draw_background(input)
 	draw_cards(game)
 	draw_poker_hand_type_text(game, input)
@@ -60,6 +61,7 @@ draw :: proc(game: Game, input: Input) {
 	draw_reshuffler(game, input)
 	draw_tooltip(game)
 	draw_debug(input)
+
 	rl.EndMode2D()
 	rl.EndDrawing()
 }
