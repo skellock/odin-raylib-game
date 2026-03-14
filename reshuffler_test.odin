@@ -13,7 +13,7 @@ init_reshuffler_test :: proc(t: ^testing.T) {
 }
 
 @(test)
-reshuffler_cooldown_blocks_test :: proc(t: ^testing.T) {
+reshuffler_cooldown_test :: proc(t: ^testing.T) {
 	reshuffler := init_reshuffler()
 	defer destroy_reshuffler(&reshuffler)
 
@@ -22,11 +22,11 @@ reshuffler_cooldown_blocks_test :: proc(t: ^testing.T) {
 	testing.expect_value(t, reshuffler.cooldown.active, true)
 
 	// after partial time, still active
-	update_timer(&reshuffler.cooldown, 1.0)
+	update_timer(&reshuffler.cooldown, RESHUFFLE_COOLDOWN * 0.5)
 	testing.expect_value(t, reshuffler.cooldown.active, true)
 
 	// after full duration, cooldown expires
-	update_timer(&reshuffler.cooldown, 2.0)
+	update_timer(&reshuffler.cooldown, RESHUFFLE_COOLDOWN * 1.5)
 	testing.expect_value(t, reshuffler.cooldown.active, false)
 }
 
@@ -37,11 +37,11 @@ reshuffler_cooldown_resets_test :: proc(t: ^testing.T) {
 
 	// first cooldown cycle
 	start_timer(&reshuffler.cooldown)
-	update_timer(&reshuffler.cooldown, 3.0)
+	update_timer(&reshuffler.cooldown, RESHUFFLE_COOLDOWN)
 	testing.expect_value(t, reshuffler.cooldown.active, false)
 
 	// can start again
 	start_timer(&reshuffler.cooldown)
 	testing.expect_value(t, reshuffler.cooldown.active, true)
-	testing.expect_value(t, reshuffler.cooldown.elapsed, f32(0.0))
+	testing.expect_value(t, reshuffler.cooldown.elapsed, 0)
 }
