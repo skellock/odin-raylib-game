@@ -10,13 +10,7 @@ update :: proc(game: ^Game, input: Input) {
 	update_dot(&game.dot, input, game.sounds)
 	update_card_positions(game)
 	update_tooltip(game, input)
-	update_timer(&game.reshuffle_cooldown, input.time.dt)
-
-	if input.mouse.right_pressed && !game.reshuffle_cooldown.active {
-		shuffle_deck(&game.deck)
-		deal_to_hand(game)
-		start_timer(&game.reshuffle_cooldown)
-	}
+	update_reshuffler(game, input)
 }
 
 update_card_positions :: proc(game: ^Game) {

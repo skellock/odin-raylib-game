@@ -14,6 +14,7 @@ draw :: proc(game: Game, input: Input) {
 	draw_cards(game, input)
 	draw_poker_hand(game, input)
 	draw_dot(game, input)
+	draw_reshuffler(game, input)
 	draw_tooltip(game)
 	draw_debug(input)
 }

@@ -2,21 +2,19 @@ package main
 
 import rl "vendor:raylib"
 
-RESHUFFLE_COOLDOWN :: 3.0
-
 Game :: struct {
-	dot:                Dot,
-	camera:             rl.Camera2D,
-	card_images:        CardImages,
-	music:              Music,
-	sounds:             Sounds,
-	deck:               Deck,
-	hand:               [dynamic]Card,
-	poker_hand:         PokerHand,
-	tooltip:            Tooltip,
-	card_positions:     [5]rl.Vector2,
-	hovered_card:       int,
-	reshuffle_cooldown: Timer,
+	dot:            Dot,
+	camera:         rl.Camera2D,
+	card_images:    CardImages,
+	music:          Music,
+	sounds:         Sounds,
+	deck:           Deck,
+	hand:           [dynamic]Card,
+	poker_hand:     PokerHand,
+	tooltip:        Tooltip,
+	card_positions: [5]rl.Vector2,
+	hovered_card:   int,
+	reshuffler:     Reshuffler,
 }
 
 init_game :: proc() -> Game {
@@ -31,7 +29,7 @@ init_game :: proc() -> Game {
 		sounds = init_sounds(),
 		deck = deck,
 		hand = hand,
-		reshuffle_cooldown = init_timer(RESHUFFLE_COOLDOWN, one_shot = true),
+		reshuffler = init_reshuffler(),
 	}
 	deal_to_hand(&game)
 
@@ -54,5 +52,5 @@ destroy_game :: proc(game: ^Game) {
 	destroy_card_images(&game.card_images)
 	destroy_music(&game.music)
 	destroy_sounds(&game.sounds)
-	destroy_timer(&game.reshuffle_cooldown)
+	destroy_reshuffler(&game.reshuffler)
 }
