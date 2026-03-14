@@ -35,15 +35,13 @@ draw_background :: proc(input: Input) {
 draw_cards :: proc(game: Game, input: Input) {
 	SHADOW_OFFSET :: rl.Vector2{1, 1}
 
-	for card, idx in game.hand {
-		tex := game.card_images.cards[card]
-		pos := game.card_positions[idx]
-		rl.DrawTextureEx(tex, pos + SHADOW_OFFSET, 0, CARD_SCALE, rl.ColorAlpha(rl.BLACK, 0.1))
-		rl.DrawTextureEx(tex, pos, 0, CARD_SCALE, rl.WHITE)
+	for cv, idx in game.hand {
+		rl.DrawTextureEx(cv.texture, cv.pos + SHADOW_OFFSET, 0, CARD_SCALE, rl.ColorAlpha(rl.BLACK, 0.1))
+		rl.DrawTextureEx(cv.texture, cv.pos, 0, CARD_SCALE, rl.WHITE)
 
 		// are we hovering over this card?
 		if idx == game.hovered_card {
-			draw_card_hover(tex, pos)
+			draw_card_hover(cv.texture, cv.pos)
 		}
 	}
 }
@@ -99,15 +97,14 @@ draw_poker_hand_text :: proc(game: Game, input: Input) {
 	MARGIN_TOP :: i32(10)
 
 	// center text with the hand of cards
-	first := game.card_positions[0]
-	last := game.card_positions[len(game.hand) - 1]
-	card := game.card_images.cards[game.hand[0]]
-	card_w := f32(card.width) * CARD_SCALE
-	card_h := f32(card.height) * CARD_SCALE
-	hand_center_x := (first.x + last.x + card_w) / 2
+	first := game.hand[0]
+	last := game.hand[len(game.hand) - 1]
+	card_w := f32(first.texture.width) * CARD_SCALE
+	card_h := f32(first.texture.height) * CARD_SCALE
+	hand_center_x := (first.pos.x + last.pos.x + card_w) / 2
 	text_w := f32(rl.MeasureText(text, FONT_SIZE))
 	x := i32(hand_center_x - text_w / 2)
-	y := i32(first.y + card_h) + MARGIN_TOP
+	y := i32(first.pos.y + card_h) + MARGIN_TOP
 
 	rl.DrawText(text, x, y, FONT_SIZE, rl.WHITE)
 }
@@ -123,14 +120,14 @@ draw_poker_odds :: proc(game: Game) {
 	one_in := int(1.0 / odds + 0.5)
 	text := fmt.ctprintf("1 in {}", format_with_commas(one_in, context.temp_allocator))
 
-	first := game.card_positions[0]
-	last := game.card_positions[len(game.hand) - 1]
-	card_w := f32(game.card_images.cards[game.hand[0]].width) * CARD_SCALE
-	hand_center_x := (first.x + last.x + card_w) / 2
+	first := game.hand[0]
+	last := game.hand[len(game.hand) - 1]
+	card_w := f32(first.texture.width) * CARD_SCALE
+	hand_center_x := (first.pos.x + last.pos.x + card_w) / 2
 
 	text_w := f32(rl.MeasureText(text, FONT_SIZE))
 	x := i32(hand_center_x - text_w / 2)
-	y := i32(first.y) - FONT_SIZE - MARGIN_BOTTOM
+	y := i32(first.pos.y) - FONT_SIZE - MARGIN_BOTTOM
 
 	rl.DrawText(text, x, y, FONT_SIZE, rl.ColorAlpha(rl.WHITE, 0.7))
 }

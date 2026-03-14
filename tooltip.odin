@@ -66,12 +66,10 @@ update_hovered_card :: proc(game: ^Game, input: Input) {
 	game.hovered_card = -1
 
 	for i := len(game.hand) - 1; i >= 0; i -= 1 {
-		card := game.hand[i]
-		tex := game.card_images.cards[card]
-		card_w := f32(tex.width) * CARD_SCALE
-		card_h := f32(tex.height) * CARD_SCALE
-		card_pos := game.card_positions[i]
-		rect := rl.Rectangle{card_pos.x, card_pos.y, card_w, card_h}
+		cv := game.hand[i]
+		card_w := f32(cv.texture.width) * CARD_SCALE
+		card_h := f32(cv.texture.height) * CARD_SCALE
+		rect := rl.Rectangle{cv.pos.x, cv.pos.y, card_w, card_h}
 		if rl.CheckCollisionPointRec(mouse, rect) {
 			game.hovered_card = i
 			break
@@ -84,7 +82,7 @@ update_tooltip_text :: proc(game: ^Game) {
 	// nothing to do if we're not over a card
 	if game.hovered_card < 0 do return
 
-	card := game.hand[game.hovered_card]
+	card := game.hand[game.hovered_card].card
 	set_tooltip_text(&game.tooltip, fmt.tprintf("%v of %vs", card.pip, card.suit))
 }
 

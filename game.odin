@@ -9,17 +9,16 @@ Game :: struct {
 	music:          Music,
 	sounds:         Sounds,
 	deck:           Deck,
-	hand:           [dynamic]Card,
+	hand:           [dynamic]CardView,
 	poker_hand:     PokerHand,
 	tooltip:        Tooltip,
-	card_positions: [5]rl.Vector2,
 	hovered_card:   int,
 	reshuffler:     Reshuffler,
 }
 
 init_game :: proc() -> Game {
 	deck := init_shuffled_deck()
-	hand := make([dynamic]Card)
+	hand := make([dynamic]CardView)
 
 	game := Game {
 		dot = init_dot(),
@@ -41,9 +40,20 @@ init_game :: proc() -> Game {
 deal_to_hand :: proc(game: ^Game) {
 	clear(&game.hand)
 	for i in 0 ..< 5 {
-		append(&game.hand, game.deck.cards[i])
+		card := game.deck.cards[i]
+		tex := game.card_images.cards[card]
+		append(&game.hand, init_card_view(card, tex))
 	}
-	game.poker_hand = score_hand(game.hand[:])
+	game.poker_hand = score_hand(hand_cards(game.hand[:], context.temp_allocator))
+	update_card_view_positions(game.hand[:])
+}
+
+hand_cards :: proc(hand: []CardView, allocator := context.allocator) -> []Card {
+	cards := make([]Card, len(hand), allocator)
+	for cv, i in hand {
+		cards[i] = cv.card
+	}
+	return cards
 }
 
 destroy_game :: proc(game: ^Game) {
