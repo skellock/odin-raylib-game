@@ -1,5 +1,6 @@
 package main
 
+import "core:fmt"
 import rl "vendor:raylib"
 
 // The main drawing function called once per frame.
@@ -113,13 +114,14 @@ draw_poker_hand_text :: proc(game: Game, input: Input) {
 
 @(private = "file")
 draw_poker_odds :: proc(game: Game) {
-	if game.poker_hand == .HighCard do return
+	if game.poker_hand == .Nothing || game.poker_hand == .HighCard do return
 
 	FONT_SIZE :: i32(10)
 	MARGIN_BOTTOM :: i32(4)
 
-	odds := poker_odds[game.poker_hand] * 100
-	text := odds > 1 ? rl.TextFormat("%.2f%%", odds) : rl.TextFormat("%.4f%%", odds)
+	odds := poker_odds[game.poker_hand]
+	one_in := int(1.0 / odds + 0.5)
+	text := fmt.ctprintf("1 in {}", format_with_commas(one_in, context.temp_allocator))
 
 	first := game.card_positions[0]
 	last := game.card_positions[len(game.hand) - 1]
