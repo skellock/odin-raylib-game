@@ -1,6 +1,5 @@
 package main
 
-import "core:math"
 import rl "vendor:raylib"
 
 RESHUFFLE_COOLDOWN :: f32(3.0)
