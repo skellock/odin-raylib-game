@@ -1,6 +1,6 @@
 package main
 
-import "core:fmt"
+import "core:math"
 import rl "vendor:raylib"
 
 RESHUFFLE_COOLDOWN :: f32(3.0)
@@ -27,15 +27,25 @@ draw_reshuffler :: proc(game: Game, input: Input) {
 	cooldown := game.reshuffler.cooldown
 	if !cooldown.active do return
 
-	remaining := cooldown.duration - cooldown.elapsed
-	text := fmt.ctprintf("%.1f", remaining)
+	RADIUS :: f32(8)
+	OFFSET_Y :: f32(16)
+	SEGMENTS :: 36
+	BG_COLOR := rl.ColorAlpha(rl.BLACK, 0.3)
+	FG_COLOR := rl.WHITE
 
-	FONT_SIZE :: i32(7)
-	OFFSET_Y :: i32(12)
+	cx := f32(input.mouse.world_x)
+	cy := f32(input.mouse.world_y) + OFFSET_Y
 
-	x := input.mouse.world_x
-	y := input.mouse.world_y + OFFSET_Y
-	rl.DrawText(text, x, y, FONT_SIZE, rl.WHITE)
+	// elapsed fraction (0.0 = start, 1.0 = done)
+	fraction := cooldown.elapsed / cooldown.duration
+
+	// background circle
+	rl.DrawCircleV({cx, cy}, RADIUS, BG_COLOR)
+
+	// pie slice filling up as cooldown progresses
+	start_angle := f32(-90)
+	end_angle := start_angle + fraction * 360
+	rl.DrawCircleSector({cx, cy}, RADIUS, start_angle, end_angle, SEGMENTS, FG_COLOR)
 }
 
 destroy_reshuffler :: proc(reshuffler: ^Reshuffler) {
