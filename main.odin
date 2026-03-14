@@ -27,11 +27,13 @@ main :: proc() {
 	rl.InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Game")
 	defer rl.CloseWindow()
 
-	// setup state
-	game := init_game()
-	input := init_input()
+	// initialize the resource
+	card_images := init_card_images()
 	music := init_music()
 	sounds := init_sounds()
+
+	game := init_game(card_images)
+	input := init_input()
 
 	play_music(music)
 
@@ -40,21 +42,22 @@ main :: proc() {
 		capture_input(game, &input)
 		update_music(&music)
 		update_dot(&game.dot, input, sounds)
-		update(&game, input)
+		update(&game, input, card_images)
 		draw(game, input)
 		free_all(context.temp_allocator)
 	}
 
-	destroy_game(&game)
+	destroy_card_images(&card_images)
 	destroy_music(&music)
 	destroy_sounds(&sounds)
+	destroy_game(&game)
 }
 
 // The main update statement called once per frame.
-update :: proc(game: ^Game, input: Input) {
+update :: proc(game: ^Game, input: Input, card_images: CardImages) {
 	update_card_view_positions(game.hand[:])
 	update_tooltip(game, input)
-	update_reshuffler(game, input)
+	update_reshuffler(game, input, card_images)
 }
 
 // The main drawing function called once per frame.
