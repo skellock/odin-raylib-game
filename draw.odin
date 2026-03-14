@@ -13,7 +13,7 @@ draw :: proc(game: Game, input: Input) {
 
 	draw_background(input)
 	draw_cards(game, input)
-	draw_poker_hand_text(game, input)
+	draw_poker_hand_type_text(game, input)
 	draw_poker_odds(game)
 	draw_dot(game, input)
 	draw_reshuffler(game, input)
@@ -66,9 +66,9 @@ draw_card_hover :: proc(tex: rl.Texture2D, pos: rl.Vector2) {
 }
 
 @(private = "file")
-draw_poker_hand_text :: proc(game: Game, input: Input) {
+draw_poker_hand_type_text :: proc(game: Game, input: Input) {
 	text: cstring
-	switch game.poker_hand {
+	switch game.poker_hand_type {
 	case .Nothing:
 		text = "Nothing"
 	case .HighCard:
@@ -111,12 +111,12 @@ draw_poker_hand_text :: proc(game: Game, input: Input) {
 
 @(private = "file")
 draw_poker_odds :: proc(game: Game) {
-	if game.poker_hand == .Nothing || game.poker_hand == .HighCard do return
+	if game.poker_hand_type == .Nothing || game.poker_hand_type == .HighCard do return
 
 	FONT_SIZE :: i32(10)
 	MARGIN_BOTTOM :: i32(4)
 
-	odds := poker_odds[game.poker_hand]
+	odds := poker_odds[game.poker_hand_type]
 	one_in := int(1.0 / odds + 0.5)
 	text := fmt.ctprintf("1 in {}", format_with_commas(one_in, context.temp_allocator))
 

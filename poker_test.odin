@@ -96,15 +96,15 @@ has_royal_flush_test :: proc(t: ^testing.T) {
 }
 
 // A helper function for testing if a hand is a certain type of Poker Hand.
-expect_poker_hand_score :: proc(t: ^testing.T, hand_string: string, hand: PokerHand) {
+expect_poker_hand_score :: proc(t: ^testing.T, hand_string: string, hand_type: PokerHandType) {
 	context.allocator = context.temp_allocator
 	card_map := init_card_map()
 	cards := init_cards(hand_string, card_map)
 	score := score_hand(cards[:])
 	testing.expect(
 		t,
-		score == hand,
-		fmt.tprintf("expected (%s) to be %v but was %v", hand_string, hand, score),
+		score == hand_type,
+		fmt.tprintf("expected (%s) to be %v but was %v", hand_string, hand_type, score),
 	)
 }
 

@@ -2,7 +2,7 @@ package main
 
 import "core:sort"
 
-PokerHand :: enum {
+PokerHandType :: enum {
 	Nothing,
 	HighCard,
 	Pair,
@@ -16,7 +16,7 @@ PokerHand :: enum {
 	RoyalFlush,
 }
 
-poker_odds := [PokerHand]f64 {
+poker_odds := [PokerHandType]f64 {
 	.Nothing       = 0.0,
 	.HighCard      = 1.0,
 	.Pair          = 0.422569,
@@ -128,7 +128,7 @@ has_royal_flush :: proc(cards: []Card) -> bool {
 	return pip_map[.Ten] == 1 && pip_map[.Ace] == 1
 }
 
-score_hand :: proc(cards: []Card) -> PokerHand {
+score_hand :: proc(cards: []Card) -> PokerHandType {
 	if has_royal_flush(cards) do return .RoyalFlush
 	if has_straight_flush(cards) do return .StraightFlush
 	if has_four_of_a_kind(cards) do return .FourOfAKind

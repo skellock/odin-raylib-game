@@ -3,17 +3,17 @@ package main
 import rl "vendor:raylib"
 
 Game :: struct {
-	dot:            Dot,
-	camera:         rl.Camera2D,
-	card_images:    CardImages,
-	music:          Music,
-	sounds:         Sounds,
-	deck:           Deck,
-	hand:           [dynamic]CardView,
-	poker_hand:     PokerHand,
-	tooltip:        Tooltip,
-	hovered_card:   int,
-	reshuffler:     Reshuffler,
+	dot:             Dot,
+	camera:          rl.Camera2D,
+	card_images:     CardImages,
+	music:           Music,
+	sounds:          Sounds,
+	deck:            Deck,
+	hand:            [dynamic]CardView,
+	poker_hand_type: PokerHandType,
+	tooltip:         Tooltip,
+	hovered_card:    int,
+	reshuffler:      Reshuffler,
 }
 
 init_game :: proc() -> Game {
@@ -44,7 +44,7 @@ deal_to_hand :: proc(game: ^Game) {
 		tex := game.card_images.cards[card]
 		append(&game.hand, init_card_view(card, tex))
 	}
-	game.poker_hand = score_hand(hand_cards(game.hand[:], context.temp_allocator))
+	game.poker_hand_type = score_hand(hand_cards(game.hand[:], context.temp_allocator))
 	update_card_view_positions(game.hand[:])
 }
 
