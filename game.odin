@@ -47,10 +47,10 @@ deal_to_hand :: proc(game: ^Game) {
 }
 
 destroy_game :: proc(game: ^Game) {
-	delete(game.hand)
-	destroy_dot(&game.dot)
-	destroy_card_images(&game.card_images)
 	destroy_music(&game.music)
 	destroy_sounds(&game.sounds)
+	destroy_dot(&game.dot)
 	destroy_reshuffler(&game.reshuffler)
+	delete(game.hand)
+	destroy_card_images(&game.card_images)
 }
