@@ -6,8 +6,6 @@ Game :: struct {
 	dot:             Dot,
 	camera:          rl.Camera2D,
 	card_images:     CardImages,
-	music:           Music,
-	sounds:          Sounds,
 	deck:            Deck,
 	hand:            [dynamic]CardView,
 	poker_hand_type: PokerHandType,
@@ -24,8 +22,6 @@ init_game :: proc() -> Game {
 		dot = init_dot(),
 		camera = rl.Camera2D{zoom = f32(WINDOW_HEIGHT / VIEWPORT_HEIGHT)},
 		card_images = init_card_images(),
-		music = init_music(),
-		sounds = init_sounds(),
 		deck = deck,
 		hand = hand,
 		reshuffler = init_reshuffler(),
@@ -55,8 +51,6 @@ hand_cards :: proc(hand: []CardView, allocator := context.allocator) -> []Card {
 }
 
 destroy_game :: proc(game: ^Game) {
-	destroy_music(&game.music)
-	destroy_sounds(&game.sounds)
 	destroy_dot(&game.dot)
 	destroy_reshuffler(&game.reshuffler)
 	delete(game.hand)

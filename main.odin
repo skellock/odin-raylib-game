@@ -30,24 +30,28 @@ main :: proc() {
 	// setup state
 	game := init_game()
 	input := init_input()
+	music := init_music()
+	sounds := init_sounds()
 
-	play_music(game.music)
+	play_music(music)
 
 	// main game loop -- continues until <esc> or window closed
 	for !rl.WindowShouldClose() {
 		capture_input(game, &input)
+		update_music(&music)
+		update_dot(&game.dot, input, sounds)
 		update(&game, input)
 		draw(game, input)
 		free_all(context.temp_allocator)
 	}
 
 	destroy_game(&game)
+	destroy_music(&music)
+	destroy_sounds(&sounds)
 }
 
 // The main update statement called once per frame.
 update :: proc(game: ^Game, input: Input) {
-	update_music(&game.music)
-	update_dot(&game.dot, input, game.sounds)
 	update_card_view_positions(game.hand[:])
 	update_tooltip(game, input)
 	update_reshuffler(game, input)
