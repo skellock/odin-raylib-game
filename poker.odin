@@ -1,6 +1,7 @@
 package main
 
 import "core:sort"
+import rl "vendor:raylib"
 
 PokerHandType :: enum {
 	Nothing,
@@ -112,6 +113,49 @@ has_royal_flush :: proc(cards: []Card) -> bool {
 	if !has_straight_flush(cards) do return false
 	pip_map := init_card_pip_map(cards, context.temp_allocator)
 	return pip_map[.Ten] == 1 && pip_map[.Ace] == 1
+}
+
+draw_poker_hand_type_text :: proc(game: Game, input: Input) {
+	text: cstring
+	switch game.poker_hand_type {
+	case .Nothing:
+		text = "Nothing"
+	case .HighCard:
+		text = "High Card"
+	case .Pair:
+		text = "Pair"
+	case .TwoPair:
+		text = "Two Pair"
+	case .ThreeOfAKind:
+		text = "Three of a Kind"
+	case .Straight:
+		text = "Straight"
+	case .Flush:
+		text = "Flush"
+	case .FullHouse:
+		text = "Full House"
+	case .FourOfAKind:
+		text = "Four of a Kind"
+	case .StraightFlush:
+		text = "Straight Flush"
+	case .RoyalFlush:
+		text = "Royal Flush"
+	}
+
+	FONT_SIZE :: i32(20)
+	MARGIN_TOP :: i32(10)
+
+	// center text with the hand of cards
+	first := game.hand[0]
+	last := game.hand[len(game.hand) - 1]
+	card_w := f32(first.texture.width) * CARD_SCALE
+	card_h := f32(first.texture.height) * CARD_SCALE
+	hand_center_x := (first.pos.x + last.pos.x + card_w) / 2
+	text_w := f32(rl.MeasureText(text, FONT_SIZE))
+	x := i32(hand_center_x - text_w / 2)
+	y := i32(first.pos.y + card_h) + MARGIN_TOP
+
+	rl.DrawText(text, x, y, FONT_SIZE, rl.WHITE)
 }
 
 score_hand :: proc(cards: []Card) -> PokerHandType {
