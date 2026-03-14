@@ -16,6 +16,20 @@ PokerHand :: enum {
 	RoyalFlush,
 }
 
+poker_odds := [PokerHand]f64 {
+	.Nothing       = 0.0,
+	.HighCard      = 1.0,
+	.Pair          = 0.422569,
+	.TwoPair       = 0.047539,
+	.ThreeOfAKind  = 0.021128,
+	.Straight      = 0.003925,
+	.Flush         = 0.001965,
+	.FullHouse     = 0.001441,
+	.FourOfAKind   = 0.000240,
+	.StraightFlush = 0.0000139,
+	.RoyalFlush    = 0.00000154,
+}
+
 has_high_card :: proc(cards: []Card) -> bool {
 	return len(cards) == 5
 }

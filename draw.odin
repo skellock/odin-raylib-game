@@ -12,7 +12,8 @@ draw :: proc(game: Game, input: Input) {
 
 	draw_background(input)
 	draw_cards(game, input)
-	draw_poker_hand(game, input)
+	draw_poker_hand_text(game, input)
+	draw_poker_odds(game)
 	draw_dot(game, input)
 	draw_reshuffler(game, input)
 	draw_tooltip(game)
@@ -66,7 +67,7 @@ draw_card_hover :: proc(tex: rl.Texture2D, pos: rl.Vector2) {
 }
 
 @(private = "file")
-draw_poker_hand :: proc(game: Game, input: Input) {
+draw_poker_hand_text :: proc(game: Game, input: Input) {
 	text: cstring
 	switch game.poker_hand {
 	case .Nothing:
@@ -108,4 +109,26 @@ draw_poker_hand :: proc(game: Game, input: Input) {
 	y := i32(first.y + card_h) + MARGIN_TOP
 
 	rl.DrawText(text, x, y, FONT_SIZE, rl.WHITE)
+}
+
+@(private = "file")
+draw_poker_odds :: proc(game: Game) {
+	if game.poker_hand == .HighCard do return
+
+	FONT_SIZE :: i32(10)
+	MARGIN_BOTTOM :: i32(4)
+
+	odds := poker_odds[game.poker_hand] * 100
+	text := odds > 1 ? rl.TextFormat("%.2f%%", odds) : rl.TextFormat("%.4f%%", odds)
+
+	first := game.card_positions[0]
+	last := game.card_positions[len(game.hand) - 1]
+	card_w := f32(game.card_images.cards[game.hand[0]].width) * CARD_SCALE
+	hand_center_x := (first.x + last.x + card_w) / 2
+
+	text_w := f32(rl.MeasureText(text, FONT_SIZE))
+	x := i32(hand_center_x - text_w / 2)
+	y := i32(first.y) - FONT_SIZE - MARGIN_BOTTOM
+
+	rl.DrawText(text, x, y, FONT_SIZE, rl.ColorAlpha(rl.WHITE, 0.7))
 }
