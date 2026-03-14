@@ -2,7 +2,7 @@ package main
 
 import rl "vendor:raylib"
 
-RESHUFFLE_COOLDOWN :: f32(3.0)
+RESHUFFLE_COOLDOWN :: f32(1.0)
 
 Reshuffler :: struct {
 	cooldown: Timer,
