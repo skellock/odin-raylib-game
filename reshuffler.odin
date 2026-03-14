@@ -26,8 +26,8 @@ draw_reshuffler :: proc(game: Game, input: Input) {
 	cooldown := game.reshuffler.cooldown
 	if !cooldown.active do return
 
-	RADIUS :: f32(8)
-	OFFSET_Y :: f32(16)
+	RADIUS :: f32(4)
+	OFFSET_Y :: f32(-6)
 	SEGMENTS :: 36
 	BG_COLOR := rl.ColorAlpha(rl.BLACK, 0.3)
 	FG_COLOR := rl.WHITE
@@ -45,6 +45,9 @@ draw_reshuffler :: proc(game: Game, input: Input) {
 	start_angle := f32(-90)
 	end_angle := start_angle + fraction * 360
 	rl.DrawCircleSector({cx, cy}, RADIUS, start_angle, end_angle, SEGMENTS, FG_COLOR)
+
+	// border
+	rl.DrawCircleLinesV({cx, cy}, RADIUS, rl.WHITE)
 }
 
 destroy_reshuffler :: proc(reshuffler: ^Reshuffler) {
