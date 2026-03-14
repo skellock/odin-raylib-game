@@ -65,8 +65,8 @@ update_hovered_card :: proc(game: ^Game, input: Input) {
 	mouse := rl.Vector2{f32(input.mouse.world_x), f32(input.mouse.world_y)}
 	game.hovered_card = -1
 
-	for i := len(game.hand) - 1; i >= 0; i -= 1 {
-		cv := game.hand[i]
+	for i := len(game.card_views) - 1; i >= 0; i -= 1 {
+		cv := game.card_views[i]
 		card_w := f32(cv.texture.width) * CARD_SCALE
 		card_h := f32(cv.texture.height) * CARD_SCALE
 		rect := rl.Rectangle{cv.pos.x, cv.pos.y, card_w, card_h}
@@ -82,7 +82,7 @@ update_tooltip_text :: proc(game: ^Game) {
 	// nothing to do if we're not over a card
 	if game.hovered_card < 0 do return
 
-	card := game.hand[game.hovered_card].card
+	card := game.card_views[game.hovered_card].card
 	set_tooltip_text(&game.tooltip, fmt.tprintf("%v of %vs", card.pip, card.suit))
 }
 

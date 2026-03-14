@@ -146,8 +146,8 @@ draw_poker_hand_type_text :: proc(game: Game, input: Input) {
 	MARGIN_TOP :: i32(10)
 
 	// center text with the hand of cards
-	first := game.hand[0]
-	last := game.hand[len(game.hand) - 1]
+	first := game.card_views[0]
+	last := game.card_views[len(game.card_views) - 1]
 	card_w := f32(first.texture.width) * CARD_SCALE
 	card_h := f32(first.texture.height) * CARD_SCALE
 	hand_center_x := (first.pos.x + last.pos.x + card_w) / 2

@@ -27,8 +27,8 @@ draw_poker_odds :: proc(game: Game) {
 	one_in := int(1.0 / odds + 0.5)
 	text := fmt.ctprintf("1 in {}", format_with_commas(one_in, context.temp_allocator))
 
-	first := game.hand[0]
-	last := game.hand[len(game.hand) - 1]
+	first := game.card_views[0]
+	last := game.card_views[len(game.card_views) - 1]
 	card_w := f32(first.texture.width) * CARD_SCALE
 	hand_center_x := (first.pos.x + last.pos.x + card_w) / 2
 

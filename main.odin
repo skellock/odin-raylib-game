@@ -55,7 +55,7 @@ main :: proc() {
 
 // The main update statement called once per frame.
 update :: proc(game: ^Game, input: Input, card_images: CardImages) {
-	update_card_view_positions(game.hand[:])
+	update_card_view_positions(game.card_views[:])
 	update_tooltip(game, input)
 	update_reshuffler(game, input, card_images)
 }
