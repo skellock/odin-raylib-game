@@ -4,7 +4,8 @@
       "Bash(odin test:*)",
       "Bash(odin build:*)",
       "Bash(odin check:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(perl:*)"
     ]
   }
 }
