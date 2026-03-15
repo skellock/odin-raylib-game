@@ -12,12 +12,7 @@ assets: Assets
 main :: proc() {
 	// setup raylib
 	rl.SetTraceLogLevel(.NONE)
-	rl.SetConfigFlags(
-		{
-			/*.VSYNC_HINT,*/
-			.MSAA_4X_HINT,
-		},
-	)
+	rl.SetConfigFlags({.VSYNC_HINT, .MSAA_4X_HINT})
 	rl.SetTargetFPS(144)
 
 	// setup audio device
