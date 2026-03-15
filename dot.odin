@@ -16,15 +16,15 @@ DotColor :: enum {
 }
 
 Dot :: struct {
-	color:  DotColor,
-	size:   f32,
-	x:      f32,
-	y:      f32,
-	tweens: ease.Flux_Map(f32),
+	color:         DotColor,
+	size:          f32,
+	current_pos:   rl.Vector2,
+	targeting_pos: rl.Vector2,
+	tweens:        ease.Flux_Map(f32),
 }
 
 init_dot :: proc() -> Dot {
-	return Dot{color = .Yellow, size = NORMAL_DOT_SIZE, x = 0, y = 0, tweens = ease.flux_init(f32)}
+	return Dot{color = .Yellow, size = NORMAL_DOT_SIZE, tweens = ease.flux_init(f32)}
 }
 
 update_dot :: proc(dot: ^Dot, input: Input, actions: Actions) {
@@ -37,6 +37,7 @@ update_dot :: proc(dot: ^Dot, input: Input, actions: Actions) {
 		play_sound(assets.sounds.blip)
 	}
 
+	dot.targeting_pos = input.mouse.world_pos
 	update_dot_size(dot, input)
 	update_dot_tweens(dot, input)
 }
@@ -54,11 +55,9 @@ draw_dot :: proc(game: Game, input: Input) {
 		dot_color = rl.YELLOW
 	}
 
-	if !game.paused {
-		rl.DrawLineEx({dot.x, dot.y}, input.mouse.world_pos, 2, rl.ColorAlpha(rl.WHITE, 0.25))
-	}
+	rl.DrawLineEx(dot.current_pos, dot.targeting_pos, 2, rl.ColorAlpha(rl.WHITE, 0.25))
 
-	rl.DrawCircle(i32(dot.x), i32(dot.y), dot.size, dot_color)
+	rl.DrawCircleV(dot.current_pos, dot.size, dot_color)
 }
 
 @(private = "file")
@@ -68,7 +67,7 @@ update_dot_tweens :: proc(dot: ^Dot, input: Input) {
 
 @(private = "file")
 update_dot_size :: proc(dot: ^Dot, input: Input) {
-	big := dot.x < f32(input.viewport.width / 2)
+	big := dot.current_pos.x < f32(input.viewport.width / 2)
 	to_size := f32(big ? BIG_DOT_SIZE : NORMAL_DOT_SIZE)
 
 	dot.size = math.lerp(dot.size, to_size, DOT_GROW_SPEED * input.time.dt)
@@ -80,8 +79,8 @@ move_dot_location :: proc(dot: ^Dot, pos: rl.Vector2) {
 	EASE :: ease.Ease.Quadratic_Out
 	DELAY: f64 : 0
 
-	_ = ease.flux_to(&dot.tweens, &dot.x, pos.x, EASE, DURATION, DELAY)
-	_ = ease.flux_to(&dot.tweens, &dot.y, pos.y, EASE, DURATION, DELAY)
+	_ = ease.flux_to(&dot.tweens, &dot.current_pos.x, pos.x, EASE, DURATION, DELAY)
+	_ = ease.flux_to(&dot.tweens, &dot.current_pos.y, pos.y, EASE, DURATION, DELAY)
 }
 
 cycle_dot_color :: proc(dot: ^Dot) {
