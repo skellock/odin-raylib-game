@@ -2,8 +2,8 @@ package main
 
 import rl "vendor:raylib"
 
-CARD_SCALE :: f32(1.0 / 3.0)
-CARD_SPACING :: rl.Vector2{35, 0}
+CARD_SCALE :: f32(1.0 / 2.0)
+CARD_SPACING :: rl.Vector2{70, 0}
 
 CardView :: struct {
 	card:    Card,
