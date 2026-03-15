@@ -26,14 +26,19 @@ TimeInput :: struct {
 	elapsed: f64, // How long the game has been running
 }
 
+KeyboardInput :: struct {
+	quit_pressed: bool,
+}
+
 Input :: struct {
 	mouse:    MouseInput,
+	keyboard: KeyboardInput,
 	screen:   ScreenInput,
 	viewport: ViewportInput,
 	time:     TimeInput,
 }
 
-capture_input :: proc(game: Game, input: ^Input) {
+resolve_input :: proc(input: ^Input, game: Game) {
 	// mouse coordinates
 	screen_pos := rl.GetMousePosition()
 	input.mouse.screen_x = screen_pos.x
@@ -46,6 +51,9 @@ capture_input :: proc(game: Game, input: ^Input) {
 	// button presses
 	input.mouse.left_pressed = rl.IsMouseButtonPressed(.LEFT)
 	input.mouse.right_pressed = rl.IsMouseButtonPressed(.RIGHT)
+
+	// keyboard
+	input.keyboard.quit_pressed = rl.IsKeyPressed(.Q)
 
 	// screen stuff
 	input.screen.width = rl.GetScreenWidth()

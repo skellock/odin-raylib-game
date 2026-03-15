@@ -36,8 +36,9 @@ main :: proc() {
 
 	// main game loop -- continues until <esc> or window closed
 	for !rl.WindowShouldClose() {
-		capture_input(game, &input)
+		resolve_input(&input, game)
 		resolve_actions(&actions, game, input)
+		if actions.quit_game do break
 		update(&game, input, actions)
 		draw(game, input)
 		free_all(context.temp_allocator)

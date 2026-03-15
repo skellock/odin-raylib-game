@@ -47,3 +47,19 @@ resolve_actions_move_dot_test :: proc(t: ^testing.T) {
 	resolve_actions(&actions, game, input)
 	testing.expect_value(t, actions.move_dot, MoveDotAction{true, 1.1, 2.2})
 }
+
+@(test)
+resolve_actions_quit_game_test :: proc(t: ^testing.T) {
+	actions: Actions
+	input: Input
+	game := init_game()
+	defer destroy_game(&game)
+
+	input.keyboard.quit_pressed = false
+	resolve_actions(&actions, game, input)
+	testing.expect_value(t, actions.quit_game, false)
+
+	input.keyboard.quit_pressed = true
+	resolve_actions(&actions, game, input)
+	testing.expect_value(t, actions.quit_game, true)
+}
