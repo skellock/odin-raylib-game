@@ -12,12 +12,12 @@ init_reshuffler :: proc() -> Reshuffler {
 	return Reshuffler{cooldown = init_timer(RESHUFFLE_COOLDOWN, one_shot = true)}
 }
 
-update_reshuffler :: proc(game: ^Game, input: Input, card_images: CardImages) {
+update_reshuffler :: proc(game: ^Game, input: Input) {
 	update_timer(&game.reshuffler.cooldown, input.time.dt)
 
 	if input.mouse.right_pressed && !game.reshuffler.cooldown.active {
 		shuffle_deck(&game.deck)
-		deal_to_hand(game, card_images)
+		deal_to_hand(game)
 		start_timer(&game.reshuffler.cooldown)
 	}
 }

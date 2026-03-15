@@ -7,9 +7,7 @@ WINDOW_HEIGHT :: 1080
 VIEWPORT_WIDTH :: 1920 / 2
 VIEWPORT_HEIGHT :: 1080 / 2
 
-music: Music
-sounds: Sounds
-card_images: CardImages
+assets: Assets
 
 main :: proc() {
 	// setup raylib
@@ -32,14 +30,12 @@ main :: proc() {
 	defer rl.CloseWindow()
 
 	// initialize the assets
-	card_images = init_card_images()
-	music = init_music()
-	sounds = init_sounds()
+	assets = init_assets()
 
-	game := init_game(card_images)
+	game := init_game()
 	input := init_input()
 
-	play_music(&music)
+	play_music(&assets.music)
 
 	// main game loop -- continues until <esc> or window closed
 	for !rl.WindowShouldClose() {
@@ -49,19 +45,17 @@ main :: proc() {
 		free_all(context.temp_allocator)
 	}
 
-	destroy_card_images(&card_images)
-	destroy_music(&music)
-	destroy_sounds(&sounds)
+	destroy_assets(&assets)
 	destroy_game(&game)
 }
 
 // The main update statement called once per frame.
 update :: proc(game: ^Game, input: Input) {
-	update_music(&music)
-	update_dot(&game.dot, input, &sounds)
+	update_music(&assets.music)
+	update_dot(&game.dot, input)
 	update_card_view_positions(game.card_views[:])
 	update_tooltip(game, input)
-	update_reshuffler(game, input, card_images)
+	update_reshuffler(game, input)
 }
 
 // The main drawing function called once per frame.
