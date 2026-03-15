@@ -44,7 +44,7 @@ main :: proc() {
 	// main game loop -- continues until <esc> or window closed
 	for !rl.WindowShouldClose() {
 		capture_input(game, &input)
-		update(&game, input, card_images)
+		update(&game, input)
 		draw(game, input)
 		free_all(context.temp_allocator)
 	}
@@ -56,7 +56,7 @@ main :: proc() {
 }
 
 // The main update statement called once per frame.
-update :: proc(game: ^Game, input: Input, card_images: CardImages) {
+update :: proc(game: ^Game, input: Input) {
 	update_music(&music)
 	update_dot(&game.dot, input, &sounds)
 	update_card_view_positions(game.card_views[:])
