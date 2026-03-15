@@ -11,7 +11,7 @@ init_card_images :: proc() -> CardImages {
 
 	for card in STANDARD_DECK {
 		card_code := get_card_code(card, context.temp_allocator)
-		texture := rl.LoadTexture(rl.TextFormat("images/card-%s@2x.png", card_code))
+		texture := rl.LoadTexture(rl.TextFormat("images/card-%s@3x.png", card_code))
 		rl.SetTextureFilter(texture, .BILINEAR)
 		card_images.cards[card] = texture
 	}

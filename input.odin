@@ -51,8 +51,8 @@ resolve_input :: proc(input: ^Input, game: Game) {
 	input.keyboard.pause_pressed = rl.IsKeyPressed(.P)
 
 	// screen stuff
-	input.screen.width = rl.GetScreenWidth()
-	input.screen.height = rl.GetScreenHeight()
+	input.screen.width = rl.GetRenderWidth()
+	input.screen.height = rl.GetRenderHeight()
 	input.viewport.width = VIEWPORT_WIDTH
 	input.viewport.height = VIEWPORT_HEIGHT
 

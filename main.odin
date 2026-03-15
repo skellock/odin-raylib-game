@@ -4,8 +4,8 @@ import rl "vendor:raylib"
 
 WINDOW_WIDTH :: 1920
 WINDOW_HEIGHT :: 1080
-VIEWPORT_WIDTH :: 1920 / 2
-VIEWPORT_HEIGHT :: 1080 / 2
+VIEWPORT_WIDTH :: 1920 // / 2
+VIEWPORT_HEIGHT :: 1080 // / 2
 
 assets: Assets
 
@@ -13,7 +13,7 @@ main :: proc() {
 	// setup raylib
 	rl.SetTraceLogLevel(.NONE)
 	// rl.SetConfigFlags({.VSYNC_HINT, .MSAA_4X_HINT})
-	rl.SetConfigFlags({.MSAA_4X_HINT})
+	rl.SetConfigFlags({.MSAA_4X_HINT, .WINDOW_HIGHDPI})
 	rl.SetTargetFPS(144)
 
 	// setup audio device

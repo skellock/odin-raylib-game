@@ -17,7 +17,8 @@ Game :: struct {
 init_game :: proc() -> Game {
 	game := Game {
 		dot = init_dot(),
-		camera = rl.Camera2D{zoom = f32(WINDOW_HEIGHT / VIEWPORT_HEIGHT)},
+		camera = rl.Camera2D{zoom = 1},
+		// camera = rl.Camera2D{zoom = f32(rl.GetRenderHeight() / VIEWPORT_HEIGHT)},
 		deck = init_shuffled_deck(),
 		reshuffler = init_reshuffler(),
 	}
