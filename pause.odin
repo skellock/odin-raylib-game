@@ -19,15 +19,17 @@ draw_pause :: proc(game: Game, input: Input) {
 	rl.DrawRectangle(0, 0, vw, vh, rl.ColorAlpha(rl.BLACK, 0.6))
 
 	// blinking "Paused" text
-	FONT_SIZE :: i32(40)
+	FONT_SIZE :: f32(80)
+	SPACING :: f32(2)
 	BLINK_SPEED :: 3.0
 
+	font := assets.fonts.body
 	alpha := f32(0.5 + 0.5 * math.sin(f32(input.time.elapsed) * BLINK_SPEED))
 	text :: "Paused"
-	text_w := rl.MeasureText(text, FONT_SIZE)
+	text_size := rl.MeasureTextEx(font, text, FONT_SIZE, SPACING)
 
-	x := vw / 2 - text_w / 2
-	y := vh / 2 - FONT_SIZE / 2
+	x := f32(vw) / 2 - text_size.x / 2
+	y := f32(vh) / 2 - text_size.y / 2
 
-	rl.DrawText(text, x, y, FONT_SIZE, rl.ColorAlpha(rl.WHITE, alpha))
+	rl.DrawTextEx(font, text, {x, y}, FONT_SIZE, SPACING, rl.ColorAlpha(rl.WHITE, alpha))
 }

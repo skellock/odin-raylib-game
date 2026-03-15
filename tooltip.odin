@@ -22,30 +22,34 @@ draw_tooltip :: proc(game: Game) {
 	tooltip := game.tooltip
 	if tooltip.alpha <= 0 do return
 
-	FONT_SIZE :: i32(8)
-	PADDING :: f32(4)
+	FONT_SIZE :: f32(16)
+	SPACING :: f32(1)
+	PADDING :: f32(2)
+
+	font := assets.fonts.body
 
 	// make a cstring for the raylib text
 	text := fmt.ctprintf("%s", tooltip.text_buf[:tooltip.text_len])
 
 	// calculate text size
-	text_w := rl.MeasureText(text, FONT_SIZE)
+	text_size := rl.MeasureTextEx(font, text, FONT_SIZE, SPACING)
 
 	// the background
 	bg_rect := rl.Rectangle {
 		tooltip.pos.x - PADDING,
 		tooltip.pos.y - PADDING,
-		f32(text_w) + PADDING * 2,
-		f32(FONT_SIZE) + PADDING * 2,
+		text_size.x + PADDING * 2,
+		text_size.y + PADDING * 2,
 	}
 	rl.DrawRectangleRounded(bg_rect, 0.4, 4, rl.ColorAlpha(rl.WHITE, tooltip.alpha))
 
 	// the text
-	rl.DrawText(
+	rl.DrawTextEx(
+		font,
 		text,
-		i32(tooltip.pos.x),
-		i32(tooltip.pos.y),
+		tooltip.pos,
 		FONT_SIZE,
+		SPACING,
 		rl.ColorAlpha(rl.BLACK, tooltip.alpha),
 	)
 }

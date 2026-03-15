@@ -20,9 +20,11 @@ poker_odds := [PokerHandType]f64 {
 draw_poker_odds :: proc(game: Game) {
 	if game.poker_hand.hand_type == .Nothing || game.poker_hand.hand_type == .HighCard do return
 
-	FONT_SIZE :: i32(10)
-	MARGIN_BOTTOM :: i32(4)
+	FONT_SIZE :: f32(20)
+	SPACING :: f32(1)
+	MARGIN_BOTTOM :: f32(4)
 
+	font := assets.fonts.body
 	odds := poker_odds[game.poker_hand.hand_type]
 	one_in := int(1.0 / odds + 0.5)
 	text := fmt.ctprintf("1 in {}", format_with_commas(one_in, context.temp_allocator))
@@ -32,9 +34,9 @@ draw_poker_odds :: proc(game: Game) {
 	card_w := f32(first.texture.width) * CARD_SCALE
 	hand_center_x := (first.pos.x + last.pos.x + card_w) / 2
 
-	text_w := f32(rl.MeasureText(text, FONT_SIZE))
-	x := i32(hand_center_x - text_w / 2)
-	y := i32(first.pos.y) - FONT_SIZE - MARGIN_BOTTOM
+	text_size := rl.MeasureTextEx(font, text, FONT_SIZE, SPACING)
+	x := hand_center_x - text_size.x / 2
+	y := first.pos.y - FONT_SIZE - MARGIN_BOTTOM
 
-	rl.DrawText(text, x, y, FONT_SIZE, rl.ColorAlpha(rl.WHITE, 0.7))
+	rl.DrawTextEx(font, text, {x, y}, FONT_SIZE, SPACING, rl.WHITE)
 }
