@@ -19,7 +19,7 @@ draw_pause :: proc(game: Game, input: Input) {
 	rl.DrawRectangle(0, 0, vw, vh, rl.ColorAlpha(rl.BLACK, 0.6))
 
 	// blinking "Paused" text
-	FONT_SIZE :: i32(20)
+	FONT_SIZE :: i32(40)
 	BLINK_SPEED :: 3.0
 
 	alpha := f32(0.5 + 0.5 * math.sin(f32(input.time.elapsed) * BLINK_SPEED))
