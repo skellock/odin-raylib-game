@@ -23,12 +23,14 @@ init_card_view_test :: proc(t: ^testing.T) {
 
 @(test)
 update_card_view_positions_test :: proc(t: ^testing.T) {
-	hand := [5]CardView{}
-	update_card_view_positions(hand[:])
+	game := init_game()
+	defer destroy_game(&game)
+	update_card_view_positions(&game)
+	card_views := game.card_views[:]
 
 	// each card should be spaced apart by CARD_SPACING
-	for i in 1 ..< len(hand) {
-		diff := hand[i].pos - hand[i - 1].pos
+	for i in 1 ..< len(card_views) {
+		diff := card_views[i].pos - card_views[i - 1].pos
 		testing.expect_value(t, diff, CARD_SPACING)
 	}
 }

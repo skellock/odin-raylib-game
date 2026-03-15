@@ -53,7 +53,8 @@ draw_card_hover :: proc(tex: rl.Texture2D, pos: rl.Vector2) {
 	)
 }
 
-update_card_view_positions :: proc(hand: []CardView) {
+update_card_view_positions :: proc(game: ^Game) {
+	hand := game.card_views[:]
 	pos := rl.Vector2{200, 200}
 	for idx in 0 ..< len(hand) {
 		hand[idx].pos = pos

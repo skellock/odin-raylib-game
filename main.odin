@@ -49,7 +49,7 @@ main :: proc() {
 update :: proc(game: ^Game, input: Input) {
 	update_music(&assets.music)
 	update_dot(&game.dot, input)
-	update_card_view_positions(game.card_views[:])
+	update_card_view_positions(game)
 	update_tooltip(game, input)
 	update_reshuffler(game, input)
 }

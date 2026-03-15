@@ -31,7 +31,7 @@ deal_to_hand :: proc(game: ^Game) {
 		tex := assets.card_images.cards[card]
 		game.card_views[i] = init_card_view(card, tex)
 	}
-	update_card_view_positions(game.card_views[:])
+	update_card_view_positions(game)
 }
 
 destroy_game :: proc(game: ^Game) {
