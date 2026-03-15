@@ -33,10 +33,6 @@ Input :: struct {
 	time:     TimeInput,
 }
 
-init_input :: proc() -> Input {
-	return Input{}
-}
-
 capture_input :: proc(game: Game, input: ^Input) {
 	// mouse coordinates
 	screen_pos := rl.GetMousePosition()

@@ -29,14 +29,16 @@ main :: proc() {
 	assets = init_assets()
 
 	game := init_game()
-	input := init_input()
+	input := Input{}
+	actions := Actions{}
 
 	play_music(&assets.music)
 
 	// main game loop -- continues until <esc> or window closed
 	for !rl.WindowShouldClose() {
 		capture_input(game, &input)
-		update(&game, input)
+		resolve_actions(&actions, game, input)
+		update(&game, input, actions)
 		draw(game, input)
 		free_all(context.temp_allocator)
 	}
@@ -46,12 +48,12 @@ main :: proc() {
 }
 
 // The main update statement called once per frame.
-update :: proc(game: ^Game, input: Input) {
+update :: proc(game: ^Game, input: Input, actions: Actions) {
 	update_music(&assets.music)
-	update_dot(&game.dot, input)
+	update_dot(&game.dot, input, actions)
 	update_card_view_positions(game)
 	update_tooltip(game, input)
-	update_reshuffler(game, input)
+	update_reshuffler(game, input, actions)
 }
 
 // The main drawing function called once per frame.

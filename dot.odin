@@ -27,13 +27,13 @@ init_dot :: proc() -> Dot {
 	return Dot{color = .Yellow, size = NORMAL_DOT_SIZE, x = 0, y = 0, tweens = ease.flux_init(f32)}
 }
 
-update_dot :: proc(dot: ^Dot, input: Input) {
-	if input.mouse.left_pressed {
+update_dot :: proc(dot: ^Dot, input: Input, actions: Actions) {
+	if actions.move_dot {
 		move_dot_location(dot, input)
 		play_jump_sound(&assets.sounds)
 	}
 
-	if input.mouse.right_pressed {
+	if actions.reshuffle {
 		cycle_dot_color(dot)
 		play_sound(assets.sounds.blip)
 	}
