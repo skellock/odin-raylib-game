@@ -7,7 +7,7 @@ Fonts :: struct {
 }
 
 init_fonts :: proc() -> Fonts {
-	body := rl.LoadFontEx("fonts/bulgia.otf", 256, nil, 0)
+	body := rl.LoadFontEx("fonts/Amble-Regular.ttf", 256, nil, 0)
 	rl.GenTextureMipmaps(&body.texture)
 	rl.SetTextureFilter(body.texture, .BILINEAR)
 
