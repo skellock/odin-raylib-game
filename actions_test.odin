@@ -39,9 +39,11 @@ resolve_actions_move_dot_test :: proc(t: ^testing.T) {
 
 	input.mouse.left_pressed = false
 	resolve_actions(&actions, game, input)
-	testing.expect_value(t, actions.move_dot, false)
+	testing.expect_value(t, actions.move_dot.active, false)
 
 	input.mouse.left_pressed = true
+	input.mouse.world_x = 1.1
+	input.mouse.world_y = 2.2
 	resolve_actions(&actions, game, input)
-	testing.expect_value(t, actions.move_dot, true)
+	testing.expect_value(t, actions.move_dot, MoveDotAction{true, 1.1, 2.2})
 }

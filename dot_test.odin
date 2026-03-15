@@ -47,7 +47,7 @@ update_dot_move_dot_sets_tween_test :: proc(t: ^testing.T) {
 
 	input.mouse.world_x = 100
 	input.mouse.world_y = 200
-	actions.move_dot = true
+	actions.move_dot = {true, input.mouse.world_x, input.mouse.world_y}
 	update_dot(&dot, input, actions)
 
 	// after a move_dot action, tweens are created but dot hasn't moved yet without dt
@@ -55,7 +55,7 @@ update_dot_move_dot_sets_tween_test :: proc(t: ^testing.T) {
 	testing.expect_value(t, dot.y, f32(0))
 
 	// simulate time passing to let tweens update
-	actions.move_dot = false
+	actions.move_dot = {false, 0, 0}
 	input.time.dt = 1.0
 	update_dot(&dot, input, actions)
 

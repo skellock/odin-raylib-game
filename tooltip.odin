@@ -6,8 +6,8 @@ import rl "vendor:raylib"
 Tooltip :: struct {
 	text_buf: [256]byte,
 	text_len: int,
-	x:        i32,
-	y:        i32,
+	x:        f32,
+	y:        f32,
 	alpha:    f32,
 	delay:    f32,
 }
@@ -24,7 +24,7 @@ draw_tooltip :: proc(game: Game) {
 	if tooltip.alpha <= 0 do return
 
 	FONT_SIZE :: i32(8)
-	PADDING :: i32(4)
+	PADDING :: f32(4)
 
 	// make a cstring for the raylib text
 	text := fmt.ctprintf("%s", tooltip.text_buf[:tooltip.text_len])
@@ -34,15 +34,21 @@ draw_tooltip :: proc(game: Game) {
 
 	// the background
 	bg_rect := rl.Rectangle {
-		f32(tooltip.x - PADDING),
-		f32(tooltip.y - PADDING),
-		f32(text_w + PADDING * 2),
-		f32(FONT_SIZE + PADDING * 2),
+		tooltip.x - PADDING,
+		tooltip.y - PADDING,
+		f32(text_w) + PADDING * 2,
+		f32(FONT_SIZE) + PADDING * 2,
 	}
 	rl.DrawRectangleRounded(bg_rect, 0.4, 4, rl.ColorAlpha(rl.WHITE, tooltip.alpha))
 
 	// the text
-	rl.DrawText(text, tooltip.x, tooltip.y, FONT_SIZE, rl.ColorAlpha(rl.BLACK, tooltip.alpha))
+	rl.DrawText(
+		text,
+		i32(tooltip.x),
+		i32(tooltip.y),
+		FONT_SIZE,
+		rl.ColorAlpha(rl.BLACK, tooltip.alpha),
+	)
 }
 
 @(private = "file")
