@@ -18,12 +18,12 @@ poker_odds := [PokerHandType]f64 {
 }
 
 draw_poker_odds :: proc(game: Game) {
-	if game.poker_hand_type == .Nothing || game.poker_hand_type == .HighCard do return
+	if game.poker_hand.hand_type == .Nothing || game.poker_hand.hand_type == .HighCard do return
 
 	FONT_SIZE :: i32(10)
 	MARGIN_BOTTOM :: i32(4)
 
-	odds := poker_odds[game.poker_hand_type]
+	odds := poker_odds[game.poker_hand.hand_type]
 	one_in := int(1.0 / odds + 0.5)
 	text := fmt.ctprintf("1 in {}", format_with_commas(one_in, context.temp_allocator))
 

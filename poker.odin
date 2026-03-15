@@ -3,6 +3,12 @@ package main
 import "core:sort"
 import rl "vendor:raylib"
 
+PokerHand :: struct {
+	cards:          [5]Card,
+	hand_type:      PokerHandType,
+	hand_type_text: cstring,
+}
+
 PokerHandType :: enum {
 	Nothing,
 	HighCard,
@@ -15,6 +21,16 @@ PokerHandType :: enum {
 	FourOfAKind,
 	StraightFlush,
 	RoyalFlush,
+}
+
+init_poker_hand :: proc(cards: []Card) -> PokerHand {
+	hand: PokerHand
+	hand.hand_type = score_hand(cards)
+	hand.hand_type_text = poker_hand_type_text(hand.hand_type)
+	for i in 0 ..< min(len(cards), 5) {
+		hand.cards[i] = cards[i]
+	}
+	return hand
 }
 
 has_high_card :: proc(cards: []Card) -> bool {
@@ -115,32 +131,36 @@ has_royal_flush :: proc(cards: []Card) -> bool {
 	return pip_map[.Ten] == 1 && pip_map[.Ace] == 1
 }
 
-draw_poker_hand_type_text :: proc(game: Game, input: Input) {
-	text: cstring
-	switch game.poker_hand_type {
+poker_hand_type_text :: proc(hand_type: PokerHandType) -> cstring {
+	switch hand_type {
 	case .Nothing:
-		text = "Nothing"
+		return "Nothing"
 	case .HighCard:
-		text = "High Card"
+		return "High Card"
 	case .Pair:
-		text = "Pair"
+		return "Pair"
 	case .TwoPair:
-		text = "Two Pair"
+		return "Two Pair"
 	case .ThreeOfAKind:
-		text = "Three of a Kind"
+		return "Three of a Kind"
 	case .Straight:
-		text = "Straight"
+		return "Straight"
 	case .Flush:
-		text = "Flush"
+		return "Flush"
 	case .FullHouse:
-		text = "Full House"
+		return "Full House"
 	case .FourOfAKind:
-		text = "Four of a Kind"
+		return "Four of a Kind"
 	case .StraightFlush:
-		text = "Straight Flush"
+		return "Straight Flush"
 	case .RoyalFlush:
-		text = "Royal Flush"
+		return "Royal Flush"
 	}
+	return ""
+}
+
+draw_poker_hand_type_text :: proc(game: Game, input: Input) {
+	text := game.poker_hand.hand_type_text
 
 	FONT_SIZE :: i32(20)
 	MARGIN_TOP :: i32(10)
