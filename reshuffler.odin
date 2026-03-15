@@ -32,8 +32,8 @@ draw_reshuffler :: proc(game: Game, input: Input) {
 	BG_COLOR := rl.ColorAlpha(rl.BLACK, 0.3)
 	FG_COLOR := rl.WHITE
 
-	cx := f32(input.mouse.world_x)
-	cy := f32(input.mouse.world_y) + OFFSET_Y
+	cx := input.mouse.world_pos.x
+	cy := input.mouse.world_pos.y + OFFSET_Y
 
 	// elapsed fraction (0.0 = start, 1.0 = done)
 	fraction := cooldown.elapsed / cooldown.duration

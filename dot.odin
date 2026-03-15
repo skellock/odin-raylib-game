@@ -29,7 +29,7 @@ init_dot :: proc() -> Dot {
 
 update_dot :: proc(dot: ^Dot, input: Input, actions: Actions) {
 	if actions.move_dot.active {
-		move_dot_location(dot, actions.move_dot.x, actions.move_dot.y)
+		move_dot_location(dot, actions.move_dot.pos)
 	}
 
 	if actions.reshuffle {
@@ -56,7 +56,7 @@ draw_dot :: proc(game: Game, input: Input) {
 
 	rl.DrawLineEx(
 		{dot.x, dot.y},
-		{input.mouse.world_x, input.mouse.world_y},
+		input.mouse.world_pos,
 		2,
 		rl.ColorAlpha(rl.WHITE, 0.25),
 	)
@@ -78,13 +78,13 @@ update_dot_size :: proc(dot: ^Dot, input: Input) {
 }
 
 @(private = "file")
-move_dot_location :: proc(dot: ^Dot, x, y: f32) {
+move_dot_location :: proc(dot: ^Dot, pos: rl.Vector2) {
 	DURATION :: time.Millisecond * 500
 	EASE :: ease.Ease.Quadratic_Out
 	DELAY: f64 : 0
 
-	_ = ease.flux_to(&dot.tweens, &dot.x, x, EASE, DURATION, DELAY)
-	_ = ease.flux_to(&dot.tweens, &dot.y, y, EASE, DURATION, DELAY)
+	_ = ease.flux_to(&dot.tweens, &dot.x, pos.x, EASE, DURATION, DELAY)
+	_ = ease.flux_to(&dot.tweens, &dot.y, pos.y, EASE, DURATION, DELAY)
 }
 
 cycle_dot_color :: proc(dot: ^Dot) {

@@ -3,10 +3,8 @@ package main
 import rl "vendor:raylib"
 
 MouseInput :: struct {
-	screen_x:      f32,
-	screen_y:      f32,
-	world_x:       f32,
-	world_y:       f32,
+	screen_pos:    rl.Vector2,
+	world_pos:     rl.Vector2,
 	left_pressed:  bool, // Has the left button been pressed?
 	right_pressed: bool, // Has the right button been pressed?
 }
@@ -40,13 +38,8 @@ Input :: struct {
 
 resolve_input :: proc(input: ^Input, game: Game) {
 	// mouse coordinates
-	screen_pos := rl.GetMousePosition()
-	input.mouse.screen_x = screen_pos.x
-	input.mouse.screen_y = screen_pos.y
-
-	world_pos := rl.GetScreenToWorld2D(screen_pos, game.camera)
-	input.mouse.world_x = world_pos.x
-	input.mouse.world_y = world_pos.y
+	input.mouse.screen_pos = rl.GetMousePosition()
+	input.mouse.world_pos = rl.GetScreenToWorld2D(input.mouse.screen_pos, game.camera)
 
 	// button presses
 	input.mouse.left_pressed = rl.IsMouseButtonPressed(.LEFT)

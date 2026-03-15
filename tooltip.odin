@@ -6,8 +6,7 @@ import rl "vendor:raylib"
 Tooltip :: struct {
 	text_buf: [256]byte,
 	text_len: int,
-	x:        f32,
-	y:        f32,
+	pos:      rl.Vector2,
 	alpha:    f32,
 	delay:    f32,
 }
@@ -34,8 +33,8 @@ draw_tooltip :: proc(game: Game) {
 
 	// the background
 	bg_rect := rl.Rectangle {
-		tooltip.x - PADDING,
-		tooltip.y - PADDING,
+		tooltip.pos.x - PADDING,
+		tooltip.pos.y - PADDING,
 		f32(text_w) + PADDING * 2,
 		f32(FONT_SIZE) + PADDING * 2,
 	}
@@ -44,8 +43,8 @@ draw_tooltip :: proc(game: Game) {
 	// the text
 	rl.DrawText(
 		text,
-		i32(tooltip.x),
-		i32(tooltip.y),
+		i32(tooltip.pos.x),
+		i32(tooltip.pos.y),
 		FONT_SIZE,
 		rl.ColorAlpha(rl.BLACK, tooltip.alpha),
 	)
@@ -68,7 +67,7 @@ update_tooltip_alpha :: proc(game: ^Game, input: Input) {
 
 @(private = "file")
 update_hovered_card :: proc(game: ^Game, input: Input) {
-	mouse := rl.Vector2{f32(input.mouse.world_x), f32(input.mouse.world_y)}
+	mouse := input.mouse.world_pos
 	game.hovered_card = -1
 
 	for i := len(game.card_views) - 1; i >= 0; i -= 1 {
@@ -94,10 +93,8 @@ update_tooltip_text :: proc(game: ^Game) {
 
 @(private = "file")
 update_tooltip_position :: proc(game: ^Game, input: Input) {
-	OFFSET_X :: 10
-	OFFSET_Y :: 10
-	game.tooltip.x = input.mouse.world_x + OFFSET_X
-	game.tooltip.y = input.mouse.world_y + OFFSET_Y
+	OFFSET :: rl.Vector2{10, 10}
+	game.tooltip.pos = input.mouse.world_pos + OFFSET
 }
 
 @(private = "file")

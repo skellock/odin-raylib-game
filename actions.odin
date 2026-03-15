@@ -1,9 +1,10 @@
 package main
 
+import rl "vendor:raylib"
+
 MoveDotAction :: struct {
 	active: bool,
-	x:      f32,
-	y:      f32,
+	pos:    rl.Vector2,
 }
 
 Actions :: struct {
@@ -25,6 +26,6 @@ resolve_actions :: proc(actions: ^Actions, game: Game, input: Input) {
 	}
 
 	if input.mouse.left_pressed {
-		actions.move_dot = {true, input.mouse.world_x, input.mouse.world_y}
+		actions.move_dot = {true, input.mouse.world_pos}
 	}
 }
