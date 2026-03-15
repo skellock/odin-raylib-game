@@ -54,12 +54,9 @@ draw_dot :: proc(game: Game, input: Input) {
 		dot_color = rl.YELLOW
 	}
 
-	rl.DrawLineEx(
-		{dot.x, dot.y},
-		input.mouse.world_pos,
-		2,
-		rl.ColorAlpha(rl.WHITE, 0.25),
-	)
+	if !game.paused {
+		rl.DrawLineEx({dot.x, dot.y}, input.mouse.world_pos, 2, rl.ColorAlpha(rl.WHITE, 0.25))
+	}
 
 	rl.DrawCircle(i32(dot.x), i32(dot.y), dot.size, dot_color)
 }
