@@ -24,13 +24,13 @@ PokerHandType :: enum {
 }
 
 init_poker_hand :: proc(cards: []Card) -> PokerHand {
-	hand: PokerHand
-	hand.hand_type = score_hand(cards)
-	hand.hand_type_text = poker_hand_type_text(hand.hand_type)
+	result: PokerHand
+	result.hand_type = score_hand(cards)
+	result.hand_type_text = get_poker_hand_type_text(result.hand_type)
 	for i in 0 ..< min(len(cards), 5) {
-		hand.cards[i] = cards[i]
+		result.cards[i] = cards[i]
 	}
-	return hand
+	return result
 }
 
 has_high_card :: proc(cards: []Card) -> bool {
@@ -131,7 +131,7 @@ has_royal_flush :: proc(cards: []Card) -> bool {
 	return pip_map[.Ten] == 1 && pip_map[.Ace] == 1
 }
 
-poker_hand_type_text :: proc(hand_type: PokerHandType) -> cstring {
+get_poker_hand_type_text :: proc(hand_type: PokerHandType) -> cstring {
 	switch hand_type {
 	case .Nothing:
 		return "Nothing"
