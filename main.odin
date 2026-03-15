@@ -73,7 +73,16 @@ draw :: proc(game: Game, input: Input) {
 	draw_tooltip(game)
 	draw_pause(game, input)
 	draw_debug(input)
+	draw_cursor(game)
 
 	rl.EndMode2D()
 	rl.EndDrawing()
+}
+
+draw_cursor :: proc(game: Game) {
+	if game.hovered_card < 0 {
+		rl.SetMouseCursor(.DEFAULT)
+	} else {
+		rl.SetMouseCursor(.POINTING_HAND)
+	}
 }
