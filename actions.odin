@@ -11,6 +11,7 @@ Actions :: struct {
 	reshuffle: bool,
 	move_dot:  MoveDotAction,
 	quit_game: bool,
+	toggle_pause: bool,
 }
 
 resolve_actions :: proc(actions: ^Actions, game: Game, input: Input) {
@@ -19,6 +20,10 @@ resolve_actions :: proc(actions: ^Actions, game: Game, input: Input) {
 
 	if input.keyboard.quit_pressed {
 		actions.quit_game = true
+	}
+
+	if input.keyboard.pause_pressed {
+		actions.toggle_pause = true
 	}
 
 	if input.mouse.right_pressed && !game.reshuffler.cooldown.active {

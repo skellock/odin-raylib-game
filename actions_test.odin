@@ -62,3 +62,19 @@ resolve_actions_quit_game_test :: proc(t: ^testing.T) {
 	resolve_actions(&actions, game, input)
 	testing.expect_value(t, actions.quit_game, true)
 }
+
+@(test)
+resolve_actions_toggle_pause_test :: proc(t: ^testing.T) {
+	actions: Actions
+	input: Input
+	game := init_game()
+	defer destroy_game(&game)
+
+	input.keyboard.pause_pressed = false
+	resolve_actions(&actions, game, input)
+	testing.expect_value(t, actions.toggle_pause, false)
+
+	input.keyboard.pause_pressed = true
+	resolve_actions(&actions, game, input)
+	testing.expect_value(t, actions.toggle_pause, true)
+}

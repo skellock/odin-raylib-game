@@ -60,3 +60,25 @@ destroy_timer_test :: proc(t: ^testing.T) {
 	testing.expect_value(t, timer.active, false)
 	testing.expect_value(t, timer.elapsed, f32(0.0))
 }
+
+@(test)
+paused_timer_does_not_update_test :: proc(t: ^testing.T) {
+	timer := init_timer(1.0)
+	timer.active = true
+	timer.paused = true
+	update_timer(&timer, 0.5)
+	testing.expect_value(t, timer.elapsed, f32(0.0))
+}
+
+@(test)
+unpaused_timer_resumes_test :: proc(t: ^testing.T) {
+	timer := init_timer(1.0)
+	timer.active = true
+	timer.paused = true
+	update_timer(&timer, 0.5)
+	testing.expect_value(t, timer.elapsed, f32(0.0))
+
+	timer.paused = false
+	update_timer(&timer, 0.3)
+	testing.expect_value(t, timer.elapsed, f32(0.3))
+}

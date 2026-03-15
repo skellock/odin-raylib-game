@@ -25,7 +25,8 @@ TimeInput :: struct {
 }
 
 KeyboardInput :: struct {
-	quit_pressed: bool,
+	quit_pressed:  bool,
+	pause_pressed: bool,
 }
 
 Input :: struct {
@@ -47,6 +48,7 @@ resolve_input :: proc(input: ^Input, game: Game) {
 
 	// keyboard
 	input.keyboard.quit_pressed = rl.IsKeyPressed(.Q)
+	input.keyboard.pause_pressed = rl.IsKeyPressed(.P)
 
 	// screen stuff
 	input.screen.width = rl.GetScreenWidth()

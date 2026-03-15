@@ -11,6 +11,7 @@ Game :: struct {
 	tooltip:      Tooltip,
 	hovered_card: int,
 	reshuffler:   Reshuffler,
+	paused:       bool,
 }
 
 init_game :: proc() -> Game {

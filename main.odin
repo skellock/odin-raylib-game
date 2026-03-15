@@ -50,7 +50,9 @@ main :: proc() {
 
 // The main update statement called once per frame.
 update :: proc(game: ^Game, input: Input, actions: Actions) {
-	update_music(&assets.music)
+	update_pause(game, actions)
+	update_music(&assets.music, game)
+	if game.paused do return
 	update_dot(&game.dot, input, actions)
 	update_card_view_positions(game)
 	update_tooltip(game, input)
@@ -69,6 +71,7 @@ draw :: proc(game: Game, input: Input) {
 	draw_dot(game, input)
 	draw_reshuffler(game, input)
 	draw_tooltip(game)
+	draw_pause(game, input)
 	draw_debug(input)
 
 	rl.EndMode2D()

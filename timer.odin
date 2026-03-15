@@ -4,6 +4,7 @@ Timer :: struct {
 	elapsed:  f32,
 	duration: f32,
 	active:   bool,
+	paused:   bool,
 	one_shot: bool,
 }
 
@@ -18,6 +19,7 @@ start_timer :: proc(timer: ^Timer) {
 
 update_timer :: proc(timer: ^Timer, dt: f32) {
 	if !timer.active do return
+	if timer.paused do return
 	timer.elapsed += dt
 	if timer.elapsed >= timer.duration {
 		if timer.one_shot {
