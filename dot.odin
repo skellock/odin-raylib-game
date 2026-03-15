@@ -27,7 +27,7 @@ init_dot :: proc() -> Dot {
 	return Dot{color = .Yellow, size = NORMAL_DOT_SIZE, x = 0, y = 0, tweens = ease.flux_init(f32)}
 }
 
-update_dot :: proc(dot: ^Dot, input: Input, sounds: Sounds) {
+update_dot :: proc(dot: ^Dot, input: Input, sounds: ^Sounds) {
 	if input.mouse.left_pressed {
 		move_dot_location(dot, input)
 		play_jump_sound(sounds)
