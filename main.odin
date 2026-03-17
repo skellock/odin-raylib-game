@@ -34,6 +34,8 @@ main :: proc() {
 
 	play_music(&assets.music)
 
+
+	rl.SetExitKey(.KEY_NULL)
 	// main game loop -- continues until <esc> or window closed
 	for !rl.WindowShouldClose() {
 		resolve_input(&input, game)
