@@ -130,34 +130,6 @@ has_royal_flush :: proc(cards: []Card) -> bool {
 	return pip_map[.Ten] == 1 && pip_map[.Ace] == 1
 }
 
-get_poker_hand_type_text :: proc(hand_type: PokerHandType) -> cstring {
-	switch hand_type {
-	case .Nothing:
-		return "Nothing"
-	case .HighCard:
-		return "High Card"
-	case .Pair:
-		return "Pair"
-	case .TwoPair:
-		return "Two Pair"
-	case .ThreeOfAKind:
-		return "Three of a Kind"
-	case .Straight:
-		return "Straight"
-	case .Flush:
-		return "Flush"
-	case .FullHouse:
-		return "Full House"
-	case .FourOfAKind:
-		return "Four of a Kind"
-	case .StraightFlush:
-		return "Straight Flush"
-	case .RoyalFlush:
-		return "Royal Flush"
-	}
-	return ""
-}
-
 score_hand :: proc(cards: []Card) -> PokerHandType {
 	if has_royal_flush(cards) do return .RoyalFlush
 	if has_straight_flush(cards) do return .StraightFlush
