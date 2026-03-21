@@ -1,5 +1,6 @@
 package main
 
+import "core:log"
 import rl "vendor:raylib"
 
 WINDOW_WIDTH :: 1920
@@ -10,6 +11,10 @@ VIEWPORT_HEIGHT :: 1080
 assets: Assets
 
 main :: proc() {
+	// setup a console logger
+	context.logger = log.create_console_logger()
+	defer log.destroy_console_logger(context.logger)
+
 	// setup raylib
 	rl.SetTraceLogLevel(.NONE)
 	rl.SetConfigFlags({.MSAA_4X_HINT, .WINDOW_HIGHDPI})
