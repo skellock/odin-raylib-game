@@ -4,7 +4,7 @@ import "core:log"
 import "core:mem"
 import rl "vendor:raylib"
 
-// Hack to prevent unsused variable warning while not in debug mode.
+// HACK: prevent unused variable warning while not in debug mode
 when !ODIN_DEBUG {
 	_ :: mem
 }
@@ -33,8 +33,6 @@ main :: proc() {
 			}
 			mem.tracking_allocator_destroy(&tracking_allocator)
 		}
-
-		// example_memory_leak := make([]int, 4096)
 	}
 
 	// setup raylib
