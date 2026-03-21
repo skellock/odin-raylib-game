@@ -1,3 +1,6 @@
+[env]
+BINARY_FILE = "game"
+
 [tasks.build]
 description = "Builds the executable"
 run = "odin build ."
@@ -26,5 +29,5 @@ alias = "r"
 [tasks.clean]
 description = "Cleans up unnecessary files."
 run = [
-  "rm -f ./game",
+  "rm -f ./$BINARY_FILE",
 ]
