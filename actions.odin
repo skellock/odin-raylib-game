@@ -8,9 +8,9 @@ MoveDotAction :: struct {
 }
 
 Actions :: struct {
-	reshuffle: bool,
-	move_dot:  MoveDotAction,
-	quit_game: bool,
+	reshuffle:    bool,
+	move_dot:     MoveDotAction,
+	quit_game:    bool,
 	toggle_pause: bool,
 }
 
