@@ -26,6 +26,11 @@ description = "Runs the game."
 run = "odin run ."
 alias = "r"
 
+[tasks.debug]
+description = "Runs the game in debug mode."
+run = "odin run . -debug"
+alias = "d"
+
 [tasks.clean]
 description = "Cleans up unnecessary files."
 run = [
