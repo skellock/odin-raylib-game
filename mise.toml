@@ -30,4 +30,5 @@ alias = "r"
 description = "Cleans up unnecessary files."
 run = [
   "rm -f ./$BINARY_FILE",
+  "rm -rf ./$BINARY_FILE.dSYM",
 ]
