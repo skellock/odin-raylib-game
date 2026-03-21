@@ -1,7 +1,12 @@
 package main
 
 import "core:log"
+import "core:mem"
 import rl "vendor:raylib"
+
+when !ODIN_DEBUG {
+	_ :: mem
+}
 
 WINDOW_WIDTH :: 1920
 WINDOW_HEIGHT :: 1080
@@ -14,6 +19,22 @@ main :: proc() {
 	// setup a console logger
 	context.logger = log.create_console_logger()
 	defer log.destroy_console_logger(context.logger)
+
+	// setup memory tracking in debug mode
+	when ODIN_DEBUG {
+		tracking_allocator: mem.Tracking_Allocator
+		mem.tracking_allocator_init(&tracking_allocator, context.allocator)
+		context.allocator = mem.tracking_allocator(&tracking_allocator)
+
+		defer {
+			for _, value in tracking_allocator.allocation_map {
+				log.errorf("%v: Leaked %v bytes\n", value.location, value.size)
+			}
+			mem.tracking_allocator_destroy(&tracking_allocator)
+		}
+
+		// example_memory_leak := make([]int, 4096)
+	}
 
 	// setup raylib
 	rl.SetTraceLogLevel(.NONE)
