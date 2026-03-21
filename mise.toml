@@ -1,0 +1,30 @@
+[tasks.build]
+description = "Builds the executable"
+run = "odin build ."
+alias = "b"
+
+[tasks.test]
+description = "Runs the tests."
+run = "odin test ."
+alias = "t"
+
+[tasks.format]
+description = "Formats every file."
+run = "odinfmt . -w"
+alias = "f"
+
+[tasks.check]
+description = "Checks the source code for problems."
+run = "odin check . -vet -strict-style"
+alias = "c"
+
+[tasks.run]
+description = "Runs the game."
+run = "odin run ."
+alias = "r"
+
+[tasks.clean]
+description = "Cleans up unnecessary files."
+run = [
+  "rm -f ./game",
+]
