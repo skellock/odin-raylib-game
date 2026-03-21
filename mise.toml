@@ -8,7 +8,7 @@ alias = "b"
 
 [tasks.test]
 description = "Runs the tests."
-run = "odin test ."
+run = "odin test tests"
 alias = "t"
 
 [tasks.format]
@@ -36,4 +36,5 @@ description = "Cleans up unnecessary files."
 run = [
   "rm -f ./$BINARY_FILE",
   "rm -rf ./$BINARY_FILE.dSYM",
+  "rm -rf ./tests.bin.dSYM",
 ]

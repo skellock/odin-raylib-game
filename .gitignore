@@ -1,5 +1,6 @@
 /game
 /game.dSYM
+/tests.bin.dSYM
 
 
 .DS_Store
