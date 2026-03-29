@@ -11,14 +11,14 @@ Tooltip :: struct {
 	delay:    f32,
 }
 
-update_tooltip :: proc(game: ^Game, input: Input) {
-	update_hovered_card(game, input)
-	update_tooltip_position(game, input)
+update_tooltip :: proc(game: ^Game) {
+	update_hovered_card(game)
+	update_tooltip_position(game)
 	update_tooltip_text(game)
-	update_tooltip_alpha(game, input)
+	update_tooltip_alpha(game)
 }
 
-draw_tooltip :: proc(game: Game) {
+draw_tooltip :: proc(game: ^Game) {
 	tooltip := game.tooltip
 	if tooltip.alpha <= 0 do return
 
@@ -55,23 +55,23 @@ draw_tooltip :: proc(game: Game) {
 }
 
 @(private = "file")
-update_tooltip_alpha :: proc(game: ^Game, input: Input) {
+update_tooltip_alpha :: proc(game: ^Game) {
 	if game.tooltip.alpha <= 0 do return
 	if game.hovered_card >= 0 do return
 
 	// move the tooltip along with mouse as it fades
 	FADE_DELAY :: f32(0.25)
 	FADE_SPEED :: f32(4.0)
-	game.tooltip.delay += input.time.dt
+	game.tooltip.delay += game.input.time.dt
 	if game.tooltip.delay >= FADE_DELAY {
-		game.tooltip.alpha -= FADE_SPEED * input.time.dt
+		game.tooltip.alpha -= FADE_SPEED * game.input.time.dt
 	}
 	if game.tooltip.alpha < 0 do game.tooltip.alpha = 0
 }
 
 @(private = "file")
-update_hovered_card :: proc(game: ^Game, input: Input) {
-	mouse := input.mouse.world_pos
+update_hovered_card :: proc(game: ^Game) {
+	mouse := game.input.mouse.world_pos
 	game.hovered_card = -1
 
 	for i := len(game.card_views) - 1; i >= 0; i -= 1 {
@@ -96,9 +96,9 @@ update_tooltip_text :: proc(game: ^Game) {
 }
 
 @(private = "file")
-update_tooltip_position :: proc(game: ^Game, input: Input) {
+update_tooltip_position :: proc(game: ^Game) {
 	OFFSET :: rl.Vector2{10, 10}
-	game.tooltip.pos = input.mouse.world_pos + OFFSET
+	game.tooltip.pos = game.input.mouse.world_pos + OFFSET
 }
 
 @(private = "file")

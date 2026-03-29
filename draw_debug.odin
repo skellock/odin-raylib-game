@@ -4,7 +4,7 @@ import "core:fmt"
 import rl "vendor:raylib"
 
 // Draws an FPS thingy.
-draw_debug :: proc(input: Input) {
+draw_debug :: proc(game: ^Game) {
 	FONT_SIZE :: 16
 	FONT_SPACING :: 2
 	H_MARGIN :: 4
@@ -21,7 +21,7 @@ draw_debug :: proc(input: Input) {
 	text_size := rl.MeasureTextEx(font, text, FONT_SIZE, FONT_SPACING)
 	tw := i32(text_size.x)
 	th := i32(text_size.y)
-	tx: i32 = input.viewport.width - H_MARGIN * 2 - tw
+	tx: i32 = game.input.viewport.width - H_MARGIN * 2 - tw
 	ty: i32 = V_MARGIN
 
 	// draw

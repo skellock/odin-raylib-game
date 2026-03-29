@@ -24,10 +24,10 @@ init_card_view_test :: proc(t: ^testing.T) {
 
 @(test)
 update_card_view_positions_test :: proc(t: ^testing.T) {
-	g := main.init_game()
-	defer main.destroy_game(&g)
-	main.update_card_view_positions(&g)
-	card_views := g.card_views[:]
+	game := main.init_game()
+	defer main.destroy_game(&game)
+	main.update_card_view_positions(&game)
+	card_views := game.card_views[:]
 
 	// each card should be spaced apart by CARD_SPACING
 	for i in 1 ..< len(card_views) {

@@ -3,6 +3,8 @@ package main
 import rl "vendor:raylib"
 
 Game :: struct {
+	input:        Input,
+	actions:      Actions,
 	dot:          Dot,
 	camera:       rl.Camera2D,
 	deck:         Deck,

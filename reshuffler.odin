@@ -12,17 +12,17 @@ init_reshuffler :: proc() -> Reshuffler {
 	return Reshuffler{cooldown = init_timer(RESHUFFLE_COOLDOWN, one_shot = true)}
 }
 
-update_reshuffler :: proc(game: ^Game, input: Input, actions: Actions) {
-	update_timer(&game.reshuffler.cooldown, input.time.dt)
+update_reshuffler :: proc(game: ^Game) {
+	update_timer(&game.reshuffler.cooldown, game.input.time.dt)
 
-	if actions.reshuffle {
+	if game.actions.reshuffle {
 		shuffle_deck(&game.deck)
 		deal_to_hand(game)
 		start_timer(&game.reshuffler.cooldown)
 	}
 }
 
-draw_reshuffler :: proc(game: Game, input: Input) {
+draw_reshuffler :: proc(game: ^Game) {
 	cooldown := game.reshuffler.cooldown
 	if !cooldown.active do return
 
@@ -32,8 +32,8 @@ draw_reshuffler :: proc(game: Game, input: Input) {
 	BG_COLOR := rl.ColorAlpha(rl.BLACK, 0.3)
 	FG_COLOR := rl.WHITE
 
-	cx := input.mouse.world_pos.x
-	cy := input.mouse.world_pos.y + OFFSET_Y
+	cx := game.input.mouse.world_pos.x
+	cy := game.input.mouse.world_pos.y + OFFSET_Y
 
 	// elapsed fraction (0.0 = start, 1.0 = done)
 	fraction := cooldown.elapsed / cooldown.duration

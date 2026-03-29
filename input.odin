@@ -37,26 +37,26 @@ Input :: struct {
 	time:     TimeInput,
 }
 
-resolve_input :: proc(input: ^Input, game: Game) {
+resolve_input :: proc(game: ^Game) {
 	// mouse coordinates
-	input.mouse.screen_pos = rl.GetMousePosition()
-	input.mouse.world_pos = rl.GetScreenToWorld2D(input.mouse.screen_pos, game.camera)
+	game.input.mouse.screen_pos = rl.GetMousePosition()
+	game.input.mouse.world_pos = rl.GetScreenToWorld2D(game.input.mouse.screen_pos, game.camera)
 
 	// button presses
-	input.mouse.left_pressed = rl.IsMouseButtonPressed(.LEFT)
-	input.mouse.right_pressed = rl.IsMouseButtonPressed(.RIGHT)
+	game.input.mouse.left_pressed = rl.IsMouseButtonPressed(.LEFT)
+	game.input.mouse.right_pressed = rl.IsMouseButtonPressed(.RIGHT)
 
 	// keyboard
-	input.keyboard.quit_pressed = rl.IsKeyPressed(.Q)
-	input.keyboard.pause_pressed = rl.IsKeyPressed(.P)
+	game.input.keyboard.quit_pressed = rl.IsKeyPressed(.Q)
+	game.input.keyboard.pause_pressed = rl.IsKeyPressed(.P)
 
 	// screen stuff
-	input.screen.width = rl.GetRenderWidth()
-	input.screen.height = rl.GetRenderHeight()
-	input.viewport.width = VIEWPORT_WIDTH
-	input.viewport.height = VIEWPORT_HEIGHT
+	game.input.screen.width = rl.GetRenderWidth()
+	game.input.screen.height = rl.GetRenderHeight()
+	game.input.viewport.width = VIEWPORT_WIDTH
+	game.input.viewport.height = VIEWPORT_HEIGHT
 
 	// time
-	input.time.dt = rl.GetFrameTime()
-	input.time.elapsed = rl.GetTime()
+	game.input.time.dt = rl.GetFrameTime()
+	game.input.time.elapsed = rl.GetTime()
 }

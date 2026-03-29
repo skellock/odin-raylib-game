@@ -14,23 +14,23 @@ Actions :: struct {
 	toggle_pause: bool,
 }
 
-resolve_actions :: proc(actions: ^Actions, game: Game, input: Input) {
+resolve_actions :: proc(game: ^Game) {
 	// start by resetting the actions entirely
-	actions^ = Actions{}
+	game.actions = Actions{}
 
-	if input.keyboard.quit_pressed {
-		actions.quit_game = true
+	if game.input.keyboard.quit_pressed {
+		game.actions.quit_game = true
 	}
 
-	if input.keyboard.pause_pressed {
-		actions.toggle_pause = true
+	if game.input.keyboard.pause_pressed {
+		game.actions.toggle_pause = true
 	}
 
-	if input.mouse.right_pressed && !game.reshuffler.cooldown.active {
-		actions.reshuffle = true
+	if game.input.mouse.right_pressed && !game.reshuffler.cooldown.active {
+		game.actions.reshuffle = true
 	}
 
-	if input.mouse.left_pressed {
-		actions.move_dot = {true, input.mouse.world_pos}
+	if game.input.mouse.left_pressed {
+		game.actions.move_dot = {true, game.input.mouse.world_pos}
 	}
 }

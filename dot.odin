@@ -27,22 +27,22 @@ init_dot :: proc() -> Dot {
 	return Dot{color = .Yellow, size = NORMAL_DOT_SIZE, tweens = ease.flux_init(f32)}
 }
 
-update_dot :: proc(dot: ^Dot, input: Input, actions: Actions) {
-	if actions.move_dot.active {
-		move_dot_location(dot, actions.move_dot.pos)
+update_dot :: proc(game: ^Game) {
+	if game.actions.move_dot.active {
+		move_dot_location(&game.dot, game.actions.move_dot.pos)
 	}
 
-	if actions.reshuffle {
-		cycle_dot_color(dot)
+	if game.actions.reshuffle {
+		cycle_dot_color(&game.dot)
 		play_sound(assets.sounds.blip)
 	}
 
-	dot.targeting_pos = input.mouse.world_pos
-	update_dot_size(dot, input)
-	update_dot_tweens(dot, input)
+	game.dot.targeting_pos = game.input.mouse.world_pos
+	update_dot_size(game)
+	update_dot_tweens(game)
 }
 
-draw_dot :: proc(game: Game, input: Input) {
+draw_dot :: proc(game: ^Game) {
 	dot := game.dot
 	dot_color: rl.Color
 
@@ -61,16 +61,16 @@ draw_dot :: proc(game: Game, input: Input) {
 }
 
 @(private = "file")
-update_dot_tweens :: proc(dot: ^Dot, input: Input) {
-	ease.flux_update(&dot.tweens, f64(input.time.dt))
+update_dot_tweens :: proc(game: ^Game) {
+	ease.flux_update(&game.dot.tweens, f64(game.input.time.dt))
 }
 
 @(private = "file")
-update_dot_size :: proc(dot: ^Dot, input: Input) {
-	big := dot.current_pos.x < f32(input.viewport.width / 2)
+update_dot_size :: proc(game: ^Game) {
+	big := game.dot.current_pos.x < f32(game.input.viewport.width / 2)
 	to_size := f32(big ? BIG_DOT_SIZE : NORMAL_DOT_SIZE)
 
-	dot.size = math.lerp(dot.size, to_size, DOT_GROW_SPEED * input.time.dt)
+	game.dot.size = math.lerp(game.dot.size, to_size, DOT_GROW_SPEED * game.input.time.dt)
 }
 
 @(private = "file")

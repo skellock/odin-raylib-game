@@ -59,9 +59,6 @@ main :: proc() {
 	game := init_game()
 	defer destroy_game(&game)
 
-	input := Input{}
-	actions := Actions{}
-
 	play_music(&assets.music)
 
 	// main game loop
@@ -72,45 +69,45 @@ main :: proc() {
 		// jet if the window is closed
 		if rl.WindowShouldClose() do break
 
-		resolve_input(&input, game)
-		resolve_actions(&actions, game, input)
+		resolve_input(&game)
+		resolve_actions(&game)
 
 		// jet if the quit_game action is triggered
-		if actions.quit_game do break
+		if game.actions.quit_game do break
 
-		update(&game, input, actions)
-		draw(game, input)
+		update(&game)
+		draw(&game)
 	}
 }
 
 // The main update statement called once per frame.
-update :: proc(game: ^Game, input: Input, actions: Actions) {
-	update_pause(game, actions)
+update :: proc(game: ^Game) {
+	update_pause(game)
 	update_music(&assets.music, game)
 
 	if game.paused do return
 
-	update_dot(&game.dot, input, actions)
+	update_dot(game)
 	update_card_view_positions(game)
-	update_tooltip(game, input)
-	update_reshuffler(game, input, actions)
+	update_tooltip(game)
+	update_reshuffler(game)
 }
 
 // The main drawing function called once per frame.
-draw :: proc(game: Game, input: Input) {
+draw :: proc(game: ^Game) {
 	rl.BeginDrawing()
 	defer rl.EndDrawing()
 	rl.BeginMode2D(game.camera)
 	defer rl.EndMode2D()
 
-	draw_background(input)
+	draw_background(game)
 	draw_cards(game)
-	draw_poker_hand_type_text(game, input)
+	draw_poker_hand_type_text(game)
 	draw_poker_odds(game)
-	draw_dot(game, input)
-	draw_reshuffler(game, input)
+	draw_dot(game)
+	draw_reshuffler(game)
 	draw_tooltip(game)
-	draw_pause(game, input)
-	draw_debug(input)
+	draw_pause(game)
+	draw_debug(game)
 	draw_cursor(game)
 }
