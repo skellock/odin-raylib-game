@@ -114,11 +114,3 @@ draw :: proc(game: Game, input: Input) {
 	draw_debug(input)
 	draw_cursor(game)
 }
-
-draw_cursor :: proc(game: Game) {
-	if game.hovered_card < 0 {
-		rl.SetMouseCursor(.DEFAULT)
-	} else {
-		rl.SetMouseCursor(.POINTING_HAND)
-	}
-}
