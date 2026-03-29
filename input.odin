@@ -37,7 +37,7 @@ Input :: struct {
 	time:     TimeInput,
 }
 
-resolve_input :: proc(game: ^Game) {
+update_input :: proc(game: ^Game) {
 	// mouse coordinates
 	game.input.mouse.screen_pos = rl.GetMousePosition()
 	game.input.mouse.world_pos = rl.GetScreenToWorld2D(game.input.mouse.screen_pos, game.camera)

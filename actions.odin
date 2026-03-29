@@ -14,7 +14,7 @@ Actions :: struct {
 	toggle_pause: bool,
 }
 
-resolve_actions :: proc(game: ^Game) {
+update_actions :: proc(game: ^Game) {
 	// start by resetting the actions entirely
 	game.actions = Actions{}
 

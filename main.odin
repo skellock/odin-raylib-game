@@ -66,22 +66,20 @@ main :: proc() {
 		// free the temp allocator each loop
 		defer free_all(context.temp_allocator)
 
-		// jet if the window is closed
-		if rl.WindowShouldClose() do break
+		update_input(&game)
+		update_actions(&game)
+		update_game(&game)
 
-		resolve_input(&game)
-		resolve_actions(&game)
-
-		// jet if the quit_game action is triggered
-		if game.actions.quit_game do break
-
-		update(&game)
 		draw(&game)
+
+		// quit the game?
+		if game.actions.quit_game do break
+		if rl.WindowShouldClose() do break
 	}
 }
 
 // The main update statement called once per frame.
-update :: proc(game: ^Game) {
+update_game :: proc(game: ^Game) {
 	update_pause(game)
 	update_music(&assets.music, game)
 
