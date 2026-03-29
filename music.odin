@@ -20,13 +20,15 @@ play_music :: proc(music: ^Music) {
 	}
 }
 
-update_music :: proc(music: ^Music, game: ^Game) {
-	if game.paused {
-		rl.PauseMusicStream(music.cvb)
-	} else {
-		rl.ResumeMusicStream(music.cvb)
+update_music :: proc(game: ^Game) {
+	if game.actions.toggle_pause {
+		if game.paused {
+			rl.PauseMusicStream(assets.music.cvb)
+		} else {
+			rl.ResumeMusicStream(assets.music.cvb)
+		}
 	}
-	rl.UpdateMusicStream(music.cvb)
+	rl.UpdateMusicStream(assets.music.cvb)
 }
 
 destroy_music :: proc(music: ^Music) {

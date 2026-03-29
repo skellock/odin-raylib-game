@@ -75,8 +75,12 @@ main :: proc() {
 			// determine what the user wants to do
 			update_actions(&game)
 
+			// update the pause state
 			update_pause(&game)
-			update_music(&assets.music, &game)
+
+			update_music(&game)
+
+			// skip game updates if we're paused
 			if !game.paused {
 				update_dot(&game)
 				update_card_view_positions(&game)
