@@ -98,7 +98,7 @@ main :: proc() {
 			defer rl.EndMode2D()
 
 			draw_background(&game)
-			draw_cards(&game)
+			draw_card_views(&game)
 			draw_poker_hand_type_text(&game)
 			draw_poker_odds(&game)
 			draw_dot(&game)

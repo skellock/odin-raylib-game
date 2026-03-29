@@ -15,7 +15,7 @@ init_card_view :: proc(card: Card, texture: rl.Texture2D) -> CardView {
 	return CardView{card = card, texture = texture}
 }
 
-draw_cards :: proc(game: ^Game) {
+draw_card_views :: proc(game: ^Game) {
 	SHADOW_OFFSET :: rl.Vector2{1, 1}
 
 	for cv, idx in game.card_views {
