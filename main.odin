@@ -66,46 +66,36 @@ main :: proc() {
 		// free the temp allocator each loop
 		defer free_all(context.temp_allocator)
 
+		// -- updates
 		update_input(&game)
 		update_actions(&game)
-		update_game(&game)
+		update_pause(&game)
+		update_music(&assets.music, &game)
+		if !game.paused {
+			update_dot(&game)
+			update_card_view_positions(&game)
+			update_tooltip(&game)
+			update_reshuffler(&game)
+		}
 
-		draw(&game)
+		// -- draws
+		rl.BeginDrawing()
+		defer rl.EndDrawing()
+		rl.BeginMode2D(game.camera)
+		defer rl.EndMode2D()
+		draw_background(&game)
+		draw_cards(&game)
+		draw_poker_hand_type_text(&game)
+		draw_poker_odds(&game)
+		draw_dot(&game)
+		draw_reshuffler(&game)
+		draw_tooltip(&game)
+		draw_pause(&game)
+		draw_debug(&game)
+		draw_cursor(&game)
 
 		// quit the game?
 		if game.actions.quit_game do break
 		if rl.WindowShouldClose() do break
 	}
-}
-
-// The main update statement called once per frame.
-update_game :: proc(game: ^Game) {
-	update_pause(game)
-	update_music(&assets.music, game)
-
-	if game.paused do return
-
-	update_dot(game)
-	update_card_view_positions(game)
-	update_tooltip(game)
-	update_reshuffler(game)
-}
-
-// The main drawing function called once per frame.
-draw :: proc(game: ^Game) {
-	rl.BeginDrawing()
-	defer rl.EndDrawing()
-	rl.BeginMode2D(game.camera)
-	defer rl.EndMode2D()
-
-	draw_background(game)
-	draw_cards(game)
-	draw_poker_hand_type_text(game)
-	draw_poker_odds(game)
-	draw_dot(game)
-	draw_reshuffler(game)
-	draw_tooltip(game)
-	draw_pause(game)
-	draw_debug(game)
-	draw_cursor(game)
 }
