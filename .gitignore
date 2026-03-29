@@ -1,9 +1,7 @@
+.DS_Store
+/.claude/settings.local.json
+/.zed
 /game
 /game.dSYM
-/tests.bin.dSYM
-
-
-.DS_Store
-/.zed
 /tests.bin
-/.claude/settings.local.json
+/tests.bin.dSYM
