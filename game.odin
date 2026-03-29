@@ -4,6 +4,8 @@ import rl "vendor:raylib"
 
 Game :: struct {
 	time:         Time,
+	screen:       Screen,
+	viewport:     Viewport,
 	input:        Input,
 	actions:      Actions,
 	dot:          Dot,

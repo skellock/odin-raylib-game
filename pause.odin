@@ -12,8 +12,8 @@ update_pause :: proc(game: ^Game) {
 draw_pause :: proc(game: ^Game) {
 	if !game.paused do return
 
-	vw := game.input.viewport.width
-	vh := game.input.viewport.height
+	vw := game.viewport.width
+	vh := game.viewport.height
 
 	// desaturate overlay
 	rl.DrawRectangle(0, 0, vw, vh, rl.ColorAlpha(rl.BLACK, 0.6))

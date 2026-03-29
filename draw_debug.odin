@@ -21,7 +21,7 @@ draw_debug :: proc(game: ^Game) {
 	text_size := rl.MeasureTextEx(font, text, FONT_SIZE, FONT_SPACING)
 	tw := i32(text_size.x)
 	th := i32(text_size.y)
-	tx: i32 = game.input.viewport.width - H_MARGIN * 2 - tw
+	tx: i32 = game.viewport.width - H_MARGIN * 2 - tw
 	ty: i32 = V_MARGIN
 
 	// draw

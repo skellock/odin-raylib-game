@@ -67,7 +67,7 @@ update_dot_tweens :: proc(game: ^Game) {
 
 @(private = "file")
 update_dot_size :: proc(game: ^Game) {
-	big := game.dot.current_pos.x < f32(game.input.viewport.width / 2)
+	big := game.dot.current_pos.x < f32(game.viewport.width / 2)
 	to_size := f32(big ? BIG_DOT_SIZE : NORMAL_DOT_SIZE)
 
 	game.dot.size = math.lerp(game.dot.size, to_size, DOT_GROW_SPEED * game.time.dt)

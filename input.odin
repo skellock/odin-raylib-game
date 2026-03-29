@@ -9,16 +9,6 @@ MouseInput :: struct {
 	right_pressed: bool, // Has the right button been pressed?
 }
 
-ScreenInput :: struct {
-	width:  i32,
-	height: i32,
-}
-
-ViewportInput :: struct {
-	width:  i32,
-	height: i32,
-}
-
 KeyboardInput :: struct {
 	quit_pressed:  bool,
 	pause_pressed: bool,
@@ -27,8 +17,6 @@ KeyboardInput :: struct {
 Input :: struct {
 	mouse:    MouseInput,
 	keyboard: KeyboardInput,
-	screen:   ScreenInput,
-	viewport: ViewportInput,
 }
 
 update_input :: proc(game: ^Game) {
@@ -45,10 +33,10 @@ update_input :: proc(game: ^Game) {
 	game.input.keyboard.pause_pressed = rl.IsKeyPressed(.P)
 
 	// screen stuff
-	game.input.screen.width = rl.GetRenderWidth()
-	game.input.screen.height = rl.GetRenderHeight()
-	game.input.viewport.width = VIEWPORT_WIDTH
-	game.input.viewport.height = VIEWPORT_HEIGHT
+	game.screen.width = rl.GetRenderWidth()
+	game.screen.height = rl.GetRenderHeight()
+	game.viewport.width = VIEWPORT_WIDTH
+	game.viewport.height = VIEWPORT_HEIGHT
 
 	// time
 	game.time.dt = rl.GetFrameTime()
