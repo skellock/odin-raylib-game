@@ -4,15 +4,11 @@ import "core:log"
 import "core:mem"
 import rl "vendor:raylib"
 
-// HACK: prevent unused variable warning while not in debug mode
-when !ODIN_DEBUG {
-	_ :: mem
-}
-
 WINDOW_WIDTH :: 1920
 WINDOW_HEIGHT :: 1080
 
 assets: Assets
+tracking_allocator: mem.Tracking_Allocator
 
 main :: proc() {
 	// setup a console logger
@@ -22,7 +18,6 @@ main :: proc() {
 	// setup memory tracking in debug mode
 	when ODIN_DEBUG {
 		log.debug("starting up")
-		tracking_allocator: mem.Tracking_Allocator
 		mem.tracking_allocator_init(&tracking_allocator, context.allocator)
 		context.allocator = mem.tracking_allocator(&tracking_allocator)
 
@@ -67,7 +62,7 @@ main :: proc() {
 
 		// -- updates ---------------------------------------------------------------
 		{
-			// the primitives
+			// update the basic state that other update_* functions rely on
 			update_time(&game)
 			update_screen(&game)
 			update_viewport(&game)
