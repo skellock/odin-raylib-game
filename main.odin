@@ -71,7 +71,8 @@ main :: proc() {
 			update_time(&game)
 			update_screen(&game)
 			update_viewport(&game)
-			update_input(&game)
+			update_keyboard(&game)
+			update_mouse(&game)
 
 			// determine what the user wants to do
 			update_actions(&game)

@@ -71,7 +71,7 @@ update_tooltip_alpha :: proc(game: ^Game) {
 
 @(private = "file")
 update_hovered_card :: proc(game: ^Game) {
-	mouse := game.input.mouse.world_pos
+	mouse := game.mouse.world_pos
 	game.hovered_card = -1
 
 	for i := len(game.card_views) - 1; i >= 0; i -= 1 {
@@ -98,7 +98,7 @@ update_tooltip_text :: proc(game: ^Game) {
 @(private = "file")
 update_tooltip_position :: proc(game: ^Game) {
 	OFFSET :: rl.Vector2{10, 10}
-	game.tooltip.pos = game.input.mouse.world_pos + OFFSET
+	game.tooltip.pos = game.mouse.world_pos + OFFSET
 }
 
 @(private = "file")

@@ -37,7 +37,7 @@ update_dot :: proc(game: ^Game) {
 		play_sound(assets.sounds.blip)
 	}
 
-	game.dot.targeting_pos = game.input.mouse.world_pos
+	game.dot.targeting_pos = game.mouse.world_pos
 	update_dot_size(game)
 	update_dot_tweens(game)
 }

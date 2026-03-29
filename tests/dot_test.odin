@@ -45,8 +45,8 @@ update_dot_move_dot_sets_tween_test :: proc(t: ^testing.T) {
 	testing.expect_value(t, game.dot.current_pos.x, f32(0))
 	testing.expect_value(t, game.dot.current_pos.y, f32(0))
 
-	game.input.mouse.world_pos = {100, 200}
-	game.actions.move_dot = {true, game.input.mouse.world_pos}
+	game.mouse.world_pos = {100, 200}
+	game.actions.move_dot = {true, game.mouse.world_pos}
 	update_dot(&game)
 
 	// after a move_dot action, tweens are created but dot hasn't moved yet without dt
@@ -79,11 +79,11 @@ update_dot_targeting_pos_test :: proc(t: ^testing.T) {
 
 	testing.expect_value(t, game.dot.targeting_pos, rl.Vector2{0, 0})
 
-	game.input.mouse.world_pos = {50, 75}
+	game.mouse.world_pos = {50, 75}
 	update_dot(&game)
 	testing.expect_value(t, game.dot.targeting_pos, rl.Vector2{50, 75})
 
-	game.input.mouse.world_pos = {200, 300}
+	game.mouse.world_pos = {200, 300}
 	update_dot(&game)
 	testing.expect_value(t, game.dot.targeting_pos, rl.Vector2{200, 300})
 }

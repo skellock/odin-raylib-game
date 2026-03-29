@@ -18,19 +18,19 @@ update_actions :: proc(game: ^Game) {
 	// start by resetting the actions entirely
 	game.actions = Actions{}
 
-	if game.input.keyboard.quit_pressed {
+	if game.keyboard.quit_pressed {
 		game.actions.quit_game = true
 	}
 
-	if game.input.keyboard.pause_pressed {
+	if game.keyboard.pause_pressed {
 		game.actions.toggle_pause = true
 	}
 
-	if game.input.mouse.right_pressed && !game.reshuffler.cooldown.active {
+	if game.mouse.right_pressed && !game.reshuffler.cooldown.active {
 		game.actions.reshuffle = true
 	}
 
-	if game.input.mouse.left_pressed {
-		game.actions.move_dot = {true, game.input.mouse.world_pos}
+	if game.mouse.left_pressed {
+		game.actions.move_dot = {true, game.mouse.world_pos}
 	}
 }
