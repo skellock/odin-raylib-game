@@ -39,6 +39,8 @@ main :: proc() {
 	rl.SetTraceLogLevel(.NONE)
 	rl.SetConfigFlags({.MSAA_4X_HINT, .WINDOW_HIGHDPI})
 	rl.SetTargetFPS(144)
+	rl.SetExitKey(.KEY_NULL)
+	rl.ToggleFullscreen()
 
 	// setup audio device
 	rl.InitAudioDevice()
@@ -49,38 +51,45 @@ main :: proc() {
 	rl.InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Game")
 	defer rl.CloseWindow()
 
-	// initialize the assets
+	// prepare the assets
 	assets = init_assets()
+	defer destroy_assets(&assets)
 
+	// prepare the game
 	game := init_game()
+	defer destroy_game(&game)
+
 	input := Input{}
 	actions := Actions{}
 
 	play_music(&assets.music)
 
-	rl.SetExitKey(.KEY_NULL)
+	// main game loop
+	for {
+		// free the temp allocator each loop
+		defer free_all(context.temp_allocator)
 
-	rl.ToggleFullscreen()
+		// jet if the window is closed
+		if rl.WindowShouldClose() do break
 
-	// main game loop -- continues until <esc> or window closed
-	for !rl.WindowShouldClose() {
 		resolve_input(&input, game)
 		resolve_actions(&actions, game, input)
+
+		// jet if the quit_game action is triggered
 		if actions.quit_game do break
+
 		update(&game, input, actions)
 		draw(game, input)
-		free_all(context.temp_allocator)
 	}
-
-	destroy_assets(&assets)
-	destroy_game(&game)
 }
 
 // The main update statement called once per frame.
 update :: proc(game: ^Game, input: Input, actions: Actions) {
 	update_pause(game, actions)
 	update_music(&assets.music, game)
+
 	if game.paused do return
+
 	update_dot(&game.dot, input, actions)
 	update_card_view_positions(game)
 	update_tooltip(game, input)
@@ -90,7 +99,9 @@ update :: proc(game: ^Game, input: Input, actions: Actions) {
 // The main drawing function called once per frame.
 draw :: proc(game: Game, input: Input) {
 	rl.BeginDrawing()
+	defer rl.EndDrawing()
 	rl.BeginMode2D(game.camera)
+	defer rl.EndMode2D()
 
 	draw_background(input)
 	draw_cards(game)
@@ -102,9 +113,6 @@ draw :: proc(game: Game, input: Input) {
 	draw_pause(game, input)
 	draw_debug(input)
 	draw_cursor(game)
-
-	rl.EndMode2D()
-	rl.EndDrawing()
 }
 
 draw_cursor :: proc(game: Game) {
