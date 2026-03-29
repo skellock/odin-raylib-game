@@ -21,6 +21,7 @@ main :: proc() {
 
 	// setup memory tracking in debug mode
 	when ODIN_DEBUG {
+		log.debug("starting up")
 		tracking_allocator: mem.Tracking_Allocator
 		mem.tracking_allocator_init(&tracking_allocator, context.allocator)
 		context.allocator = mem.tracking_allocator(&tracking_allocator)
