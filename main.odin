@@ -105,7 +105,7 @@ main :: proc() {
 			draw_reshuffler(&game)
 			draw_tooltip(&game)
 			if game.paused {
-				draw_pause(&game)
+				draw_paused(&game)
 			}
 			draw_debug(&game)
 			draw_cursor(&game)
