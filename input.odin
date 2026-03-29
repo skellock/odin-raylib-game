@@ -31,14 +31,4 @@ update_input :: proc(game: ^Game) {
 	// keyboard
 	game.input.keyboard.quit_pressed = rl.IsKeyPressed(.Q)
 	game.input.keyboard.pause_pressed = rl.IsKeyPressed(.P)
-
-	// screen stuff
-	game.screen.width = rl.GetRenderWidth()
-	game.screen.height = rl.GetRenderHeight()
-	game.viewport.width = VIEWPORT_WIDTH
-	game.viewport.height = VIEWPORT_HEIGHT
-
-	// time
-	game.time.dt = rl.GetFrameTime()
-	game.time.elapsed = rl.GetTime()
 }

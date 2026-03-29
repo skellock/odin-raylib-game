@@ -11,8 +11,6 @@ when !ODIN_DEBUG {
 
 WINDOW_WIDTH :: 1920
 WINDOW_HEIGHT :: 1080
-VIEWPORT_WIDTH :: 1920
-VIEWPORT_HEIGHT :: 1080
 
 assets: Assets
 
@@ -66,36 +64,50 @@ main :: proc() {
 		// free the temp allocator each loop
 		defer free_all(context.temp_allocator)
 
-		// -- updates
-		update_input(&game)
-		update_actions(&game)
-		update_pause(&game)
-		update_music(&assets.music, &game)
-		if !game.paused {
-			update_dot(&game)
-			update_card_view_positions(&game)
-			update_tooltip(&game)
-			update_reshuffler(&game)
+		// -- updates ---------------------------------------------------------------
+		{
+			// the primitives
+			update_time(&game)
+			update_screen(&game)
+			update_viewport(&game)
+			update_input(&game)
+
+			// determine what the user wants to do
+			update_actions(&game)
+
+			update_pause(&game)
+			update_music(&assets.music, &game)
+			if !game.paused {
+				update_dot(&game)
+				update_card_view_positions(&game)
+				update_tooltip(&game)
+				update_reshuffler(&game)
+			}
 		}
 
-		// -- draws
-		rl.BeginDrawing()
-		defer rl.EndDrawing()
-		rl.BeginMode2D(game.camera)
-		defer rl.EndMode2D()
-		draw_background(&game)
-		draw_cards(&game)
-		draw_poker_hand_type_text(&game)
-		draw_poker_odds(&game)
-		draw_dot(&game)
-		draw_reshuffler(&game)
-		draw_tooltip(&game)
-		draw_pause(&game)
-		draw_debug(&game)
-		draw_cursor(&game)
+		// -- drawing ---------------------------------------------------------------
+		{
+			rl.BeginDrawing()
+			defer rl.EndDrawing()
+			rl.BeginMode2D(game.camera)
+			defer rl.EndMode2D()
 
-		// quit the game?
-		if game.actions.quit_game do break
-		if rl.WindowShouldClose() do break
+			draw_background(&game)
+			draw_cards(&game)
+			draw_poker_hand_type_text(&game)
+			draw_poker_odds(&game)
+			draw_dot(&game)
+			draw_reshuffler(&game)
+			draw_tooltip(&game)
+			draw_pause(&game)
+			draw_debug(&game)
+			draw_cursor(&game)
+		}
+
+		// -- quitting the game ------------------------------------------------------
+		{
+			if game.actions.quit_game do break
+			if rl.WindowShouldClose() do break
+		}
 	}
 }
