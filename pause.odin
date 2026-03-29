@@ -10,8 +10,6 @@ update_pause :: proc(game: ^Game) {
 }
 
 draw_pause :: proc(game: ^Game) {
-	if !game.paused do return
-
 	vw := game.viewport.width
 	vh := game.viewport.height
 
