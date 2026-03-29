@@ -3,6 +3,7 @@ package main
 import rl "vendor:raylib"
 
 Game :: struct {
+	time:         Time,
 	input:        Input,
 	actions:      Actions,
 	dot:          Dot,

@@ -19,11 +19,6 @@ ViewportInput :: struct {
 	height: i32,
 }
 
-TimeInput :: struct {
-	dt:      f32, // The frame's delta time.
-	elapsed: f64, // How long the game has been running
-}
-
 KeyboardInput :: struct {
 	quit_pressed:  bool,
 	pause_pressed: bool,
@@ -34,7 +29,6 @@ Input :: struct {
 	keyboard: KeyboardInput,
 	screen:   ScreenInput,
 	viewport: ViewportInput,
-	time:     TimeInput,
 }
 
 update_input :: proc(game: ^Game) {
@@ -57,6 +51,6 @@ update_input :: proc(game: ^Game) {
 	game.input.viewport.height = VIEWPORT_HEIGHT
 
 	// time
-	game.input.time.dt = rl.GetFrameTime()
-	game.input.time.elapsed = rl.GetTime()
+	game.time.dt = rl.GetFrameTime()
+	game.time.elapsed = rl.GetTime()
 }

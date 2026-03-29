@@ -24,7 +24,7 @@ draw_pause :: proc(game: ^Game) {
 	BLINK_SPEED :: 3.0
 
 	font := assets.fonts.body
-	alpha := f32(0.5 + 0.5 * math.sin(f32(game.input.time.elapsed) * BLINK_SPEED))
+	alpha := f32(0.5 + 0.5 * math.sin(f32(game.time.elapsed) * BLINK_SPEED))
 	text :: "Paused"
 	text_size := rl.MeasureTextEx(font, text, FONT_SIZE, SPACING)
 

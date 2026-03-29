@@ -13,7 +13,7 @@ init_reshuffler :: proc() -> Reshuffler {
 }
 
 update_reshuffler :: proc(game: ^Game) {
-	update_timer(&game.reshuffler.cooldown, game.input.time.dt)
+	update_timer(&game.reshuffler.cooldown, game.time.dt)
 
 	if game.actions.reshuffle {
 		shuffle_deck(&game.deck)

@@ -51,7 +51,7 @@ update_dot_move_dot_sets_tween_test :: proc(t: ^testing.T) {
 
 	// simulate time passing to let tweens update
 	game.actions.move_dot = {}
-	game.input.time.dt = 1.0
+	game.time.dt = 1.0
 	main.update_dot(&game)
 
 	// dot should have moved toward the target

@@ -62,9 +62,9 @@ update_tooltip_alpha :: proc(game: ^Game) {
 	// move the tooltip along with mouse as it fades
 	FADE_DELAY :: f32(0.25)
 	FADE_SPEED :: f32(4.0)
-	game.tooltip.delay += game.input.time.dt
+	game.tooltip.delay += game.time.dt
 	if game.tooltip.delay >= FADE_DELAY {
-		game.tooltip.alpha -= FADE_SPEED * game.input.time.dt
+		game.tooltip.alpha -= FADE_SPEED * game.time.dt
 	}
 	if game.tooltip.alpha < 0 do game.tooltip.alpha = 0
 }
