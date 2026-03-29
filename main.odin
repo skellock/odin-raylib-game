@@ -17,13 +17,16 @@ main :: proc() {
 
 	// setup memory tracking in debug mode
 	when ODIN_DEBUG {
-		log.debug("starting up")
 		mem.tracking_allocator_init(&tracking_allocator, context.allocator)
 		context.allocator = mem.tracking_allocator(&tracking_allocator)
 
 		defer {
-			for _, value in tracking_allocator.allocation_map {
-				log.errorf("%v: Leaked %v bytes\n", value.location, value.size)
+			if len(tracking_allocator.allocation_map) == 0 {
+				log.debug("No memory leaks detected 🎉.")
+			} else {
+				for _, value in tracking_allocator.allocation_map {
+					log.errorf("%v: Leaked %v bytes\n", value.location, value.size)
+				}
 			}
 			mem.tracking_allocator_destroy(&tracking_allocator)
 		}
