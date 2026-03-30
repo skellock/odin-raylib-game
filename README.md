@@ -18,7 +18,7 @@ Tire kicking Odin and Raylib.
 - [x] tweening
 - [x] memory leak tracking
 - [x] collision detection
-- [ ] sprite sheets
-- [ ] basic sprite animations
+- [x] sprite sheets
+- [x] basic sprite animations
 - [ ] tilemap
 - [ ] save/load game (json is fine)

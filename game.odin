@@ -18,6 +18,7 @@ Game :: struct {
 	hovered_card: int,
 	reshuffler:   Reshuffler,
 	paused:       bool,
+	scarfy:       Scarfy,
 }
 
 init_game :: proc() -> Game {
@@ -27,6 +28,7 @@ init_game :: proc() -> Game {
 		// camera = rl.Camera2D{zoom = f32(rl.GetRenderHeight() / VIEWPORT_HEIGHT)},
 		deck = init_shuffled_deck(),
 		reshuffler = init_reshuffler(),
+		scarfy = init_scarfy(),
 	}
 	deal_to_hand(&game)
 
@@ -45,4 +47,5 @@ deal_to_hand :: proc(game: ^Game) {
 destroy_game :: proc(game: ^Game) {
 	destroy_dot(&game.dot)
 	destroy_reshuffler(&game.reshuffler)
+	destroy_scarfy(&game.scarfy)
 }

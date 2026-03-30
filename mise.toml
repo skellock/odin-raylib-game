@@ -18,7 +18,7 @@ alias = "f"
 
 [tasks.check]
 description = "Checks the source code for problems."
-run = "odin check . -vet -strict-style -vet-packages:tests"
+run = "odin check . -vet -strict-style -vet-packages:tests,animator"
 alias = "c"
 
 [tasks.run]

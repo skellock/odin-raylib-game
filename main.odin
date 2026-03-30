@@ -54,6 +54,7 @@ main :: proc() {
 
 	// prepare the game
 	game := init_game()
+	load_scarfy(&game.scarfy)
 	defer destroy_game(&game)
 
 	play_music(&assets.music)
@@ -82,6 +83,7 @@ main :: proc() {
 
 			// skip game updates if we're paused
 			if !game.paused {
+				update_scarfy(&game)
 				update_dot(&game)
 				update_card_view_positions(&game)
 				update_card_view_collisions(&game)
@@ -98,6 +100,7 @@ main :: proc() {
 			defer rl.EndMode2D()
 
 			draw_background(&game)
+			draw_scarfy(&game)
 			draw_card_views(&game)
 			draw_poker_hand_type_text(&game)
 			draw_poker_odds(&game)
