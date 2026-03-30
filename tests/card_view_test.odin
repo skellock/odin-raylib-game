@@ -32,3 +32,28 @@ update_card_view_positions_test :: proc(t: ^testing.T) {
 		testing.expect_value(t, diff, CARD_SPACING)
 	}
 }
+
+@(test)
+update_card_view_collisions_test :: proc(t: ^testing.T) {
+	using main
+	game := init_game()
+	defer destroy_game(&game)
+
+	update_card_view_positions(&game)
+	game.dot.current_pos = {0, 0}
+	game.dot.size = 1.0
+
+	// no collisions to start
+	update_card_view_collisions(&game)
+	for cv in game.card_views {
+		testing.expect_value(t, cv.collided, false)
+	}
+
+	// then we collide with one of them
+	collided := &game.card_views[4]
+	game.dot.current_pos = collided.pos
+	update_card_view_collisions(&game)
+	for cv in game.card_views {
+		testing.expect_value(t, cv.collided, cv == collided^)
+	}
+}

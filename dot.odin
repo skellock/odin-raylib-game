@@ -42,21 +42,22 @@ update_dot :: proc(game: ^Game) {
 	update_dot_tweens(game)
 }
 
+get_dot_drawing_color :: proc(game: ^Game) -> rl.Color {
+	switch game.dot.color {
+	case .Red:
+		return rl.RED
+	case .Green:
+		return rl.GREEN
+	case .Yellow:
+		return rl.YELLOW
+	}
+	return rl.WHITE
+}
+
 draw_dot :: proc(game: ^Game) {
 	dot := game.dot
-	dot_color: rl.Color
-
-	switch dot.color {
-	case .Red:
-		dot_color = rl.RED
-	case .Green:
-		dot_color = rl.GREEN
-	case .Yellow:
-		dot_color = rl.YELLOW
-	}
-
+	dot_color := get_dot_drawing_color(game)
 	rl.DrawLineEx(dot.current_pos, dot.targeting_pos, 2, rl.ColorAlpha(rl.WHITE, 0.25))
-
 	rl.DrawCircleV(dot.current_pos, dot.size, dot_color)
 }
 

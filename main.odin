@@ -84,6 +84,7 @@ main :: proc() {
 			if !game.paused {
 				update_dot(&game)
 				update_card_view_positions(&game)
+				update_card_view_collisions(&game)
 				update_tooltip(&game)
 				update_reshuffler(&game)
 			}
