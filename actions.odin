@@ -12,6 +12,8 @@ Actions :: struct {
 	move_dot:     MoveDotAction,
 	quit_game:    bool,
 	toggle_pause: bool,
+	save_game:    bool,
+	load_game:    bool,
 }
 
 update_actions :: proc(game: ^Game) {
@@ -32,5 +34,13 @@ update_actions :: proc(game: ^Game) {
 
 	if game.mouse.left_pressed {
 		game.actions.move_dot = {true, game.mouse.world_pos}
+	}
+
+	if game.keyboard.load_pressed {
+		load_save_game(game)
+	}
+
+	if game.keyboard.save_pressed {
+		write_save_game(game)
 	}
 }

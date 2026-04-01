@@ -49,3 +49,22 @@ destroy_game :: proc(game: ^Game) {
 	destroy_reshuffler(&game.reshuffler)
 	destroy_scarfy(&game.scarfy)
 }
+
+restore_save_game :: proc(game: ^Game, save: ^SaveGame) {
+	game.deck.cards = save.cards
+	game.dot.current_pos = {save.dot_x, save.dot_y}
+	game.dot.color = save.dot_color
+
+	// update dependent game state
+	clear_dot_tweens(game)
+	deal_to_hand(game)
+}
+
+build_save_game :: proc(game: ^Game) -> SaveGame {
+	return SaveGame {
+		cards = game.deck.cards,
+		dot_x = game.dot.current_pos[0],
+		dot_y = game.dot.current_pos[1],
+		dot_color = game.dot.color,
+	}
+}

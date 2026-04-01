@@ -93,3 +93,7 @@ cycle_dot_color :: proc(dot: ^Dot) {
 destroy_dot :: proc(dot: ^Dot) {
 	ease.flux_destroy(dot.tweens)
 }
+
+clear_dot_tweens :: proc(game: ^Game) {
+	ease.flux_clear(&game.dot.tweens)
+}
