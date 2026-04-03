@@ -26,7 +26,7 @@ draw_reshuffler :: proc(game: ^Game) {
 	cooldown := game.reshuffler.cooldown
 	if !cooldown.active do return
 
-	RADIUS :: f32(8)
+	RADIUS :: f32(16)
 	OFFSET_Y :: f32(-6)
 	SEGMENTS :: 36
 	BG_COLOR := rl.ColorAlpha(rl.BLACK, 0.3)
