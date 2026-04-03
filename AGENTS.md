@@ -7,7 +7,8 @@ This is a sandbox for me to learn Raylib (version 5.5) game library and the Odin
 * Never make git commits.
 * Ask before deleting any files.
 * Make tests but not for any drawing code.
-* Run `odinfmt -w` on each file you modify.
+* Run `odinfmt -w <filename>` on each file you modify.
+* When things to the game don't call the new `update_*` function if the game is paused. See the main game loop.
 
 # Patterns
 
