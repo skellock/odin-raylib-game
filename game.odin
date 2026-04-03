@@ -3,6 +3,7 @@ package main
 import rl "vendor:raylib"
 
 Game :: struct {
+	clock:        Clock,
 	time:         Time,
 	screen:       Screen,
 	viewport:     Viewport,
@@ -24,6 +25,7 @@ Game :: struct {
 
 init_game :: proc() -> Game {
 	game := Game {
+		clock = init_clock(),
 		dot = init_dot(),
 		camera = rl.Camera2D{zoom = 1},
 		// camera = rl.Camera2D{zoom = f32(rl.GetRenderHeight() / VIEWPORT_HEIGHT)},

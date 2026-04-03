@@ -86,6 +86,7 @@ main :: proc() {
 
 			// skip game updates if we're paused
 			if !game.paused {
+				update_clock(&game)
 				update_scarfy(&game)
 				update_dot(&game)
 				update_card_view_positions(&game)
@@ -114,6 +115,7 @@ main :: proc() {
 			if game.paused {
 				draw_paused(&game)
 			}
+			draw_clock(&game)
 			draw_debug(&game)
 			draw_cursor(&game)
 		}
