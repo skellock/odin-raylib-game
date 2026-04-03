@@ -21,4 +21,4 @@ Tire kicking Odin and Raylib.
 - [x] sprite sheets
 - [x] basic sprite animations
 - [x] save/load game (json is fine)
-- [ ] tilemap
+- [x] tilemap

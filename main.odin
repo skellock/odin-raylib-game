@@ -54,8 +54,11 @@ main :: proc() {
 
 	// prepare the game
 	game := init_game()
-	load_scarfy(&game.scarfy)
 	defer destroy_game(&game)
+
+	// HACK: extra steps so the tests don't rely on a Raylib window
+	load_scarfy(&game.scarfy)
+	load_tiling(&game.tiling)
 
 	play_music(&assets.music)
 
@@ -100,6 +103,7 @@ main :: proc() {
 			defer rl.EndMode2D()
 
 			draw_background(&game)
+			draw_tiling(&game)
 			draw_scarfy(&game)
 			draw_card_views(&game)
 			draw_poker_hand_type_text(&game)

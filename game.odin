@@ -19,6 +19,7 @@ Game :: struct {
 	reshuffler:   Reshuffler,
 	paused:       bool,
 	scarfy:       Scarfy,
+	tiling:       Tiling,
 }
 
 init_game :: proc() -> Game {
@@ -29,6 +30,7 @@ init_game :: proc() -> Game {
 		deck = init_shuffled_deck(),
 		reshuffler = init_reshuffler(),
 		scarfy = init_scarfy(),
+		tiling = init_tiling(),
 	}
 	deal_to_hand(&game)
 
@@ -48,6 +50,7 @@ destroy_game :: proc(game: ^Game) {
 	destroy_dot(&game.dot)
 	destroy_reshuffler(&game.reshuffler)
 	destroy_scarfy(&game.scarfy)
+	destroy_tiling(&game.tiling)
 }
 
 restore_save_game :: proc(game: ^Game, save: ^SaveGame) {
