@@ -114,23 +114,29 @@ draw_console :: proc(game: ^Game) {
 
 	rl.DrawRectangleRounded({f32(box_x), f32(box_y), f32(box_w), f32(box_h)}, 0.4, 8, BG_COLOR)
 
-	// prompt indicator
+	// prompt indicator (drawn before scissor so it's never clipped)
 	prompt_size := rl.MeasureTextEx(font, INDICATOR, FONT_SIZE, FONT_SPACING)
 	rl.DrawTextEx(font, INDICATOR, {f32(tx), f32(ty)}, FONT_SIZE, FONT_SPACING, TEXT_COLOR)
-	text_offset := i32(prompt_size.x) + H_PADDING / 2
+	text_left := f32(tx) + prompt_size.x + f32(H_PADDING / 2)
 
-	rl.DrawTextEx(
-		font,
-		text,
-		{f32(tx + text_offset), f32(ty)},
-		FONT_SIZE,
-		FONT_SPACING,
-		TEXT_COLOR,
-	)
+	// clip text area to the region after the prompt
+	scissor_x := i32(text_left)
+	scissor_w := box_x + box_w - scissor_x
+	rl.BeginScissorMode(scissor_x, box_y, scissor_w, box_h)
+	defer rl.EndScissorMode()
+
+	// shift text left if it overflows the box
+	available_w := f32(box_x + box_w - H_PADDING) - text_left
+	text_draw_x := text_left
+	if text_size.x > available_w {
+		text_draw_x = text_left - (text_size.x - available_w)
+	}
+
+	rl.DrawTextEx(font, text, {text_draw_x, f32(ty)}, FONT_SIZE, FONT_SPACING, TEXT_COLOR)
 
 	// blinking caret if the console is fully visible
 	if int(game.time.elapsed * CARET_BLINK_RATE) % 2 == 0 && c.animation == 1 {
-		caret_x := f32(tx + text_offset) + text_size.x + 2
+		caret_x := text_draw_x + text_size.x + 2
 		caret_h := th
 		caret_y := f32(ty)
 		rl.DrawRectangle(i32(caret_x), i32(caret_y), 2, caret_h, TEXT_COLOR)
