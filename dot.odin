@@ -57,7 +57,9 @@ get_dot_drawing_color :: proc(game: ^Game) -> rl.Color {
 draw_dot :: proc(game: ^Game) {
 	dot := game.dot
 	dot_color := get_dot_drawing_color(game)
-	rl.DrawLineEx(dot.current_pos, dot.targeting_pos, 2, rl.ColorAlpha(rl.WHITE, 0.25))
+	if !game.console.active {
+		rl.DrawLineEx(dot.current_pos, dot.targeting_pos, 2, rl.ColorAlpha(rl.WHITE, 0.25))
+	}
 	rl.DrawCircleV(dot.current_pos, dot.size, dot_color)
 }
 
