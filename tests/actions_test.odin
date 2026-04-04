@@ -140,6 +140,25 @@ update_actions_hide_console_enter_test :: proc(t: ^testing.T) {
 }
 
 @(test)
+update_actions_console_backspace_test :: proc(t: ^testing.T) {
+	using main
+	game := init_game()
+	defer destroy_game(&game)
+
+	// backspace action when console is active
+	game.console.active = true
+	game.keyboard.backspace_pressed = true
+	update_actions(&game)
+	testing.expect_value(t, game.actions.console.backspace, true)
+
+	// backspace not set when console is not active
+	game.console.active = false
+	game.keyboard.backspace_pressed = true
+	update_actions(&game)
+	testing.expect_value(t, game.actions.console.backspace, false)
+}
+
+@(test)
 update_actions_console_typed_test :: proc(t: ^testing.T) {
 	using main
 	game := init_game()
@@ -159,47 +178,40 @@ update_actions_console_typed_test :: proc(t: ^testing.T) {
 	testing.expect_value(t, game.actions.console.typed, "")
 }
 
-@(test)
-update_actions_console_quit_test :: proc(t: ^testing.T) {
+@(private = "file")
+run_command :: proc(command: string) -> main.Actions {
 	using main
 	game := init_game()
 	defer destroy_game(&game)
 
-	strings.write_string(&game.console.builder, "quit")
+	strings.write_string(&game.console.builder, command)
 	game.console.active = true
 	game.keyboard.enter_pressed = true
 	update_actions(&game)
-	testing.expect_value(t, game.actions.quit_game, true)
+
+	return game.actions
+}
+
+@(test)
+update_actions_console_quit_test :: proc(t: ^testing.T) {
+	a := run_command("quit")
+	testing.expect_value(t, a.quit_game, true)
 }
 
 @(test)
 update_actions_console_pause_test :: proc(t: ^testing.T) {
-	using main
-	game := init_game()
-	defer destroy_game(&game)
-
-	strings.write_string(&game.console.builder, "pause")
-	game.console.active = true
-	game.keyboard.enter_pressed = true
-	update_actions(&game)
-	testing.expect_value(t, game.actions.toggle_pause, true)
+	a := run_command("pause")
+	testing.expect_value(t, a.toggle_pause, true)
 }
 
 @(test)
-update_actions_console_backspace_test :: proc(t: ^testing.T) {
-	using main
-	game := init_game()
-	defer destroy_game(&game)
+update_actions_console_load_test :: proc(t: ^testing.T) {
+	a := run_command("load")
+	testing.expect_value(t, a.load_game, true)
+}
 
-	// backspace action when console is active
-	game.console.active = true
-	game.keyboard.backspace_pressed = true
-	update_actions(&game)
-	testing.expect_value(t, game.actions.console.backspace, true)
-
-	// backspace not set when console is not active
-	game.console.active = false
-	game.keyboard.backspace_pressed = true
-	update_actions(&game)
-	testing.expect_value(t, game.actions.console.backspace, false)
+@(test)
+update_actions_console_save_test :: proc(t: ^testing.T) {
+	a := run_command("save")
+	testing.expect_value(t, a.save_game, true)
 }

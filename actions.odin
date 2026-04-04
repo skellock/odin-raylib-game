@@ -49,6 +49,10 @@ update_actions :: proc(game: ^Game) {
 				acts.quit_game = true
 			case "pause":
 				acts.toggle_pause = true
+			case "load":
+				acts.load_game = true
+			case "save":
+				acts.save_game = true
 			}
 		}
 	} else {
