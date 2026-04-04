@@ -36,8 +36,6 @@ main :: proc() {
 	rl.SetTraceLogLevel(.NONE)
 	rl.SetConfigFlags({.MSAA_4X_HINT, .WINDOW_HIGHDPI})
 	rl.SetTargetFPS(144)
-	rl.SetExitKey(.KEY_NULL)
-	rl.ToggleFullscreen()
 
 	// setup audio device
 	rl.InitAudioDevice()
@@ -47,6 +45,10 @@ main :: proc() {
 	// setup window
 	rl.InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Game")
 	defer rl.CloseWindow()
+
+	// configure raylib settings that should be set after window initialization
+	rl.SetExitKey(.KEY_NULL)
+	// rl.ToggleFullscreen()
 
 	// prepare the assets
 	assets = init_assets()
