@@ -76,3 +76,110 @@ update_actions_toggle_pause_test :: proc(t: ^testing.T) {
 	update_actions(&game)
 	testing.expect_value(t, game.actions.toggle_pause, true)
 }
+
+@(test)
+update_actions_show_console_test :: proc(t: ^testing.T) {
+	using main
+	game := init_game()
+	defer destroy_game(&game)
+
+	// slash shows console when console is not active
+	game.console.active = false
+	game.keyboard.slash_pressed = true
+	update_actions(&game)
+	testing.expect_value(t, game.actions.console.show, true)
+
+	// slash does not show console when console is already active
+	game.console.active = true
+	game.keyboard.slash_pressed = true
+	update_actions(&game)
+	testing.expect_value(t, game.actions.console.show, false)
+}
+
+@(test)
+update_actions_hide_console_escape_test :: proc(t: ^testing.T) {
+	using main
+	game := init_game()
+	defer destroy_game(&game)
+
+	// escape hides console when active
+	game.console.active = true
+	game.keyboard.escape_pressed = true
+	update_actions(&game)
+	testing.expect_value(t, game.actions.console.hide, true)
+	testing.expect_value(t, game.actions.console.clear, true)
+
+	// escape does nothing when console is not active
+	game.console.active = false
+	game.keyboard.escape_pressed = true
+	update_actions(&game)
+	testing.expect_value(t, game.actions.console.hide, false)
+	testing.expect_value(t, game.actions.console.clear, false)
+}
+
+@(test)
+update_actions_hide_console_enter_test :: proc(t: ^testing.T) {
+	using main
+	game := init_game()
+	defer destroy_game(&game)
+
+	// enter hides and clears console when active
+	game.console.active = true
+	game.keyboard.enter_pressed = true
+	update_actions(&game)
+	testing.expect_value(t, game.actions.console.hide, true)
+	testing.expect_value(t, game.actions.console.clear, true)
+
+	// enter does nothing when console is not active
+	game.console.active = false
+	game.keyboard.enter_pressed = true
+	update_actions(&game)
+	testing.expect_value(t, game.actions.console.hide, false)
+	testing.expect_value(t, game.actions.console.clear, false)
+}
+
+@(test)
+update_actions_console_quit_test :: proc(t: ^testing.T) {
+	using main
+	game := init_game()
+	defer destroy_game(&game)
+
+	// typing "quit" and pressing enter triggers quit_game
+	game.console.active = true
+	game.console.buf[0] = 'q'
+	game.console.buf[1] = 'u'
+	game.console.buf[2] = 'i'
+	game.console.buf[3] = 't'
+	game.console.len = 4
+	game.keyboard.enter_pressed = true
+	update_actions(&game)
+	testing.expect_value(t, game.actions.quit_game, true)
+
+	// typing something else and pressing enter does not trigger quit_game
+	game.console.active = true
+	game.console.buf[0] = 'h'
+	game.console.buf[1] = 'i'
+	game.console.len = 2
+	game.keyboard.enter_pressed = true
+	update_actions(&game)
+	testing.expect_value(t, game.actions.quit_game, false)
+}
+
+@(test)
+update_actions_console_backspace_test :: proc(t: ^testing.T) {
+	using main
+	game := init_game()
+	defer destroy_game(&game)
+
+	// backspace action when console is active
+	game.console.active = true
+	game.keyboard.backspace_pressed = true
+	update_actions(&game)
+	testing.expect_value(t, game.actions.console.backspace, true)
+
+	// backspace not set when console is not active
+	game.console.active = false
+	game.keyboard.backspace_pressed = true
+	update_actions(&game)
+	testing.expect_value(t, game.actions.console.backspace, false)
+}
