@@ -83,8 +83,11 @@ main :: proc() {
 			// determine what the user wants to do
 			update_actions(&game)
 
-			update_console(&game)
 			update_pause(&game)
+			update_console(&game)
+
+			if game.actions.load_game do read_save_game(&game)
+			if game.actions.save_game do write_save_game(&game)
 
 			// skip game updates if we're paused
 			if !game.paused {

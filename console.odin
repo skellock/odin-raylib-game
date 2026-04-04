@@ -9,13 +9,18 @@ CONSOLE_FONT_SIZE :: 28
 CONSOLE_MAX_CHARS :: 64
 
 Console :: struct {
-	buf:    [CONSOLE_MAX_CHARS]u8,
-	len:    int,
-	active: bool,
+	builder: strings.Builder,
+	active:  bool,
 }
 
 init_console :: proc() -> Console {
-	return Console{}
+	result := Console{}
+	strings.builder_init(&result.builder)
+	return result
+}
+
+destroy_console :: proc(console: ^Console) {
+	strings.builder_destroy(&console.builder)
 }
 
 update_console :: proc(game: ^Game) {
@@ -25,7 +30,11 @@ update_console :: proc(game: ^Game) {
 	if ca.show do c.active = true
 	if ca.hide do c.active = false
 	if ca.clear do clear_console(c)
-	if ca.backspace && c.len > 0 do c.len -= 1
+	if ca.backspace && len(c.builder.buf) > 0 {
+		old_string := strings.to_string(c.builder)
+		strings.builder_reset(&c.builder)
+		strings.write_string(&c.builder, old_string[:len(old_string) - 1])
+	}
 
 	if !c.active do return
 
@@ -46,24 +55,16 @@ update_console :: proc(game: ^Game) {
 	// Don't gather input on the same frame of showing. This prevents the slash character
 	// from showing up when we use it to active the console.
 	if !ca.show {
-		// gather typed characters -- TODO: relocate into console actions?
-		for {
-			ch := rl.GetCharPressed()
-			if ch == 0 do break
-			if ch >= 32 && ch < 127 && c.len < CONSOLE_MAX_CHARS {
-				c.buf[c.len] = u8(ch)
-				c.len += 1
-			}
-		}
+		strings.write_string(&c.builder, ca.typed)
 	}
 }
 
 get_console_value :: proc(c: ^Console) -> string {
-	return string(c.buf[:c.len])
+	return strings.to_string(c.builder)
 }
 
 clear_console :: proc(c: ^Console) {
-	c.len = 0
+	strings.builder_reset(&c.builder)
 }
 
 draw_console :: proc(game: ^Game) {

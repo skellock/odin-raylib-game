@@ -55,6 +55,7 @@ destroy_game :: proc(game: ^Game) {
 	destroy_reshuffler(&game.reshuffler)
 	destroy_scarfy(&game.scarfy)
 	destroy_tiling(&game.tiling)
+	destroy_console(&game.console)
 }
 
 restore_save_game :: proc(game: ^Game, save: ^SaveGame) {

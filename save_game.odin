@@ -13,7 +13,7 @@ SaveGame :: struct {
 	dot_color: DotColor,
 }
 
-load_save_game :: proc(game: ^Game) {
+read_save_game :: proc(game: ^Game) {
 	// read the save game file
 	data, read_err := os.read_entire_file(SAVE_FILENAME, context.allocator)
 	if read_err != nil {

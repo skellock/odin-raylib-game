@@ -7,6 +7,7 @@ ConsoleAction :: struct {
 	hide:      bool,
 	backspace: bool,
 	clear:     bool,
+	typed:     string,
 }
 
 MoveDotAction :: struct {
@@ -24,51 +25,36 @@ Actions :: struct {
 	console:      ConsoleAction,
 }
 
-@(private = "file")
-update_console_actions :: proc(game: ^Game) {
-	c := &game.actions.console
-
-	if game.console.active {
-		c.hide = game.keyboard.escape_pressed || game.keyboard.enter_pressed
-		c.clear = c.hide
-		c.backspace = game.keyboard.backspace_pressed
-
-		if game.keyboard.enter_pressed {
-			value := get_console_value(&game.console)
-			game.actions.quit_game = value == "quit"
-		}
-	} else {
-		c.show = game.keyboard.slash_pressed
-	}
-}
-
 update_actions :: proc(game: ^Game) {
 	// start by resetting the actions entirely
 	game.actions = Actions{}
 
-	update_console_actions(game)
+	// establish some shortcuts
+	kb := &game.keyboard
+	mouse := &game.mouse
+	con := &game.console
+	acts := &game.actions
 
-	if game.keyboard.quit_pressed {
-		game.actions.quit_game = true
-	}
+	if con.active {
+		acts.console.hide = kb.escape_pressed || kb.enter_pressed
+		acts.console.clear = acts.console.hide
+		acts.console.backspace = kb.backspace_pressed
+		acts.console.typed = string(kb.typed_buf[:kb.typed_len])
 
-	if game.keyboard.pause_pressed {
-		game.actions.toggle_pause = true
-	}
+		if kb.enter_pressed {
+			switch get_console_value(con) {
+			case "quit":
+				acts.quit_game = true
+			}
+		}
+	} else {
+		acts.console.show = kb.slash_pressed
+		acts.quit_game = kb.quit_pressed
+		acts.load_game = kb.load_pressed
+		acts.save_game = kb.save_pressed
+		acts.toggle_pause = kb.pause_pressed
 
-	if game.mouse.right_pressed && !game.reshuffler.cooldown.active {
-		game.actions.reshuffle = true
-	}
-
-	if game.mouse.left_pressed {
-		game.actions.move_dot = {true, game.mouse.world_pos}
-	}
-
-	if game.keyboard.load_pressed {
-		load_save_game(game)
-	}
-
-	if game.keyboard.save_pressed {
-		write_save_game(game)
+		if mouse.right_pressed && !game.reshuffler.cooldown.active do acts.reshuffle = true
+		if mouse.left_pressed do acts.move_dot = {true, mouse.world_pos}
 	}
 }
