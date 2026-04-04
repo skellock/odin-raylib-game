@@ -9,9 +9,12 @@ CONSOLE_HEIGHT :: 50
 CONSOLE_FONT_SIZE :: 28
 CONSOLE_MAX_CHARS :: 64
 
+CONSOLE_ANIM_SPEED :: 16.0
+
 Console :: struct {
-	builder: strings.Builder,
-	active:  bool,
+	builder:   strings.Builder,
+	active:    bool,
+	animation: f32, // 0 = hidden (offscreen), 1 = fully visible
 }
 
 init_console :: proc() -> Console {
@@ -31,6 +34,15 @@ update_console :: proc(game: ^Game) {
 	if ca.show do c.active = true
 	if ca.hide do c.active = false
 	if ca.clear do clear_console(c)
+
+	// animate
+	target: f32 = 1.0 if c.active else 0.0
+	c.animation =
+		c.animation + (target - c.animation) * min(CONSOLE_ANIM_SPEED * game.time.dt, 1.0)
+	if c.animation < 0.01 do c.animation = 0
+	if c.animation > 0.99 do c.animation = 1
+
+	// backspace has been pressed -- TODO: this could be nicer
 	if ca.backspace && len(c.builder.buf) > 0 {
 		old_string := strings.to_string(c.builder)
 		strings.builder_reset(&c.builder)
@@ -77,7 +89,7 @@ draw_console :: proc(game: ^Game) {
 	TEXT_COLOR :: rl.WHITE
 
 	c := &game.console
-	if !c.active do return
+	if c.animation <= 0 do return
 
 	font := assets.fonts.body
 	text := fmt.ctprintf("%s", get_console_value(c))
@@ -90,7 +102,9 @@ draw_console :: proc(game: ^Game) {
 	box_w := i32(CONSOLE_WIDTH)
 	box_h := th + V_PADDING * 2
 	box_x := game.viewport.width / 2 - box_w / 2
-	box_y := game.viewport.height - box_h - 10
+	rest_y := game.viewport.height - box_h - 10
+	offscreen_y := game.viewport.height
+	box_y := rest_y + i32(f32(offscreen_y - rest_y) * (1.0 - c.animation))
 
 	// center text vertically inside the box
 	tx := box_x + H_PADDING
