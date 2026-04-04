@@ -78,13 +78,13 @@ main :: proc() {
 			update_keyboard(&game)
 			update_mouse(&game)
 
+			update_music(&game)
+
 			// determine what the user wants to do
 			update_actions(&game)
 
-			// update the pause state
+			update_console(&game)
 			update_pause(&game)
-
-			update_music(&game)
 
 			// skip game updates if we're paused
 			if !game.paused {
@@ -102,6 +102,7 @@ main :: proc() {
 		{
 			rl.BeginDrawing()
 			defer rl.EndDrawing()
+
 			rl.BeginMode2D(game.camera)
 			defer rl.EndMode2D()
 
@@ -114,18 +115,15 @@ main :: proc() {
 			draw_dot(&game)
 			draw_reshuffler(&game)
 			draw_tooltip(&game)
-			if game.paused {
-				draw_paused(&game)
-			}
 			draw_clock(&game)
+			if game.paused do draw_paused(&game)
 			draw_debug(&game)
 			draw_cursor(&game)
+			draw_console(&game)
 		}
 
 		// -- quitting the game ------------------------------------------------------
-		{
-			if game.actions.quit_game do break
-			if rl.WindowShouldClose() do break
-		}
+		if game.actions.quit_game do break
+		if rl.WindowShouldClose() do break
 	}
 }

@@ -21,6 +21,7 @@ Game :: struct {
 	paused:       bool,
 	scarfy:       Scarfy,
 	tiling:       Tiling,
+	console:      Console,
 }
 
 init_game :: proc() -> Game {
@@ -33,6 +34,7 @@ init_game :: proc() -> Game {
 		reshuffler = init_reshuffler(),
 		scarfy = init_scarfy(),
 		tiling = init_tiling(),
+		console = init_console(),
 	}
 	deal_to_hand(&game)
 
