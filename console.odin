@@ -119,18 +119,17 @@ draw_console :: proc(game: ^Game) {
 	rl.DrawTextEx(font, INDICATOR, {f32(tx), f32(ty)}, FONT_SIZE, FONT_SPACING, TEXT_COLOR)
 	text_left := f32(tx) + prompt_size.x + f32(H_PADDING / 2)
 
-	// clip text area to the region after the prompt
-	scissor_x := i32(text_left)
-	scissor_w := box_x + box_w - scissor_x
-	rl.BeginScissorMode(scissor_x, box_y, scissor_w, box_h)
-	defer rl.EndScissorMode()
-
-	// shift text left if it overflows the box
 	available_w := f32(box_x + box_w - H_PADDING) - text_left
 	text_draw_x := text_left
 	if text_size.x > available_w {
 		text_draw_x = text_left - (text_size.x - available_w)
 	}
+
+	// clip text area to the region after the prompt
+	scissor_x := i32(text_left)
+	scissor_w := box_x + box_w - scissor_x
+	rl.BeginScissorMode(scissor_x, box_y, scissor_w, box_h)
+	defer rl.EndScissorMode()
 
 	rl.DrawTextEx(font, text, {text_draw_x, f32(ty)}, FONT_SIZE, FONT_SPACING, TEXT_COLOR)
 
