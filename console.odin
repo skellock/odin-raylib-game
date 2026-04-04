@@ -87,6 +87,8 @@ draw_console :: proc(game: ^Game) {
 	V_PADDING :: i32(8)
 	BG_COLOR: rl.Color : {0, 0, 0, 128}
 	TEXT_COLOR :: rl.WHITE
+	INDICATOR :: ">"
+	CARET_BLINK_RATE :: 2
 
 	c := &game.console
 	if c.animation <= 0 do return
@@ -113,8 +115,8 @@ draw_console :: proc(game: ^Game) {
 	rl.DrawRectangleRounded({f32(box_x), f32(box_y), f32(box_w), f32(box_h)}, 0.4, 8, BG_COLOR)
 
 	// prompt indicator
-	prompt_size := rl.MeasureTextEx(font, ">", FONT_SIZE, FONT_SPACING)
-	rl.DrawTextEx(font, ">", {f32(tx), f32(ty)}, FONT_SIZE, FONT_SPACING, TEXT_COLOR)
+	prompt_size := rl.MeasureTextEx(font, INDICATOR, FONT_SIZE, FONT_SPACING)
+	rl.DrawTextEx(font, INDICATOR, {f32(tx), f32(ty)}, FONT_SIZE, FONT_SPACING, TEXT_COLOR)
 	text_offset := i32(prompt_size.x) + H_PADDING / 2
 
 	rl.DrawTextEx(
@@ -126,8 +128,8 @@ draw_console :: proc(game: ^Game) {
 		TEXT_COLOR,
 	)
 
-	// blinking caret
-	if int(game.time.elapsed * 2) % 2 == 0 {
+	// blinking caret if the console is fully visible
+	if int(game.time.elapsed * CARET_BLINK_RATE) % 2 == 0 && c.animation == 1 {
 		caret_x := f32(tx + text_offset) + text_size.x + 2
 		caret_h := th
 		caret_y := f32(ty)
