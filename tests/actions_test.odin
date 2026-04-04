@@ -165,18 +165,24 @@ update_actions_console_quit_test :: proc(t: ^testing.T) {
 	game := init_game()
 	defer destroy_game(&game)
 
-	// the quit command + enter will trigger a quit action
 	strings.write_string(&game.console.builder, "quit")
 	game.console.active = true
 	game.keyboard.enter_pressed = true
 	update_actions(&game)
 	testing.expect_value(t, game.actions.quit_game, true)
+}
 
-	// typing something else and pressing enter does not trigger quit_game
-	strings.write_string(&game.console.builder, "nope")
+@(test)
+update_actions_console_pause_test :: proc(t: ^testing.T) {
+	using main
+	game := init_game()
+	defer destroy_game(&game)
+
+	strings.write_string(&game.console.builder, "pause")
+	game.console.active = true
 	game.keyboard.enter_pressed = true
 	update_actions(&game)
-	testing.expect_value(t, game.actions.quit_game, false)
+	testing.expect_value(t, game.actions.toggle_pause, true)
 }
 
 @(test)

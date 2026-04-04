@@ -47,6 +47,8 @@ update_actions :: proc(game: ^Game) {
 			switch get_console_value(con) {
 			case "quit":
 				acts.quit_game = true
+			case "pause":
+				acts.toggle_pause = true
 			}
 		}
 	} else {
