@@ -1,8 +1,7 @@
 package main
 
+import "core:strings"
 import rl "vendor:raylib"
-
-TYPED_MAX_CHARS :: 64
 
 Keyboard :: struct {
 	quit_pressed:      bool,
@@ -13,8 +12,27 @@ Keyboard :: struct {
 	backspace_pressed: bool,
 	escape_pressed:    bool,
 	slash_pressed:     bool,
-	typed_buf:         [TYPED_MAX_CHARS]u8,
-	typed_len:         int,
+	typed:             string,
+}
+
+@(private = "file")
+read_keyboard_characters :: proc() -> string {
+	TYPED_MAX_CHARS :: 64
+
+	typed_buf: [TYPED_MAX_CHARS]u8
+	typed_len := 0
+
+	// and then collect them all
+	for {
+		ch := rl.GetCharPressed()
+		if ch == 0 do break
+		if ch >= 32 && ch < 127 && typed_len < TYPED_MAX_CHARS {
+			typed_buf[typed_len] = u8(ch)
+			typed_len += 1
+		}
+	}
+
+	return strings.clone(string(typed_buf[:typed_len]), context.temp_allocator)
 }
 
 update_keyboard :: proc(game: ^Game) {
@@ -28,17 +46,5 @@ update_keyboard :: proc(game: ^Game) {
 	k.pause_pressed = rl.IsKeyPressed(.P)
 	k.load_pressed = rl.IsKeyPressed(.L)
 	k.save_pressed = rl.IsKeyPressed(.S)
-
-	// reset they characters the user has typed this frame
-	k.typed_len = 0
-
-	// and then collect them all
-	for {
-		ch := rl.GetCharPressed()
-		if ch == 0 do break
-		if ch >= 32 && ch < 127 && k.typed_len < TYPED_MAX_CHARS {
-			k.typed_buf[k.typed_len] = u8(ch)
-			k.typed_len += 1
-		}
-	}
+	k.typed = read_keyboard_characters()
 }

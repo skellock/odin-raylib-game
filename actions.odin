@@ -40,7 +40,7 @@ update_actions :: proc(game: ^Game) {
 		acts.console.hide = kb.escape_pressed || kb.enter_pressed
 		acts.console.clear = acts.console.hide
 		acts.console.backspace = kb.backspace_pressed
-		acts.console.typed = string(kb.typed_buf[:kb.typed_len])
+		acts.console.typed = kb.typed
 
 		// map console input to a command
 		if kb.enter_pressed {

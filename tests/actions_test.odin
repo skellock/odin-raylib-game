@@ -147,21 +147,16 @@ update_actions_console_typed_test :: proc(t: ^testing.T) {
 
 	// when the console is active, we capture keystrokes
 	game.console.active = true
-	game.keyboard.typed_buf[0] = 'f'
-	game.keyboard.typed_buf[1] = 'u'
-	game.keyboard.typed_buf[2] = 'n'
-	game.keyboard.typed_len = 3
+	game.keyboard.typed = "fun"
 
 	update_actions(&game)
 	// frame-based keys get transfered to the console
 	testing.expect_value(t, game.actions.console.typed, "fun")
 
 	game.console.active = false
-	game.keyboard.typed_buf[0] = 'a'
-	game.keyboard.typed_len = 1
+	game.keyboard.typed = "nope"
 	update_actions(&game)
 	testing.expect_value(t, game.actions.console.typed, "")
-
 }
 
 @(test)
