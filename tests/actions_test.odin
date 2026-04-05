@@ -215,3 +215,22 @@ update_actions_console_save_test :: proc(t: ^testing.T) {
 	a := run_command("save")
 	testing.expect_value(t, a.save_game, true)
 }
+
+@(test)
+update_actions_console_backspace_word_test :: proc(t: ^testing.T) {
+	using main
+	game := init_game()
+	defer destroy_game(&game)
+
+	// backspace_word action when console is active
+	game.console.active = true
+	game.keyboard.backspace_word_pressed = true
+	update_actions(&game)
+	testing.expect_value(t, game.actions.console.backspace_word, true)
+
+	// backspace_word not set when console is not active
+	game.console.active = false
+	game.keyboard.backspace_word_pressed = true
+	update_actions(&game)
+	testing.expect_value(t, game.actions.console.backspace_word, false)
+}

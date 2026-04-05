@@ -49,6 +49,18 @@ update_console :: proc(game: ^Game) {
 		strings.write_string(&c.builder, old_string[:len(old_string) - 1])
 	}
 
+	// backspace word: delete back to previous space (inclusive), or clear all
+	if ca.backspace_word && len(c.builder.buf) > 0 {
+		val := strings.to_string(c.builder)
+		// trim trailing spaces first, then find the previous space
+		trimmed := strings.trim_right(val, " ")
+		idx := strings.last_index(trimmed, " ")
+		strings.builder_reset(&c.builder)
+		if idx >= 0 {
+			strings.write_string(&c.builder, trimmed[:idx])
+		}
+	}
+
 	if !c.active do return
 
 	// clicking outside the console hides it

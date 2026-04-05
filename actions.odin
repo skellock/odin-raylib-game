@@ -3,11 +3,12 @@ package main
 import rl "vendor:raylib"
 
 ConsoleAction :: struct {
-	show:      bool,
-	hide:      bool,
-	backspace: bool,
-	clear:     bool,
-	typed:     string,
+	show:           bool,
+	hide:           bool,
+	backspace:      bool,
+	backspace_word: bool,
+	clear:          bool,
+	typed:          string,
 }
 
 MoveDotAction :: struct {
@@ -40,6 +41,7 @@ update_actions :: proc(game: ^Game) {
 		acts.console.hide = kb.escape_pressed || kb.enter_pressed
 		acts.console.clear = acts.console.hide
 		acts.console.backspace = kb.backspace_pressed
+		acts.console.backspace_word = kb.backspace_word_pressed
 		acts.console.typed = kb.typed
 
 		// map console input to a command
