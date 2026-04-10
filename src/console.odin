@@ -110,7 +110,6 @@ draw_console :: proc(game: ^Game) {
 
 	text_size := rl.MeasureTextEx(font, text, FONT_SIZE, FONT_SPACING)
 	min_height := rl.MeasureTextEx(font, "A", FONT_SIZE, FONT_SPACING).y
-	tw := i32(text_size.x)
 	th := i32(max(text_size.y, min_height))
 
 	box_w := i32(CONSOLE_WIDTH)
