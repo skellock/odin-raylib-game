@@ -19,7 +19,10 @@ alias = "f"
 
 [tasks.check]
 description = "Checks the source code for problems."
-run = "odin check src -vet -strict-style -vet-packages:tests,animator"
+run = [
+    "odin check src -vet -strict-style -warnings-as-errors",
+    "odin check tests -vet -strict-style -warnings-as-errors",
+]
 alias = "c"
 
 [tasks.run]
