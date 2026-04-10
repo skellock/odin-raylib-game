@@ -1,7 +1,7 @@
 #+feature using-stmt
 package tests
 
-import main ".."
+import main "../src"
 import "core:testing"
 
 @(test)

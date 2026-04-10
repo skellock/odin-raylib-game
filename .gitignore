@@ -2,7 +2,7 @@
 /.claude/settings.local.json
 /.zed
 /game
-/game.dSYM
+/game_debug
+/*.dSYM
 /tests.bin
-/tests.bin.dSYM
-/game.json
+game.json

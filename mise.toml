@@ -1,9 +1,10 @@
 [env]
-BINARY_FILE = "game"
+BINARY = "game"
+DEBUG_BINARY = "game_debug"
 
 [tasks.build]
 description = "Builds the executable"
-run = "odin build ."
+run = "odin build src -out:$BINARY"
 alias = "b"
 
 [tasks.test]
@@ -18,29 +19,29 @@ alias = "f"
 
 [tasks.check]
 description = "Checks the source code for problems."
-run = "odin check . -vet -strict-style -vet-packages:tests,animator"
+run = "odin check src -vet -strict-style -vet-packages:tests,animator"
 alias = "c"
 
 [tasks.run]
 description = "Runs the game."
-run = "odin run ."
+run = "odin run src"
 alias = "r"
 
 [tasks.debug]
 description = "Runs the game in debug mode."
-run = "odin run . -debug"
+run = "odin run src -debug -out:$DEBUG_BINARY"
 alias = "d"
 
 [tasks.release]
 description = "Builds an optimized release binary."
-run = "odin build . -o:size -no-bounds-check -disable-assert && strip -x $BINARY_FILE"
+run = "odin build src -o:size -no-bounds-check -disable-assert -out:$BINARY && strip -x $BINARY"
 alias = "rel"
 
 [tasks.clean]
 description = "Cleans up unnecessary files."
 run = [
-  "rm -f ./$BINARY_FILE",
-  "rm -rf ./$BINARY_FILE.dSYM",
-  "rm -rf ./tests.bin",
+  "rm -f ./$BINARY ./$DEBUG_BINARY",
+  "rm -rf ./$BINARY.dSYM ./$DEBUG_BINARY.dSYM",
+  "rm -rf ./tests.bin ./src.bin",
   "rm -rf ./tests.bin.dSYM",
 ]
