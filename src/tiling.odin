@@ -119,7 +119,6 @@ destroy_tiling :: proc(tiling: ^Tiling) {
 }
 
 draw_tiling :: proc(game: ^Game) {
-
 	for layer in game.tiling.layers {
 		screen_offset := rl.Vector2 {
 			f32(game.viewport.width - (TILE_SIZE * layer.cols)) / 2.0,
@@ -149,7 +148,6 @@ draw_tiling :: proc(game: ^Game) {
 			}
 
 			rl.DrawTexturePro(game.tiling.texture, src_rect, dst_rect, origin, 0, rl.WHITE)
-
 		}
 	}
 }
