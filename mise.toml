@@ -43,8 +43,6 @@ alias = "rel"
 [tasks.clean]
 description = "Cleans up unnecessary files."
 run = [
-  "rm -f ./$BINARY ./$DEBUG_BINARY",
-  "rm -rf ./$BINARY.dSYM ./$DEBUG_BINARY.dSYM",
-  "rm -rf ./tests.bin ./src.bin",
-  "rm -rf ./tests.bin.dSYM",
+  "rm -f $BINARY $DEBUG_BINARY",
+  "rm -rf tests.bin src.bin $BINARY.dSYM $DEBUG_BINARY.dSYM src.bin.DSYM tests.bin.dSYM",
 ]
