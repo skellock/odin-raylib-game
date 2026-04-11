@@ -47,14 +47,10 @@ update_actions :: proc(game: ^Game) {
 		// map console input to a command
 		if kb.enter_pressed {
 			switch get_console_value(con) {
-			case "quit":
-				acts.quit_game = true
-			case "pause":
-				acts.toggle_pause = true
-			case "load":
-				acts.load_game = true
-			case "save":
-				acts.save_game = true
+			case "quit": acts.quit_game = true
+			case "pause": acts.toggle_pause = true
+			case "load": acts.load_game = true
+			case "save": acts.save_game = true
 			}
 		}
 	} else {

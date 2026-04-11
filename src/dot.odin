@@ -44,12 +44,9 @@ update_dot :: proc(game: ^Game) {
 
 get_dot_drawing_color :: proc(game: ^Game) -> rl.Color {
 	switch game.dot.color {
-	case .Red:
-		return rl.RED
-	case .Green:
-		return rl.GREEN
-	case .Yellow:
-		return rl.YELLOW
+	case .Red: return rl.RED
+	case .Green: return rl.GREEN
+	case .Yellow: return rl.YELLOW
 	}
 	return rl.WHITE
 }
