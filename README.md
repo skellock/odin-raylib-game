@@ -37,6 +37,7 @@ To run the app, `odin run src`
 
 If you use [mise](https://mise.jdx.dev/), you can run `mise run r`.
 
+
 ## Mousities
 
 ```
