@@ -32,5 +32,13 @@ hooks = [
     entry = "mise run check",
     pass_filenames = false,
     description = "Makes sure all the odin code is checked."
-  }
+  },
+  {
+    id = "format",
+    name = "formats all odin files",
+    language = "system",
+    entry = "mise run format",
+    pass_filenames = false,
+    description = "Makes sure all the odin code are formatted."
+  },
 ]
