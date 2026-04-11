@@ -37,6 +37,13 @@ To run the app, `odin run src`
 
 If you use [mise](https://mise.jdx.dev/), you can run `mise run r`.
 
+## Mousities
+
+```
+left click - moves a dot
+right click - shuffles (with a cooldown)
+```
+
 
 ## Hotkeys
 
