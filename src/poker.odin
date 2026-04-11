@@ -55,12 +55,12 @@ has_high_card :: proc(cards: []Card) -> bool {
 // A helper to check if there's 2, 3 or 4 of a kind.
 @(private = "file")
 has_number_of_common_pips :: proc(cards: []Card, number: int) -> bool {
-	if len(cards) != 5 do return false
+	if len(cards) != 5 { return false }
 
 	pip_map := init_card_pip_map(cards, context.temp_allocator)
 
 	for _, count in pip_map {
-		if count == number do return true
+		if count == number { return true }
 	}
 
 	return false
@@ -71,14 +71,14 @@ has_pair :: proc(cards: []Card) -> bool {
 }
 
 has_two_pair :: proc(cards: []Card) -> bool {
-	if len(cards) != 5 do return false
+	if len(cards) != 5 { return false }
 
 	pip_map := init_card_pip_map(cards, context.temp_allocator)
 
 	doubles := 0
 	for _, count in pip_map {
-		if count == 2 {doubles += 1}
-		if doubles == 2 do return true
+		if count == 2 { doubles += 1 }
+		if doubles == 2 { return true }
 	}
 
 	return false
@@ -89,14 +89,14 @@ has_three_of_a_kind :: proc(cards: []Card) -> bool {
 }
 
 has_straight :: proc(cards: []Card) -> bool {
-	if len(cards) != 5 do return false
+	if len(cards) != 5 { return false }
 
 	pip_set := make(map[CardPip]int, context.temp_allocator)
 	for card in cards {
 		map_insert(&pip_set, card.pip, 0)
 	}
 
-	if len(pip_set) != 5 do return false
+	if len(pip_set) != 5 { return false }
 
 	pips := make([dynamic]int, context.temp_allocator)
 	for pip, _ in pip_set {
@@ -105,24 +105,22 @@ has_straight :: proc(cards: []Card) -> bool {
 	sort.bubble_sort(pips[:])
 
 	// Check for the wheel (A-2-3-4-5) where Ace acts as low.
-	if pips[4] == int(CardPip.Ace) && pips[3] == int(CardPip.Five) {
-		return true
-	}
+	if pips[4] == int(CardPip.Ace) && pips[3] == int(CardPip.Five) { return true }
 
 	for i in 0 ..< len(pips) - 1 {
-		if pips[i + 1] - pips[i] != 1 do return false
+		if pips[i + 1] - pips[i] != 1 { return false }
 	}
 
 	return true
 }
 
 has_flush :: proc(cards: []Card) -> bool {
-	if len(cards) != 5 do return false
+	if len(cards) != 5 { return false }
 
 	suit_map := init_card_suit_map(cards, context.temp_allocator)
 
 	for _, count in suit_map {
-		if count == 5 do return true
+		if count == 5 { return true }
 	}
 
 	return false
@@ -141,21 +139,21 @@ has_straight_flush :: proc(cards: []Card) -> bool {
 }
 
 has_royal_flush :: proc(cards: []Card) -> bool {
-	if !has_straight_flush(cards) do return false
+	if !has_straight_flush(cards) { return false }
 	pip_map := init_card_pip_map(cards, context.temp_allocator)
 	return pip_map[.Ten] == 1 && pip_map[.Ace] == 1
 }
 
 score_hand :: proc(cards: []Card) -> PokerHandType {
-	if has_royal_flush(cards) do return .RoyalFlush
-	if has_straight_flush(cards) do return .StraightFlush
-	if has_four_of_a_kind(cards) do return .FourOfAKind
-	if has_full_house(cards) do return .FullHouse
-	if has_flush(cards) do return .Flush
-	if has_straight(cards) do return .Straight
-	if has_three_of_a_kind(cards) do return .ThreeOfAKind
-	if has_two_pair(cards) do return .TwoPair
-	if has_pair(cards) do return .Pair
-	if has_high_card(cards) do return .HighCard
+	if has_royal_flush(cards) { return .RoyalFlush }
+	if has_straight_flush(cards) { return .StraightFlush }
+	if has_four_of_a_kind(cards) { return .FourOfAKind }
+	if has_full_house(cards) { return .FullHouse }
+	if has_flush(cards) { return .Flush }
+	if has_straight(cards) { return .Straight }
+	if has_three_of_a_kind(cards) { return .ThreeOfAKind }
+	if has_two_pair(cards) { return .TwoPair }
+	if has_pair(cards) { return .Pair }
+	if has_high_card(cards) { return .HighCard }
 	return .Nothing
 }

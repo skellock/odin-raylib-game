@@ -59,16 +59,8 @@ update_dot_move_dot_sets_tween_test :: proc(t: ^testing.T) {
 	update_dot(&game)
 
 	// dot should have moved toward the target
-	testing.expect(
-		t,
-		game.dot.current_pos.x > 0,
-		"dot.current_pos.x should have moved toward target",
-	)
-	testing.expect(
-		t,
-		game.dot.current_pos.y > 0,
-		"dot.current_pos.y should have moved toward target",
-	)
+	testing.expect(t, game.dot.current_pos.x > 0, "dot.current_pos.x should have moved toward target")
+	testing.expect(t, game.dot.current_pos.y > 0, "dot.current_pos.y should have moved toward target")
 }
 
 @(test)

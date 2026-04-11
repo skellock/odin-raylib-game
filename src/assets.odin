@@ -8,12 +8,7 @@ Assets :: struct {
 }
 
 init_assets :: proc() -> Assets {
-	return Assets {
-		card_images = init_card_images(),
-		music = init_music(),
-		sounds = init_sounds(),
-		fonts = init_fonts(),
-	}
+	return Assets{card_images = init_card_images(), music = init_music(), sounds = init_sounds(), fonts = init_fonts()}
 }
 
 destroy_assets :: proc(a: ^Assets) {

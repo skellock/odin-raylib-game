@@ -31,16 +31,15 @@ update_console :: proc(game: ^Game) {
 	c := &game.console
 	ca := &game.actions.console
 
-	if ca.show do c.active = true
-	if ca.hide do c.active = false
-	if ca.clear do clear_console(c)
+	if ca.show { c.active = true }
+	if ca.hide { c.active = false }
+	if ca.clear { clear_console(c) }
 
 	// animate
 	target: f32 = 1.0 if c.active else 0.0
-	c.animation =
-		c.animation + (target - c.animation) * min(CONSOLE_ANIM_SPEED * game.time.dt, 1.0)
-	if c.animation < 0.01 do c.animation = 0
-	if c.animation > 0.99 do c.animation = 1
+	c.animation = c.animation + (target - c.animation) * min(CONSOLE_ANIM_SPEED * game.time.dt, 1.0)
+	if c.animation < 0.01 { c.animation = 0 }
+	if c.animation > 0.99 { c.animation = 1 }
 
 	// backspace has been pressed -- TODO: this could be nicer
 	if ca.backspace && len(c.builder.buf) > 0 {
@@ -61,7 +60,7 @@ update_console :: proc(game: ^Game) {
 		}
 	}
 
-	if !c.active do return
+	if !c.active { return }
 
 	// clicking outside the console hides it
 	if rl.IsMouseButtonPressed(.LEFT) {
@@ -103,7 +102,7 @@ draw_console :: proc(game: ^Game) {
 	CARET_BLINK_RATE :: 2
 
 	c := &game.console
-	if c.animation <= 0 do return
+	if c.animation <= 0 { return }
 
 	font := assets.fonts.body
 	text := fmt.ctprintf("%s", get_console_value(c))

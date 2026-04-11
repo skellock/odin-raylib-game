@@ -24,7 +24,7 @@ update_reshuffler :: proc(game: ^Game) {
 
 draw_reshuffler :: proc(game: ^Game) {
 	cooldown := game.reshuffler.cooldown
-	if !cooldown.active do return
+	if !cooldown.active { return }
 
 	RADIUS :: f32(16)
 	OFFSET_Y :: f32(-6)

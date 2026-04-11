@@ -18,7 +18,7 @@ poker_odds := [PokerHandType]f64 {
 }
 
 draw_poker_odds :: proc(game: ^Game) {
-	if game.poker_hand.hand_type == .Nothing || game.poker_hand.hand_type == .HighCard do return
+	if game.poker_hand.hand_type == .Nothing || game.poker_hand.hand_type == .HighCard { return }
 
 	FONT_SIZE :: f32(20)
 	SPACING :: f32(1)

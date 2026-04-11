@@ -26,7 +26,7 @@ read_keyboard_characters :: proc() -> string {
 	// and then collect them all
 	for {
 		ch := rl.GetCharPressed()
-		if ch == 0 do break
+		if ch == 0 { break }
 		if ch >= 32 && ch < 127 && typed_len < TYPED_MAX_CHARS {
 			typed_buf[typed_len] = u8(ch)
 			typed_len += 1
@@ -43,8 +43,7 @@ update_keyboard :: proc(game: ^Game) {
 	k.escape_pressed = rl.IsKeyPressed(.ESCAPE)
 	k.enter_pressed = rl.IsKeyPressed(.ENTER)
 	k.slash_pressed = rl.IsKeyPressed(.SLASH)
-	k.backspace_pressed =
-		!ctrl_down && (rl.IsKeyPressed(.BACKSPACE) || rl.IsKeyPressedRepeat(.BACKSPACE))
+	k.backspace_pressed = !ctrl_down && (rl.IsKeyPressed(.BACKSPACE) || rl.IsKeyPressedRepeat(.BACKSPACE))
 	k.backspace_word_pressed = ctrl_down && (rl.IsKeyPressed(.W) || rl.IsKeyPressed(.BACKSPACE))
 	k.quit_pressed = rl.IsKeyPressed(.Q)
 	k.pause_pressed = rl.IsKeyPressed(.P)

@@ -18,8 +18,8 @@ start_timer :: proc(timer: ^Timer) {
 }
 
 update_timer :: proc(timer: ^Timer, dt: f32) {
-	if !timer.active do return
-	if timer.paused do return
+	if !timer.active { return }
+	if timer.paused { return }
 	timer.elapsed += dt
 	if timer.elapsed >= timer.duration {
 		if timer.one_shot {

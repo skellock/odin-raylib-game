@@ -13,11 +13,7 @@ point_in_rotated_rect_no_rotation :: proc(t: ^testing.T) {
 	testing.expect(t, !point_in_rotated_rect({5, 30}, rect, 0), "left of rect should be outside")
 	testing.expect(t, !point_in_rotated_rect({50, 5}, rect, 0), "above rect should be outside")
 	testing.expect(t, point_in_rotated_rect({10, 10}, rect, 0), "top-left corner should be inside")
-	testing.expect(
-		t,
-		point_in_rotated_rect({110, 60}, rect, 0),
-		"bottom-right corner should be inside",
-	)
+	testing.expect(t, point_in_rotated_rect({110, 60}, rect, 0), "bottom-right corner should be inside")
 }
 
 @(test)
@@ -47,9 +43,5 @@ point_in_rotated_rect_180_degrees :: proc(t: ^testing.T) {
 		"original center should be outside after 180° rotation",
 	)
 	// Point to the left and above origin should be inside
-	testing.expect(
-		t,
-		point_in_rotated_rect({-40, -15}, rect, 180),
-		"should be inside 180° rotated rect",
-	)
+	testing.expect(t, point_in_rotated_rect({-40, -15}, rect, 180), "should be inside 180° rotated rect")
 }

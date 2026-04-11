@@ -33,7 +33,7 @@ format_with_commas :: proc(n: int, allocator := context.allocator) -> string {
 		buf[pos] = u8(v % 10) + '0'
 		v /= 10
 		digits += 1
-		if v == 0 do break
+		if v == 0 { break }
 		if digits % 3 == 0 {
 			pos -= 1
 			buf[pos] = ','

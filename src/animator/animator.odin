@@ -182,9 +182,7 @@ go_to_row :: proc(using animator: ^Animator, row_number: u32) {
 	} else if rows >= 1 {
 		frame_rec.y = row_number == 0 ? 0 : f32(row_number) * frame_height
 		current_row = row_number
-		time_remaining_frames_counter = f32(
-			get_total_time_in_frames(animator) - (row_number * columns + columns),
-		)
+		time_remaining_frames_counter = f32(get_total_time_in_frames(animator) - (row_number * columns + columns))
 	}
 }
 
@@ -195,8 +193,7 @@ go_to_column :: proc(using animator: ^Animator, col_num: u32) {
 		frame_rec.x = f32(columns - 1) * frame_width
 		current_column = columns - 1
 		current_frame = columns - 1
-		time_remaining_frames_counter =
-			f32(get_total_time_in_frames(animator)) - f32(current_row * columns)
+		time_remaining_frames_counter = f32(get_total_time_in_frames(animator)) - f32(current_row * columns)
 	} else if columns >= 1 {
 		frame_rec.x = col_num == 0 ? 0 : f32(col_num) * frame_width
 		current_column = col_num
@@ -313,16 +310,12 @@ unpause :: proc(using animator: ^Animator) {
 
 // Returns true if the animator is currently on the first frame of a current row
 is_at_first_frame :: proc(using animator: ^Animator) -> bool {
-	return(
-		continuous ? is_at_first_row(animator) && is_at_first_column(animator) : is_at_first_column(animator) \
-	)
+	return continuous ? is_at_first_row(animator) && is_at_first_column(animator) : is_at_first_column(animator)
 }
 
 // Returns true if the animator is currently on the last frame of a current row
 is_at_last_frame :: proc(using animator: ^Animator) -> bool {
-	return(
-		continuous ? is_at_last_row(animator) && is_at_last_column(animator) : is_at_last_column(animator) \
-	)
+	return continuous ? is_at_last_row(animator) && is_at_last_column(animator) : is_at_last_column(animator)
 }
 
 // Returns true if the animator is currently on the first row of the sprite-sheet
@@ -353,8 +346,7 @@ get_total_time_in_frames :: proc(using animator: ^Animator) -> u32 {
 // Counts down in frames. Used for timing functionality
 countdown_in_frames :: proc(using animator: ^Animator) {
 	if time_remaining_frames_counter != 0 {
-		time_remaining_frames_counter -=
-			rl.GetFrameTime() < 0.01 ? f32(framerate) * rl.GetFrameTime() : 0
+		time_remaining_frames_counter -= rl.GetFrameTime() < 0.01 ? f32(framerate) * rl.GetFrameTime() : 0
 	}
 
 	if time_remaining_frames_counter <= 0 {

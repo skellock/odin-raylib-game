@@ -65,7 +65,7 @@ update_actions :: proc(game: ^Game) {
 		acts.save_game = kb.save_pressed
 		acts.toggle_pause = kb.pause_pressed
 
-		if mouse.right_pressed && !game.reshuffler.cooldown.active do acts.reshuffle = true
-		if mouse.left_pressed do acts.move_dot = {true, mouse.world_pos}
+		if mouse.right_pressed && !game.reshuffler.cooldown.active { acts.reshuffle = true }
+		if mouse.left_pressed { acts.move_dot = {true, mouse.world_pos} }
 	}
 }

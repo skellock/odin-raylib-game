@@ -20,7 +20,7 @@ update_tooltip :: proc(game: ^Game) {
 
 draw_tooltip :: proc(game: ^Game) {
 	tooltip := game.tooltip
-	if tooltip.alpha <= 0 do return
+	if tooltip.alpha <= 0 { return }
 
 	FONT_SIZE :: f32(16)
 	SPACING :: f32(1)
@@ -44,20 +44,13 @@ draw_tooltip :: proc(game: ^Game) {
 	rl.DrawRectangleRounded(bg_rect, 0.4, 4, rl.ColorAlpha(rl.WHITE, tooltip.alpha))
 
 	// the text
-	rl.DrawTextEx(
-		font,
-		text,
-		tooltip.pos,
-		FONT_SIZE,
-		SPACING,
-		rl.ColorAlpha(rl.BLACK, tooltip.alpha),
-	)
+	rl.DrawTextEx(font, text, tooltip.pos, FONT_SIZE, SPACING, rl.ColorAlpha(rl.BLACK, tooltip.alpha))
 }
 
 @(private = "file")
 update_tooltip_alpha :: proc(game: ^Game) {
-	if game.tooltip.alpha <= 0 do return
-	if game.hovered_card >= 0 do return
+	if game.tooltip.alpha <= 0 { return }
+	if game.hovered_card >= 0 { return }
 
 	// move the tooltip along with mouse as it fades
 	FADE_DELAY :: f32(0.25)
@@ -66,7 +59,7 @@ update_tooltip_alpha :: proc(game: ^Game) {
 	if game.tooltip.delay >= FADE_DELAY {
 		game.tooltip.alpha -= FADE_SPEED * game.time.dt
 	}
-	if game.tooltip.alpha < 0 do game.tooltip.alpha = 0
+	if game.tooltip.alpha < 0 { game.tooltip.alpha = 0 }
 }
 
 @(private = "file")
@@ -89,7 +82,7 @@ update_hovered_card :: proc(game: ^Game) {
 @(private = "file")
 update_tooltip_text :: proc(game: ^Game) {
 	// nothing to do if we're not over a card
-	if game.hovered_card < 0 do return
+	if game.hovered_card < 0 { return }
 
 	card := game.card_views[game.hovered_card].card
 	set_tooltip_text(&game.tooltip, fmt.tprintf("%v of %vs", card.pip, card.suit))

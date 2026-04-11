@@ -86,8 +86,8 @@ main :: proc() {
 			update_pause(&game)
 			update_console(&game)
 
-			if game.actions.load_game do read_save_game(&game)
-			if game.actions.save_game do write_save_game(&game)
+			if game.actions.load_game { read_save_game(&game) }
+			if game.actions.save_game { write_save_game(&game) }
 
 			// skip game updates if we're paused
 			if !game.paused {
@@ -119,14 +119,14 @@ main :: proc() {
 			draw_reshuffler(&game)
 			draw_tooltip(&game)
 			draw_clock(&game)
-			if game.paused do draw_paused(&game)
+			if game.paused { draw_paused(&game) }
 			draw_debug(&game)
 			draw_cursor(&game)
 			draw_console(&game)
 		}
 
 		// -- quitting the game ------------------------------------------------------
-		if game.actions.quit_game do break
-		if rl.WindowShouldClose() do break
+		if game.actions.quit_game { break }
+		if rl.WindowShouldClose() { break }
 	}
 }
