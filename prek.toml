@@ -1,0 +1,34 @@
+[[repos]]
+repo = "builtin"
+hooks = [
+  { id = "trailing-whitespace"},
+  { id = "check-case-conflict"},
+  { id = "end-of-file-fixer"},
+  { id = "fix-byte-order-marker"},
+  { id = "check-toml"},
+  { id = "mixed-line-ending"},
+  { id = "check-symlinks"},
+  { id = "destroyed-symlinks"},
+  { id = "check-merge-conflict"},
+  { id = "detect-private-key"},
+  { id = "check-shebang-scripts-are-executable"},
+]
+
+[[repos]]
+repo = "local"
+hooks = [
+  {
+    id = "test",
+    name = "Run all odin tests",
+    language = "system",
+    entry = "mise run test",
+    pass_filenames = false,
+  },
+  {
+    id = "check",
+    name = "Check all odin files",
+    language = "system",
+    entry = "mise run check",
+    pass_filenames = false,
+  }
+]
