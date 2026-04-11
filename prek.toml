@@ -19,7 +19,7 @@ repo = "local"
 hooks = [
   {
     id = "test",
-    name = "Run all odin tests",
+    name = "run all odin tests",
     language = "system",
     entry = "mise run test",
     pass_filenames = false,
@@ -27,7 +27,7 @@ hooks = [
   },
   {
     id = "check",
-    name = "Check all odin files",
+    name = "check all odin files",
     language = "system",
     entry = "mise run check",
     pass_filenames = false,
