@@ -1,11 +1,13 @@
 package main
 
+import "core:fmt"
 import "core:sort"
 
 PokerHand :: struct {
 	cards:          [5]Card,
 	hand_type:      PokerHandType,
 	hand_type_text: cstring,
+	odds:           string,
 }
 
 PokerHandType :: enum {
@@ -26,10 +28,24 @@ init_poker_hand :: proc(cards: []Card) -> PokerHand {
 	result: PokerHand
 	result.hand_type = score_hand(cards)
 	result.hand_type_text = get_poker_hand_type_text(result.hand_type)
+	set_poker_hand_odds_text(&result)
 	for i in 0 ..< min(len(cards), 5) {
 		result.cards[i] = cards[i]
 	}
 	return result
+}
+
+destroy_poker_hand :: proc(poker_hand: ^PokerHand) {
+	delete(poker_hand.odds)
+}
+
+set_poker_hand_odds_text :: proc(poker_hand: ^PokerHand) {
+	odds := poker_odds[poker_hand.hand_type]
+	one_in := int(1.0 / odds + 0.5)
+
+	// NOTE: am I stressing too much about this allocation? It is certainly not in a hot path.
+	delete(poker_hand.odds)
+	poker_hand.odds = fmt.aprintf("1 in {}", format_with_commas(one_in, context.temp_allocator))
 }
 
 has_high_card :: proc(cards: []Card) -> bool {

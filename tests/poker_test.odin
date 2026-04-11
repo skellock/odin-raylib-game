@@ -116,6 +116,7 @@ init_poker_hand_test :: proc(t: ^testing.T) {
 
 	cards := init_cards("tc jc qc kc ac", card_map)
 	hand := init_poker_hand(cards[:])
+	defer destroy_poker_hand(&hand)
 	testing.expect_value(t, hand.hand_type, PokerHandType.RoyalFlush)
 	testing.expect_value(t, hand.hand_type_text, "Royal Flush")
 	testing.expect_value(t, hand.cards[0], Card{pip = .Ten, suit = .Club})
@@ -123,6 +124,7 @@ init_poker_hand_test :: proc(t: ^testing.T) {
 
 	cards2 := init_cards("2h 3h 4h 5h 5c", card_map)
 	hand2 := init_poker_hand(cards2[:])
+	defer destroy_poker_hand(&hand2)
 	testing.expect_value(t, hand2.hand_type, PokerHandType.Pair)
 	testing.expect_value(t, hand2.hand_type_text, "Pair")
 }

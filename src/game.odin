@@ -42,6 +42,7 @@ init_game :: proc() -> Game {
 }
 
 deal_to_hand :: proc(game: ^Game) {
+	destroy_poker_hand(&game.poker_hand)
 	game.poker_hand = init_poker_hand(game.deck.cards[:5])
 	for card, i in game.poker_hand.cards {
 		tex := assets.card_images.cards[card]
@@ -56,6 +57,7 @@ destroy_game :: proc(game: ^Game) {
 	destroy_scarfy(&game.scarfy)
 	destroy_tiling(&game.tiling)
 	destroy_console(&game.console)
+	destroy_poker_hand(&game.poker_hand)
 }
 
 restore_save_game :: proc(game: ^Game, save: ^SaveGame) {
