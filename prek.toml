@@ -23,6 +23,7 @@ hooks = [
     language = "system",
     entry = "mise run test",
     pass_filenames = false,
+    description = "Makes sure all the odin tests pass."
   },
   {
     id = "check",
@@ -30,5 +31,6 @@ hooks = [
     language = "system",
     entry = "mise run check",
     pass_filenames = false,
+    description = "Makes sure all the odin code is checked."
   }
 ]
