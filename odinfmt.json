@@ -4,6 +4,7 @@
   "tabs": true,
   "tabs_width": 4,
   "new_line_limit": 1,
+  "newline_style": "LF",
   "sort_imports": true,
   "space_single_line_blocks": true,
   "inline_single_stmt_case": true
