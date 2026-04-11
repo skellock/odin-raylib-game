@@ -23,7 +23,7 @@ point_in_rotated_rect :: proc(point: rl.Vector2, rect: rl.Rectangle, angle_deg: 
 }
 
 format_with_commas :: proc(n: int, allocator := context.allocator) -> string {
-	buf: [20]u8
+	buf: [32]u8
 	pos := len(buf)
 	v := n < 0 ? -n : n
 	digits := 0
@@ -34,7 +34,7 @@ format_with_commas :: proc(n: int, allocator := context.allocator) -> string {
 		v /= 10
 		digits += 1
 		if v == 0 do break
-		if v > 0 && digits % 3 == 0 {
+		if digits % 3 == 0 {
 			pos -= 1
 			buf[pos] = ','
 		}
