@@ -78,13 +78,12 @@ main :: proc() {
 			update_keyboard(&game)
 			update_mouse(&game)
 
-			update_music(&game)
-
 			// determine what the user wants to do
 			update_actions(&game)
 
 			update_pause(&game)
 			update_console(&game)
+			update_music(&game)
 
 			if game.actions.load_game { read_save_game(&game) }
 			if game.actions.save_game { write_save_game(&game) }
