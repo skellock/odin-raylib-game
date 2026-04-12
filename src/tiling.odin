@@ -66,19 +66,13 @@ load_layer :: proc(instance: ldtk.Layer_Instance, level: ldtk.Level) -> TileLaye
 		layer.tiles[idx].src.x = f32(val.src.x)
 		layer.tiles[idx].src.y = f32(val.src.y)
 
-		// NOTE: is there a more Odin-y way to do this?
-		if bool(val.f & 1) {
-			layer.tiles[idx].flip = .FlipX
-		} else if bool(val.f & 2) {
-			layer.tiles[idx].flip = .FlipY
-		} else if bool(val.f & 3) {
-			layer.tiles[idx].flip = .FlipBoth
-		} else {
-			layer.tiles[idx].flip = .FlipNone
+		switch val.f {
+		case 1: layer.tiles[idx].flip = .FlipX
+		case 2: layer.tiles[idx].flip = .FlipY
+		case 3: layer.tiles[idx].flip = .FlipBoth
+		case: layer.tiles[idx].flip = .FlipNone
 		}
-
 	}
-
 
 	return layer
 }
@@ -96,14 +90,11 @@ load_tiling :: proc(tiling: ^Tiling) {
 					tiling.layers[idx] = layer
 
 				case .Entities:
-
 				case .AutoLayer:
-
 				case .Tiles:
 				}
 			}
 		}
-
 	} else {
 		log.error("Unable to load world.ldtk")
 	}
