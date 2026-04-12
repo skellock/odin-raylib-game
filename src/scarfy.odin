@@ -24,12 +24,14 @@ init_scarfy :: proc() -> Scarfy {
 }
 
 load_scarfy :: proc(scarfy: ^Scarfy) {
-	texture := rl.LoadTexture("images/scarfy.png")
-	anim.assign_sprite(&scarfy.animator, texture)
+	scarfy.texture = rl.LoadTexture("images/scarfy.png")
+	anim.assign_sprite(&scarfy.animator, scarfy.texture)
 }
 
 destroy_scarfy :: proc(scarfy: ^Scarfy) {
-	rl.UnloadTexture(scarfy.texture)
+	if scarfy.texture.id != 0 {
+		rl.UnloadTexture(scarfy.texture)
+	}
 }
 
 update_scarfy :: proc(game: ^Game) {
