@@ -8,7 +8,6 @@ CONSOLE_WIDTH :: 600
 CONSOLE_HEIGHT :: 50
 CONSOLE_FONT_SIZE :: 28
 CONSOLE_MAX_CHARS :: 64
-
 CONSOLE_ANIM_SPEED :: 16.0
 
 Console :: struct {
@@ -63,7 +62,7 @@ console_update :: proc(game: ^Game) {
 	if !c.active { return }
 
 	// clicking outside the console hides it
-	if rl.IsMouseButtonPressed(.LEFT) {
+	if game.mouse.left_pressed {
 		box := rl.Rectangle {
 			f32(game.viewport.width / 2 - CONSOLE_WIDTH / 2),
 			f32(game.viewport.height - CONSOLE_HEIGHT - 10),
