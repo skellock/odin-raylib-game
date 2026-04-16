@@ -11,14 +11,14 @@ Tooltip :: struct {
 	delay:    f32,
 }
 
-update_tooltip :: proc(game: ^Game) {
-	update_hovered_card(game)
-	update_tooltip_position(game)
-	update_tooltip_text(game)
-	update_tooltip_alpha(game)
+tooltip_update :: proc(game: ^Game) {
+	tooltip_update_all_hovered_cards(game)
+	tooltip_update_position(game)
+	tooltip_update_text(game)
+	tooltip_update_alpha(game)
 }
 
-draw_tooltip :: proc(game: ^Game) {
+tooltip_draw :: proc(game: ^Game) {
 	tooltip := game.tooltip
 	if tooltip.alpha <= 0 { return }
 
@@ -48,7 +48,7 @@ draw_tooltip :: proc(game: ^Game) {
 }
 
 @(private = "file")
-update_tooltip_alpha :: proc(game: ^Game) {
+tooltip_update_alpha :: proc(game: ^Game) {
 	if game.tooltip.alpha <= 0 { return }
 	if game.hovered_card >= 0 { return }
 
@@ -63,7 +63,7 @@ update_tooltip_alpha :: proc(game: ^Game) {
 }
 
 @(private = "file")
-update_hovered_card :: proc(game: ^Game) {
+tooltip_update_all_hovered_cards :: proc(game: ^Game) {
 	mouse := game.mouse.world_pos
 	game.hovered_card = -1
 
@@ -80,22 +80,22 @@ update_hovered_card :: proc(game: ^Game) {
 }
 
 @(private = "file")
-update_tooltip_text :: proc(game: ^Game) {
+tooltip_update_text :: proc(game: ^Game) {
 	// nothing to do if we're not over a card
 	if game.hovered_card < 0 { return }
 
 	card := game.card_views[game.hovered_card].card
-	set_tooltip_text(&game.tooltip, fmt.tprintf("%v of %vs", card.pip, card.suit))
+	tooltip_set_text(&game.tooltip, fmt.tprintf("%v of %vs", card.pip, card.suit))
 }
 
 @(private = "file")
-update_tooltip_position :: proc(game: ^Game) {
+tooltip_update_position :: proc(game: ^Game) {
 	OFFSET :: rl.Vector2{10, 10}
 	game.tooltip.pos = game.mouse.world_pos + OFFSET
 }
 
 @(private = "file")
-set_tooltip_text :: proc(tooltip: ^Tooltip, text: string) {
+tooltip_set_text :: proc(tooltip: ^Tooltip, text: string) {
 	tooltip.alpha = 1.0
 	tooltip.delay = 0
 	tooltip.text_len = min(len(text), len(tooltip.text_buf))

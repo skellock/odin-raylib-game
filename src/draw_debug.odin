@@ -4,7 +4,7 @@ import "core:fmt"
 import rl "vendor:raylib"
 
 // Draws an FPS thingy.
-draw_debug :: proc(game: ^Game) {
+debug_draw :: proc(game: ^Game) {
 	FONT_SIZE :: 16
 	FONT_SPACING :: 2
 	H_MARGIN :: 4

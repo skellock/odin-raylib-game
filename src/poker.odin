@@ -24,28 +24,28 @@ PokerHandType :: enum {
 	RoyalFlush,
 }
 
-init_poker_hand :: proc(cards: []Card) -> PokerHand {
+poker_hand_init :: proc(cards: []Card) -> PokerHand {
 	result: PokerHand
-	result.hand_type = score_hand(cards)
-	result.hand_type_text = get_poker_hand_type_text(result.hand_type)
-	set_poker_hand_odds_text(&result)
+	result.hand_type = card_score_hand(cards)
+	result.hand_type_text = poker_hand_get_type_text(result.hand_type)
+	poker_hand_set_odds_text(&result)
 	for i in 0 ..< min(len(cards), 5) {
 		result.cards[i] = cards[i]
 	}
 	return result
 }
 
-destroy_poker_hand :: proc(poker_hand: ^PokerHand) {
+poker_hand_destroy :: proc(poker_hand: ^PokerHand) {
 	delete(poker_hand.odds)
 }
 
-set_poker_hand_odds_text :: proc(poker_hand: ^PokerHand) {
+poker_hand_set_odds_text :: proc(poker_hand: ^PokerHand) {
 	odds := poker_odds[poker_hand.hand_type]
 	one_in := int(1.0 / odds + 0.5)
 
 	// NOTE: am I stressing too much about this allocation? It is certainly not in a hot path.
 	delete(poker_hand.odds)
-	poker_hand.odds = fmt.aprintf("1 in {}", format_with_commas(one_in, context.temp_allocator))
+	poker_hand.odds = fmt.aprintf("1 in {}", utils_format_with_commas(one_in, context.temp_allocator))
 }
 
 has_high_card :: proc(cards: []Card) -> bool {
@@ -57,7 +57,7 @@ has_high_card :: proc(cards: []Card) -> bool {
 has_number_of_common_pips :: proc(cards: []Card, number: int) -> bool {
 	if len(cards) != 5 { return false }
 
-	pip_map := init_card_pip_map(cards, context.temp_allocator)
+	pip_map := card_init_pip_map(cards, context.temp_allocator)
 
 	for _, count in pip_map {
 		if count == number { return true }
@@ -73,7 +73,7 @@ has_pair :: proc(cards: []Card) -> bool {
 has_two_pair :: proc(cards: []Card) -> bool {
 	if len(cards) != 5 { return false }
 
-	pip_map := init_card_pip_map(cards, context.temp_allocator)
+	pip_map := card_init_pip_map(cards, context.temp_allocator)
 
 	doubles := 0
 	for _, count in pip_map {
@@ -117,7 +117,7 @@ has_straight :: proc(cards: []Card) -> bool {
 has_flush :: proc(cards: []Card) -> bool {
 	if len(cards) != 5 { return false }
 
-	suit_map := init_card_suit_map(cards, context.temp_allocator)
+	suit_map := card_init_suit_map(cards, context.temp_allocator)
 
 	for _, count in suit_map {
 		if count == 5 { return true }
@@ -140,11 +140,11 @@ has_straight_flush :: proc(cards: []Card) -> bool {
 
 has_royal_flush :: proc(cards: []Card) -> bool {
 	if !has_straight_flush(cards) { return false }
-	pip_map := init_card_pip_map(cards, context.temp_allocator)
+	pip_map := card_init_pip_map(cards, context.temp_allocator)
 	return pip_map[.Ten] == 1 && pip_map[.Ace] == 1
 }
 
-score_hand :: proc(cards: []Card) -> PokerHandType {
+card_score_hand :: proc(cards: []Card) -> PokerHandType {
 	if has_royal_flush(cards) { return .RoyalFlush }
 	if has_straight_flush(cards) { return .StraightFlush }
 	if has_four_of_a_kind(cards) { return .FourOfAKind }

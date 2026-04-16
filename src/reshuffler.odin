@@ -8,21 +8,21 @@ Reshuffler :: struct {
 	cooldown: Timer,
 }
 
-init_reshuffler :: proc() -> Reshuffler {
-	return Reshuffler{cooldown = init_timer(RESHUFFLE_COOLDOWN, one_shot = true)}
+reshuffler_init :: proc() -> Reshuffler {
+	return Reshuffler{cooldown = timer_init(RESHUFFLE_COOLDOWN, one_shot = true)}
 }
 
-update_reshuffler :: proc(game: ^Game) {
-	update_timer(&game.reshuffler.cooldown, game.time.dt)
+reshuffler_update :: proc(game: ^Game) {
+	timer_update(&game.reshuffler.cooldown, game.time.dt)
 
 	if game.actions.reshuffle {
-		shuffle_deck(&game.deck)
-		deal_to_hand(game)
-		start_timer(&game.reshuffler.cooldown)
+		deck_shuffle(&game.deck)
+		game_deal_to_hand(game)
+		timer_start(&game.reshuffler.cooldown)
 	}
 }
 
-draw_reshuffler :: proc(game: ^Game) {
+reshuffler_draw :: proc(game: ^Game) {
 	cooldown := game.reshuffler.cooldown
 	if !cooldown.active { return }
 
@@ -50,6 +50,6 @@ draw_reshuffler :: proc(game: ^Game) {
 	rl.DrawCircleLinesV({cx, cy}, RADIUS, rl.WHITE)
 }
 
-destroy_reshuffler :: proc(reshuffler: ^Reshuffler) {
-	destroy_timer(&reshuffler.cooldown)
+reshuffler_destroy :: proc(reshuffler: ^Reshuffler) {
+	timer_destroy(&reshuffler.cooldown)
 }

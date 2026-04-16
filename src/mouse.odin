@@ -9,7 +9,7 @@ Mouse :: struct {
 	right_pressed: bool, // Has the right button been pressed?
 }
 
-update_mouse :: proc(game: ^Game) {
+mouse_update :: proc(game: ^Game) {
 	game.mouse.screen_pos = rl.GetMousePosition()
 	game.mouse.world_pos = rl.GetScreenToWorld2D(game.mouse.screen_pos, game.camera)
 	game.mouse.left_pressed = rl.IsMouseButtonPressed(.LEFT)

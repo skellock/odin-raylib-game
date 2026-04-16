@@ -12,26 +12,26 @@ CardView :: struct {
 	collided: bool,
 }
 
-init_card_view :: proc(card: Card, texture: rl.Texture2D) -> CardView {
+card_view_init :: proc(card: Card, texture: rl.Texture2D) -> CardView {
 	return CardView{card = card, texture = texture}
 }
 
-draw_card_views :: proc(game: ^Game) {
+card_view_draw_all :: proc(game: ^Game) {
 	SHADOW_OFFSET :: rl.Vector2{1, 1}
 
 	for cv, idx in game.card_views {
 		rl.DrawTextureEx(cv.texture, cv.pos + SHADOW_OFFSET, 0, CARD_SCALE, rl.ColorAlpha(rl.BLACK, 0.1))
-		color := cv.collided ? get_dot_drawing_color(game) : rl.WHITE
+		color := cv.collided ? dot_get_drawing_color(game) : rl.WHITE
 		rl.DrawTextureEx(cv.texture, cv.pos, 0, CARD_SCALE, color)
 
 		if idx == game.hovered_card {
-			draw_card_hover(cv.texture, cv.pos)
+			card_view_draw_hover(cv.texture, cv.pos)
 		}
 	}
 }
 
 @(private = "file")
-draw_card_hover :: proc(tex: rl.Texture2D, pos: rl.Vector2) {
+card_view_draw_hover :: proc(tex: rl.Texture2D, pos: rl.Vector2) {
 	INSET :: f32(2)
 	THICKNESS :: 3
 	ROUNDNESS :: 0.25
@@ -49,7 +49,7 @@ draw_card_hover :: proc(tex: rl.Texture2D, pos: rl.Vector2) {
 	)
 }
 
-update_card_view_positions :: proc(game: ^Game) {
+card_view_update_all_positions :: proc(game: ^Game) {
 	hand := game.card_views[:]
 	pos := rl.Vector2{200, 200}
 	for idx in 0 ..< len(hand) {
@@ -58,7 +58,7 @@ update_card_view_positions :: proc(game: ^Game) {
 	}
 }
 
-update_card_view_collisions :: proc(game: ^Game) {
+card_view_update_all_collisions :: proc(game: ^Game) {
 	found := false
 	#reverse for &cv in game.card_views {
 		cv.collided = false

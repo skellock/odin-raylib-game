@@ -7,12 +7,12 @@ Clock :: struct {
 	elapsed: f64, // seconds accumulated since the clock was started
 }
 
-init_clock :: proc() -> Clock {
+clock_init :: proc() -> Clock {
 	return Clock{}
 }
 
 // Accumulates delta time every frame regardless of pause state.
-update_clock :: proc(game: ^Game) {
+clock_update :: proc(game: ^Game) {
 	game.clock.elapsed += f64(game.time.dt)
 }
 
@@ -21,7 +21,7 @@ update_clock :: proc(game: ^Game) {
 //   >= 1 hour  -> "H:MM:SS.mmm"
 //   >= 1 min   -> "M:SS.mmm"
 //   otherwise  -> "S.mmm"
-format_clock_elapsed :: proc(elapsed: f64, buf: []byte) -> string {
+clock_format_elapsed :: proc(elapsed: f64, buf: []byte) -> string {
 	total_seconds := int(elapsed)
 	hours := total_seconds / 3600
 	minutes := (total_seconds % 3600) / 60
@@ -36,7 +36,7 @@ format_clock_elapsed :: proc(elapsed: f64, buf: []byte) -> string {
 	return fmt.bprintf(buf, "%d.%d", seconds, tenths)
 }
 
-draw_clock :: proc(game: ^Game) {
+clock_draw :: proc(game: ^Game) {
 	FONT_SIZE :: f32(24)
 	FONT_SPACING :: f32(2)
 	EDGE_OFFSET :: i32(8) // gap between screen edge and the box
@@ -48,7 +48,7 @@ draw_clock :: proc(game: ^Game) {
 	font := assets.fonts.body
 
 	buf: [32]byte
-	text := fmt.ctprintf("%s", format_clock_elapsed(game.clock.elapsed, buf[:]))
+	text := fmt.ctprintf("%s", clock_format_elapsed(game.clock.elapsed, buf[:]))
 
 	text_size := rl.MeasureTextEx(font, text, FONT_SIZE, FONT_SPACING)
 	tw := i32(text_size.x)

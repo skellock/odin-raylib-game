@@ -6,11 +6,11 @@ CardImages :: struct {
 	cards: map[Card]rl.Texture2D,
 }
 
-init_card_images :: proc() -> CardImages {
+card_images_init :: proc() -> CardImages {
 	card_images := CardImages{}
 
 	for card in STANDARD_DECK {
-		card_code := get_card_code(card, context.temp_allocator)
+		card_code := card_get_code(card, context.temp_allocator)
 		texture := rl.LoadTexture(rl.TextFormat("images/card-%s@3x.png", card_code))
 		rl.SetTextureFilter(texture, .BILINEAR)
 		card_images.cards[card] = texture
@@ -19,7 +19,7 @@ init_card_images :: proc() -> CardImages {
 	return card_images
 }
 
-destroy_card_images :: proc(card_images: ^CardImages) {
+card_images_destroy :: proc(card_images: ^CardImages) {
 	for _, value in card_images.cards {
 		rl.UnloadTexture(value)
 	}

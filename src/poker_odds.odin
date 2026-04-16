@@ -17,7 +17,7 @@ poker_odds := [PokerHandType]f64 {
 	.RoyalFlush    = 0.00000154,
 }
 
-draw_poker_odds :: proc(game: ^Game) {
+poker_odds_draw :: proc(game: ^Game) {
 	if game.poker_hand.hand_type == .Nothing || game.poker_hand.hand_type == .HighCard { return }
 
 	FONT_SIZE :: f32(20)

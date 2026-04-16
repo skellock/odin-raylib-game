@@ -6,7 +6,7 @@ Fonts :: struct {
 	body: rl.Font,
 }
 
-init_fonts :: proc() -> Fonts {
+fonts_init :: proc() -> Fonts {
 	body := rl.LoadFontEx("fonts/Amble-Regular.ttf", 256, nil, 0)
 	rl.GenTextureMipmaps(&body.texture)
 	rl.SetTextureFilter(body.texture, .BILINEAR)
@@ -14,6 +14,6 @@ init_fonts :: proc() -> Fonts {
 	return Fonts{body}
 }
 
-destroy_fonts :: proc(fonts: ^Fonts) {
+fonts_destroy :: proc(fonts: ^Fonts) {
 	rl.UnloadFont(fonts.body)
 }

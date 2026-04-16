@@ -13,8 +13,8 @@ expect_poker_hand :: proc(
 ) {
 	using main
 	context.allocator = context.temp_allocator
-	card_map := init_card_map()
-	hand := init_cards(hand_string, card_map)
+	card_map := card_map_init()
+	hand := card_init_all(hand_string, card_map)
 	testing.expect(t, hand_fn(hand[:]) == value, fmt.tprintf("expected (%s) to be %v", hand_string, value))
 }
 
@@ -108,29 +108,29 @@ has_royal_flush_test :: proc(t: ^testing.T) {
 init_poker_hand_test :: proc(t: ^testing.T) {
 	using main
 	context.allocator = context.temp_allocator
-	card_map := init_card_map()
+	card_map := card_map_init()
 
-	cards := init_cards("tc jc qc kc ac", card_map)
-	hand := init_poker_hand(cards[:])
-	defer destroy_poker_hand(&hand)
+	cards := card_init_all("tc jc qc kc ac", card_map)
+	hand := poker_hand_init(cards[:])
+	defer poker_hand_destroy(&hand)
 	testing.expect_value(t, hand.hand_type, PokerHandType.RoyalFlush)
 	testing.expect_value(t, hand.hand_type_text, "Royal Flush")
 	testing.expect_value(t, hand.cards[0], Card{pip = .Ten, suit = .Club})
 	testing.expect_value(t, hand.cards[4], Card{pip = .Ace, suit = .Club})
 
-	cards2 := init_cards("2h 3h 4h 5h 5c", card_map)
-	hand2 := init_poker_hand(cards2[:])
-	defer destroy_poker_hand(&hand2)
+	cards2 := card_init_all("2h 3h 4h 5h 5c", card_map)
+	hand2 := poker_hand_init(cards2[:])
+	defer poker_hand_destroy(&hand2)
 	testing.expect_value(t, hand2.hand_type, PokerHandType.Pair)
 	testing.expect_value(t, hand2.hand_type_text, "Pair")
 }
 
-expect_poker_hand_score :: proc(t: ^testing.T, hand_string: string, hand_type: main.PokerHandType) {
+expect_card_score_hand :: proc(t: ^testing.T, hand_string: string, hand_type: main.PokerHandType) {
 	using main
 	context.allocator = context.temp_allocator
-	card_map := init_card_map()
-	cards := init_cards(hand_string, card_map)
-	score := score_hand(cards[:])
+	card_map := card_map_init()
+	cards := card_init_all(hand_string, card_map)
+	score := card_score_hand(cards[:])
 	testing.expect(
 		t,
 		score == hand_type,
@@ -141,18 +141,18 @@ expect_poker_hand_score :: proc(t: ^testing.T, hand_string: string, hand_type: m
 @(test)
 score_hand_test :: proc(t: ^testing.T) {
 	using main
-	expect_poker_hand_score(t, "tc jc qc kc ac", .RoyalFlush)
-	expect_poker_hand_score(t, "9c tc jc qc kc", .StraightFlush)
-	expect_poker_hand_score(t, "2c 2s 2d 2h 3c", .FourOfAKind)
-	expect_poker_hand_score(t, "3c 3s 3d 2h 2c", .FullHouse)
-	expect_poker_hand_score(t, "2h 3h 4h 5h 7h", .Flush)
-	expect_poker_hand_score(t, "2c 3c 4h 5h 6h", .Straight)
-	expect_poker_hand_score(t, "2h 2c 2d 3c 4h", .ThreeOfAKind)
-	expect_poker_hand_score(t, "2h 2c 3h 3c 5h", .TwoPair)
-	expect_poker_hand_score(t, "2h 3h 4h 5h 5c", .Pair)
-	expect_poker_hand_score(t, "2h 3h 4h 5h tc", .HighCard)
-	expect_poker_hand_score(t, "2h", .Nothing)
-	expect_poker_hand_score(t, "2h 3h", .Nothing)
-	expect_poker_hand_score(t, "2h 3h 4h", .Nothing)
-	expect_poker_hand_score(t, "2h 3h 4h 5h", .Nothing)
+	expect_card_score_hand(t, "tc jc qc kc ac", .RoyalFlush)
+	expect_card_score_hand(t, "9c tc jc qc kc", .StraightFlush)
+	expect_card_score_hand(t, "2c 2s 2d 2h 3c", .FourOfAKind)
+	expect_card_score_hand(t, "3c 3s 3d 2h 2c", .FullHouse)
+	expect_card_score_hand(t, "2h 3h 4h 5h 7h", .Flush)
+	expect_card_score_hand(t, "2c 3c 4h 5h 6h", .Straight)
+	expect_card_score_hand(t, "2h 2c 2d 3c 4h", .ThreeOfAKind)
+	expect_card_score_hand(t, "2h 2c 3h 3c 5h", .TwoPair)
+	expect_card_score_hand(t, "2h 3h 4h 5h 5c", .Pair)
+	expect_card_score_hand(t, "2h 3h 4h 5h tc", .HighCard)
+	expect_card_score_hand(t, "2h", .Nothing)
+	expect_card_score_hand(t, "2h 3h", .Nothing)
+	expect_card_score_hand(t, "2h 3h 4h", .Nothing)
+	expect_card_score_hand(t, "2h 3h 4h 5h", .Nothing)
 }

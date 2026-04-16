@@ -17,23 +17,23 @@ Console :: struct {
 	animation: f32, // 0 = hidden (offscreen), 1 = fully visible
 }
 
-init_console :: proc() -> Console {
+console_init :: proc() -> Console {
 	result := Console{}
 	strings.builder_init(&result.builder)
 	return result
 }
 
-destroy_console :: proc(console: ^Console) {
+console_destroy :: proc(console: ^Console) {
 	strings.builder_destroy(&console.builder)
 }
 
-update_console :: proc(game: ^Game) {
+console_update :: proc(game: ^Game) {
 	c := &game.console
 	ca := &game.actions.console
 
 	if ca.show { c.active = true }
 	if ca.hide { c.active = false }
-	if ca.clear { clear_console(c) }
+	if ca.clear { console_clear(c) }
 
 	// animate
 	target: f32 = 1.0 if c.active else 0.0
@@ -72,7 +72,7 @@ update_console :: proc(game: ^Game) {
 		}
 		if !rl.CheckCollisionPointRec(game.mouse.screen_pos, box) {
 			c.active = false
-			clear_console(c)
+			console_clear(c)
 		}
 	}
 
@@ -83,15 +83,15 @@ update_console :: proc(game: ^Game) {
 	}
 }
 
-get_console_value :: proc(c: ^Console) -> string {
+console_get_value :: proc(c: ^Console) -> string {
 	return strings.to_string(c.builder)
 }
 
-clear_console :: proc(c: ^Console) {
+console_clear :: proc(c: ^Console) {
 	strings.builder_reset(&c.builder)
 }
 
-draw_console :: proc(game: ^Game) {
+console_draw :: proc(game: ^Game) {
 	FONT_SIZE :: f32(24)
 	FONT_SPACING :: f32(2)
 	H_PADDING :: i32(12)
@@ -105,7 +105,7 @@ draw_console :: proc(game: ^Game) {
 	if c.animation <= 0 { return }
 
 	font := assets.fonts.body
-	text := fmt.ctprintf("%s", get_console_value(c))
+	text := fmt.ctprintf("%s", console_get_value(c))
 
 	text_size := rl.MeasureTextEx(font, text, FONT_SIZE, FONT_SPACING)
 	min_height := rl.MeasureTextEx(font, "A", FONT_SIZE, FONT_SPACING).y

@@ -9,7 +9,7 @@ Scarfy :: struct {
 	pos:      rl.Vector2,
 }
 
-init_scarfy :: proc() -> Scarfy {
+scarfy_init :: proc() -> Scarfy {
 	animator := anim.new_animator(
 		animator_name = "omgscarfy",
 		frames_per_row = 6,
@@ -23,18 +23,18 @@ init_scarfy :: proc() -> Scarfy {
 	return Scarfy{animator = animator}
 }
 
-load_scarfy :: proc(scarfy: ^Scarfy) {
+scarfy_load :: proc(scarfy: ^Scarfy) {
 	scarfy.texture = rl.LoadTexture("images/scarfy.png")
 	anim.assign_sprite(&scarfy.animator, scarfy.texture)
 }
 
-destroy_scarfy :: proc(scarfy: ^Scarfy) {
+scarfy_destroy :: proc(scarfy: ^Scarfy) {
 	if scarfy.texture.id != 0 {
 		rl.UnloadTexture(scarfy.texture)
 	}
 }
 
-update_scarfy :: proc(game: ^Game) {
+scarfy_update :: proc(game: ^Game) {
 	vw := f32(game.viewport.width)
 	vh := f32(game.viewport.height)
 	fw := game.scarfy.animator.frame_rec.width
@@ -46,16 +46,16 @@ update_scarfy :: proc(game: ^Game) {
 	anim.play(&game.scarfy.animator)
 }
 
-draw_scarfy :: proc(game: ^Game) {
+scarfy_draw :: proc(game: ^Game) {
 	animator := &game.scarfy.animator
-	scarfy_rect := get_scarfy_rect(game)
+	scarfy_rect := scarfy_get_rect(game)
 	collided := rl.CheckCollisionCircleRec(game.dot.current_pos, game.dot.size, scarfy_rect)
 	color := collided ? rl.ColorAlpha(rl.WHITE, 0.5) : rl.WHITE
 
 	rl.DrawTextureRec(animator.sprite, animator.frame_rec, game.scarfy.pos, color)
 }
 
-get_scarfy_rect :: proc(game: ^Game) -> rl.Rectangle {
+scarfy_get_rect :: proc(game: ^Game) -> rl.Rectangle {
 	return rl.Rectangle {
 		x = game.scarfy.pos.x,
 		y = game.scarfy.pos.y,

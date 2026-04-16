@@ -7,7 +7,7 @@ Screen :: struct {
 	height: i32,
 }
 
-update_screen :: proc(game: ^Game) {
+screen_update :: proc(game: ^Game) {
 	game.screen.width = rl.GetRenderWidth()
 	game.screen.height = rl.GetRenderHeight()
 }

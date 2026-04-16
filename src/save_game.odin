@@ -13,7 +13,7 @@ SaveGame :: struct {
 	dot_color: DotColor,
 }
 
-read_save_game :: proc(game: ^Game) {
+save_game_read :: proc(game: ^Game) {
 	// read the save game file
 	data, read_err := os.read_entire_file(SAVE_FILENAME, context.allocator)
 	if read_err != nil {
@@ -31,12 +31,12 @@ read_save_game :: proc(game: ^Game) {
 	}
 
 	// populate the Game with the SaveGame data
-	restore_save_game(game, &save)
+	game_restore_save_game(game, &save)
 }
 
-write_save_game :: proc(game: ^Game) {
+save_game_write :: proc(game: ^Game) {
 	// construct a SaveGame
-	save := build_save_game(game)
+	save := game_build_save_game(game)
 
 	// serialize it to JSON
 	json_data, err := json.marshal(save, {pretty = true, use_enum_names = true})

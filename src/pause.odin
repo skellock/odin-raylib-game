@@ -3,13 +3,13 @@ package main
 import "core:math"
 import rl "vendor:raylib"
 
-update_pause :: proc(game: ^Game) {
+pause_update :: proc(game: ^Game) {
 	if game.actions.toggle_pause {
 		game.paused = !game.paused
 	}
 }
 
-draw_paused :: proc(game: ^Game) {
+pause_draw :: proc(game: ^Game) {
 	vw := game.viewport.width
 	vh := game.viewport.height
 

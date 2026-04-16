@@ -8,7 +8,7 @@ Viewport :: struct {
 	height: i32,
 }
 
-update_viewport :: proc(game: ^Game) {
+viewport_update :: proc(game: ^Game) {
 	game.viewport.width = VIEWPORT_WIDTH
 	game.viewport.height = VIEWPORT_HEIGHT
 }

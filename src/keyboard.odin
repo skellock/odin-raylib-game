@@ -17,7 +17,7 @@ Keyboard :: struct {
 }
 
 @(private = "file")
-read_keyboard_characters :: proc() -> string {
+keyboard_read_characters :: proc() -> string {
 	TYPED_MAX_CHARS :: 64
 
 	typed_buf: [TYPED_MAX_CHARS]u8
@@ -36,7 +36,7 @@ read_keyboard_characters :: proc() -> string {
 	return strings.clone(string(typed_buf[:typed_len]), context.temp_allocator)
 }
 
-update_keyboard :: proc(game: ^Game) {
+keyboard_update :: proc(game: ^Game) {
 	k := &game.keyboard
 
 	ctrl_down := rl.IsKeyDown(.LEFT_CONTROL) || rl.IsKeyDown(.RIGHT_CONTROL)
@@ -49,5 +49,5 @@ update_keyboard :: proc(game: ^Game) {
 	k.pause_pressed = rl.IsKeyPressed(.P)
 	k.load_pressed = rl.IsKeyPressed(.L)
 	k.save_pressed = rl.IsKeyPressed(.S)
-	k.typed = read_keyboard_characters()
+	k.typed = keyboard_read_characters()
 }

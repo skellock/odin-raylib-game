@@ -6,11 +6,11 @@ import "core:testing"
 import rl "vendor:raylib"
 
 @(test)
-init_card_view_test :: proc(t: ^testing.T) {
+card_view_init_test :: proc(t: ^testing.T) {
 	using main
 	card := Card{.Ace, .Spade}
 	tex := rl.Texture2D{0, 100, 140, 0, rl.PixelFormat.UNKNOWN}
-	cv := init_card_view(card, tex)
+	cv := card_view_init(card, tex)
 
 	testing.expect_value(t, cv.card, card)
 	testing.expect_value(t, cv.texture.width, i32(100))
@@ -19,11 +19,11 @@ init_card_view_test :: proc(t: ^testing.T) {
 }
 
 @(test)
-update_card_view_positions_test :: proc(t: ^testing.T) {
+card_view_update_positions_test :: proc(t: ^testing.T) {
 	using main
-	game := init_game()
-	defer destroy_game(&game)
-	update_card_view_positions(&game)
+	game := game_init()
+	defer game_destroy(&game)
+	card_view_update_all_positions(&game)
 	card_views := game.card_views[:]
 
 	// each card should be spaced apart by CARD_SPACING
@@ -34,17 +34,17 @@ update_card_view_positions_test :: proc(t: ^testing.T) {
 }
 
 @(test)
-update_card_view_collisions_test :: proc(t: ^testing.T) {
+card_view_update_collisions_test :: proc(t: ^testing.T) {
 	using main
-	game := init_game()
-	defer destroy_game(&game)
+	game := game_init()
+	defer game_destroy(&game)
 
-	update_card_view_positions(&game)
+	card_view_update_all_positions(&game)
 	game.dot.current_pos = {0, 0}
 	game.dot.size = 1.0
 
 	// no collisions to start
-	update_card_view_collisions(&game)
+	card_view_update_all_collisions(&game)
 	for cv in game.card_views {
 		testing.expect_value(t, cv.collided, false)
 	}
@@ -52,7 +52,7 @@ update_card_view_collisions_test :: proc(t: ^testing.T) {
 	// then we collide with one of them
 	collided := &game.card_views[4]
 	game.dot.current_pos = collided.pos
-	update_card_view_collisions(&game)
+	card_view_update_all_collisions(&game)
 	for cv in game.card_views {
 		testing.expect_value(t, cv.collided, cv == collided^)
 	}

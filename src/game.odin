@@ -24,53 +24,53 @@ Game :: struct {
 	console:      Console,
 }
 
-init_game :: proc() -> Game {
+game_init :: proc() -> Game {
 	game := Game {
-		clock = init_clock(),
-		dot = init_dot(),
+		clock = clock_init(),
+		dot = dot_init(),
 		camera = rl.Camera2D{zoom = 1},
 		// camera = rl.Camera2D{zoom = f32(rl.GetRenderHeight() / VIEWPORT_HEIGHT)},
-		deck = init_shuffled_deck(),
-		reshuffler = init_reshuffler(),
-		scarfy = init_scarfy(),
-		tiling = init_tiling(),
-		console = init_console(),
+		deck = deck_init_shuffled(),
+		reshuffler = reshuffler_init(),
+		scarfy = scarfy_init(),
+		tiling = tiling_init(),
+		console = console_init(),
 	}
-	deal_to_hand(&game)
+	game_deal_to_hand(&game)
 
 	return game
 }
 
-deal_to_hand :: proc(game: ^Game) {
-	destroy_poker_hand(&game.poker_hand)
-	game.poker_hand = init_poker_hand(game.deck.cards[:5])
+game_deal_to_hand :: proc(game: ^Game) {
+	poker_hand_destroy(&game.poker_hand)
+	game.poker_hand = poker_hand_init(game.deck.cards[:5])
 	for card, i in game.poker_hand.cards {
 		tex := assets.card_images.cards[card]
-		game.card_views[i] = init_card_view(card, tex)
+		game.card_views[i] = card_view_init(card, tex)
 	}
-	update_card_view_positions(game)
+	card_view_update_all_positions(game)
 }
 
-destroy_game :: proc(game: ^Game) {
-	destroy_dot(&game.dot)
-	destroy_reshuffler(&game.reshuffler)
-	destroy_scarfy(&game.scarfy)
-	destroy_tiling(&game.tiling)
-	destroy_console(&game.console)
-	destroy_poker_hand(&game.poker_hand)
+game_destroy :: proc(game: ^Game) {
+	dot_destroy(&game.dot)
+	reshuffler_destroy(&game.reshuffler)
+	scarfy_destroy(&game.scarfy)
+	tiling_destroy(&game.tiling)
+	console_destroy(&game.console)
+	poker_hand_destroy(&game.poker_hand)
 }
 
-restore_save_game :: proc(game: ^Game, save: ^SaveGame) {
+game_restore_save_game :: proc(game: ^Game, save: ^SaveGame) {
 	game.deck.cards = save.cards
 	game.dot.current_pos = {save.dot_x, save.dot_y}
 	game.dot.color = save.dot_color
 
 	// update dependent game state
-	clear_dot_tweens(game)
-	deal_to_hand(game)
+	dot_clear_tweens(game)
+	game_deal_to_hand(game)
 }
 
-build_save_game :: proc(game: ^Game) -> SaveGame {
+game_build_save_game :: proc(game: ^Game) -> SaveGame {
 	return SaveGame {
 		cards = game.deck.cards,
 		dot_x = game.dot.current_pos[0],

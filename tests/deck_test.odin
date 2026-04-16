@@ -5,51 +5,51 @@ import main "../src"
 import "core:testing"
 
 @(test)
-get_card_code_test :: proc(t: ^testing.T) {
+card_code_get_test :: proc(t: ^testing.T) {
 	using main
-	tc := get_card_code(Card{.Ten, .Club})
+	tc := card_get_code(Card{.Ten, .Club})
 	testing.expect_value(t, tc, "tc")
 	delete(tc)
 }
 
 @(test)
-init_deck_test :: proc(t: ^testing.T) {
+deck_init_test :: proc(t: ^testing.T) {
 	using main
-	deck := init_deck()
+	deck := deck_init()
 	testing.expect_value(t, len(deck.cards), 52)
 }
 
 @(test)
-shuffle_deck_test :: proc(t: ^testing.T) {
+deck_shuffle_test :: proc(t: ^testing.T) {
 	using main
-	d1 := init_deck()
-	d2 := init_deck()
-	d3 := init_deck()
-	d4 := init_deck()
+	d1 := deck_init()
+	d2 := deck_init()
+	d3 := deck_init()
+	d4 := deck_init()
 
 	testing.expect(t, d1.cards == d2.cards, "unshuffled cards should match")
 
-	shuffle_deck(&d3)
+	deck_shuffle(&d3)
 	testing.expect(t, d3.cards != d1.cards, "cards are not shuffled")
 
-	shuffle_deck(&d4)
+	deck_shuffle(&d4)
 	testing.expect(t, d4.cards != d3.cards, "2 shuffled decks should not match")
 }
 
 @(test)
-init_shuffled_deck_test :: proc(t: ^testing.T) {
+deck_init_shuffled_test :: proc(t: ^testing.T) {
 	using main
-	d1 := init_deck()
-	d2 := init_shuffled_deck()
+	d1 := deck_init()
+	d2 := deck_init_shuffled()
 
 	testing.expect(t, d1.cards != d2.cards, "shuffled deck was not shuffled")
 }
 
 @(test)
-init_card_map_test :: proc(t: ^testing.T) {
+card_map_init_test :: proc(t: ^testing.T) {
 	using main
-	card_map := init_card_map()
-	defer destroy_card_map(card_map)
+	card_map := card_map_init()
+	defer card_map_destroy(card_map)
 
 	testing.expect_value(t, card_map["jc"], Card{.Jack, .Club})
 	testing.expect_value(t, card_map["3h"], Card{.Three, .Heart})
@@ -57,12 +57,12 @@ init_card_map_test :: proc(t: ^testing.T) {
 }
 
 @(test)
-init_cards_test :: proc(t: ^testing.T) {
+card_init_all_test :: proc(t: ^testing.T) {
 	using main
-	card_map := init_card_map()
-	defer destroy_card_map(card_map)
+	card_map := card_map_init()
+	defer card_map_destroy(card_map)
 
-	cards := init_cards("ah 2h 3h 4h 5h", card_map)
+	cards := card_init_all("ah 2h 3h 4h 5h", card_map)
 	defer delete(cards)
 
 	testing.expect_value(t, cards[0], Card{.Ace, .Heart})

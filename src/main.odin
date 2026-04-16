@@ -51,16 +51,16 @@ main :: proc() {
 	// rl.ToggleFullscreen()
 
 	// prepare the assets
-	assets = init_assets()
-	defer destroy_assets(&assets)
+	assets = assets_init()
+	defer assets_destroy(&assets)
 
 	// prepare the game
-	game := init_game()
-	defer destroy_game(&game)
+	game := game_init()
+	defer game_destroy(&game)
 
 	// HACK: extra steps so the tests don't rely on a Raylib window
-	load_scarfy(&game.scarfy)
-	load_tiling(&game.tiling)
+	scarfy_load(&game.scarfy)
+	tiling_load(&game.tiling)
 
 	play_music(&assets.music)
 
@@ -72,31 +72,31 @@ main :: proc() {
 		// -- updates ---------------------------------------------------------------
 		{
 			// update the basic state that other update_* functions rely on
-			update_time(&game)
-			update_screen(&game)
-			update_viewport(&game)
-			update_keyboard(&game)
-			update_mouse(&game)
+			time_update(&game)
+			screen_update(&game)
+			viewport_update(&game)
+			keyboard_update(&game)
+			mouse_update(&game)
 
 			// determine what the user wants to do
-			update_actions(&game)
+			actions_update(&game)
 
-			update_pause(&game)
-			update_console(&game)
-			update_music(&game)
+			pause_update(&game)
+			console_update(&game)
+			music_update(&game)
 
-			if game.actions.load_game { read_save_game(&game) }
-			if game.actions.save_game { write_save_game(&game) }
+			if game.actions.load_game { save_game_read(&game) }
+			if game.actions.save_game { save_game_write(&game) }
 
 			// skip game updates if we're paused
 			if !game.paused {
-				update_clock(&game)
-				update_scarfy(&game)
-				update_dot(&game)
-				update_card_view_positions(&game)
-				update_card_view_collisions(&game)
-				update_tooltip(&game)
-				update_reshuffler(&game)
+				clock_update(&game)
+				scarfy_update(&game)
+				dot_update(&game)
+				card_view_update_all_positions(&game)
+				card_view_update_all_collisions(&game)
+				tooltip_update(&game)
+				reshuffler_update(&game)
 			}
 		}
 
@@ -108,20 +108,20 @@ main :: proc() {
 			rl.BeginMode2D(game.camera)
 			defer rl.EndMode2D()
 
-			draw_background(&game)
-			draw_tiling(&game)
-			draw_scarfy(&game)
-			draw_card_views(&game)
-			draw_poker_hand_type_text(&game)
-			draw_poker_odds(&game)
-			draw_dot(&game)
-			draw_reshuffler(&game)
-			draw_tooltip(&game)
-			draw_clock(&game)
-			if game.paused { draw_paused(&game) }
-			draw_debug(&game)
-			draw_cursor(&game)
-			draw_console(&game)
+			background_draw(&game)
+			tiling_draw(&game)
+			scarfy_draw(&game)
+			card_view_draw_all(&game)
+			poker_hand_draw_type_text(&game)
+			poker_odds_draw(&game)
+			dot_draw(&game)
+			reshuffler_draw(&game)
+			tooltip_draw(&game)
+			clock_draw(&game)
+			if game.paused { pause_draw(&game) }
+			debug_draw(&game)
+			cursor_draw(&game)
+			console_draw(&game)
 		}
 
 		// -- quitting the game ------------------------------------------------------

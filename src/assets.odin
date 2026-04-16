@@ -7,13 +7,13 @@ Assets :: struct {
 	fonts:       Fonts,
 }
 
-init_assets :: proc() -> Assets {
-	return Assets{card_images = init_card_images(), music = init_music(), sounds = init_sounds(), fonts = init_fonts()}
+assets_init :: proc() -> Assets {
+	return Assets{card_images = card_images_init(), music = music_init(), sounds = sounds_init(), fonts = fonts_init()}
 }
 
-destroy_assets :: proc(a: ^Assets) {
-	destroy_card_images(&a.card_images)
-	destroy_music(&a.music)
-	destroy_sounds(&a.sounds)
-	destroy_fonts(&a.fonts)
+assets_destroy :: proc(a: ^Assets) {
+	card_images_destroy(&a.card_images)
+	music_destroy(&a.music)
+	sounds_destroy(&a.sounds)
+	fonts_destroy(&a.fonts)
 }

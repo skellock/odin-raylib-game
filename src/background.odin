@@ -3,7 +3,7 @@ package main
 import "core:math"
 import rl "vendor:raylib"
 
-draw_background :: proc(game: ^Game) {
+background_draw :: proc(game: ^Game) {
 	rl.ClearBackground(rl.WHITE)
 
 	x := game.viewport.width / 2
@@ -11,11 +11,11 @@ draw_background :: proc(game: ^Game) {
 	rl.DrawRectangle(x, 0, x, game.viewport.height, rl.SKYBLUE)
 	rl.DrawRectangle(x - 1, 0, 2, game.viewport.height, rl.ColorAlpha(rl.WHITE, 0.5))
 
-	draw_checkerboard(game)
+	background_checkerboard_draw(game)
 }
 
 @(private = "file")
-draw_checkerboard :: proc(game: ^Game) {
+background_checkerboard_draw :: proc(game: ^Game) {
 	SIZE :: 48
 	OFFSET :: SIZE / 2
 	color1 := rl.ColorAlpha(rl.WHITE, 0.1)

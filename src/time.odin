@@ -7,7 +7,7 @@ Time :: struct {
 	elapsed: f64, // How long the game has been running
 }
 
-update_time :: proc(game: ^Game) {
+time_update :: proc(game: ^Game) {
 	game.time.dt = rl.GetFrameTime()
 	game.time.elapsed = rl.GetTime()
 }

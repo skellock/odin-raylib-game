@@ -6,7 +6,7 @@ Music :: struct {
 	cvb: rl.Music,
 }
 
-init_music :: proc() -> Music {
+music_init :: proc() -> Music {
 	music := Music {
 		cvb = rl.LoadMusicStream("sounds/cvb.mp3"),
 	}
@@ -20,7 +20,7 @@ play_music :: proc(music: ^Music) {
 	}
 }
 
-update_music :: proc(game: ^Game) {
+music_update :: proc(game: ^Game) {
 	if game.actions.toggle_pause {
 		if game.paused {
 			rl.PauseMusicStream(assets.music.cvb)
@@ -31,7 +31,7 @@ update_music :: proc(game: ^Game) {
 	rl.UpdateMusicStream(assets.music.cvb)
 }
 
-destroy_music :: proc(music: ^Music) {
+music_destroy :: proc(music: ^Music) {
 	if rl.IsMusicStreamPlaying(music.cvb) {
 		rl.StopMusicStream(music.cvb)
 	}

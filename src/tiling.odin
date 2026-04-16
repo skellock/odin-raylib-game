@@ -35,13 +35,13 @@ Tiling :: struct {
 	layers:  [8]TileLayer, // hardcode for now
 }
 
-init_tiling :: proc() -> Tiling {
+tiling_init :: proc() -> Tiling {
 	tiling := Tiling{}
 	return tiling
 }
 
 @(private = "file")
-load_layer :: proc(instance: ldtk.Layer_Instance, level: ldtk.Level) -> TileLayer {
+tiling_load_layer :: proc(instance: ldtk.Layer_Instance, level: ldtk.Level) -> TileLayer {
 	layer := TileLayer {
 		identifier   = instance.identifier,
 		cols         = i32(instance.c_width),
@@ -77,7 +77,7 @@ load_layer :: proc(instance: ldtk.Layer_Instance, level: ldtk.Level) -> TileLaye
 	return layer
 }
 
-load_tiling :: proc(tiling: ^Tiling) {
+tiling_load :: proc(tiling: ^Tiling) {
 	tiling.texture = rl.LoadTexture("tiles/Cavernas_by_Adam_Saltsman.png")
 
 	if project, ok := ldtk.load_from_file("tiles/world.ldtk", context.temp_allocator).?; ok {
@@ -86,7 +86,7 @@ load_tiling :: proc(tiling: ^Tiling) {
 			for layer, idx in level.layer_instances {
 				switch layer.type {
 				case .IntGrid:
-					layer := load_layer(layer, level)
+					layer := tiling_load_layer(layer, level)
 					tiling.layers[idx] = layer
 
 				case .Entities:
@@ -100,7 +100,7 @@ load_tiling :: proc(tiling: ^Tiling) {
 	}
 }
 
-destroy_tiling :: proc(tiling: ^Tiling) {
+tiling_destroy :: proc(tiling: ^Tiling) {
 	rl.UnloadTexture(tiling.texture)
 
 	for &layer in tiling.layers {
@@ -109,7 +109,7 @@ destroy_tiling :: proc(tiling: ^Tiling) {
 	}
 }
 
-draw_tiling :: proc(game: ^Game) {
+tiling_draw :: proc(game: ^Game) {
 	for layer in game.tiling.layers {
 		screen_offset := rl.Vector2 {
 			f32(game.viewport.width - (TILE_SIZE * layer.cols)) / 2.0,

@@ -5,10 +5,10 @@ import main "../src"
 import "core:testing"
 
 @(test)
-init_reshuffler_test :: proc(t: ^testing.T) {
+reshuffler_init_test :: proc(t: ^testing.T) {
 	using main
-	reshuffler := init_reshuffler()
-	defer destroy_reshuffler(&reshuffler)
+	reshuffler := reshuffler_init()
+	defer reshuffler_destroy(&reshuffler)
 
 	testing.expect_value(t, reshuffler.cooldown.duration, RESHUFFLE_COOLDOWN)
 	testing.expect_value(t, reshuffler.cooldown.one_shot, true)
@@ -18,35 +18,35 @@ init_reshuffler_test :: proc(t: ^testing.T) {
 @(test)
 reshuffler_cooldown_test :: proc(t: ^testing.T) {
 	using main
-	reshuffler := init_reshuffler()
-	defer destroy_reshuffler(&reshuffler)
+	reshuffler := reshuffler_init()
+	defer reshuffler_destroy(&reshuffler)
 
 	// start the cooldown as if a reshuffle just happened
-	start_timer(&reshuffler.cooldown)
+	timer_start(&reshuffler.cooldown)
 	testing.expect_value(t, reshuffler.cooldown.active, true)
 
 	// after partial time, still active
-	update_timer(&reshuffler.cooldown, RESHUFFLE_COOLDOWN * 0.5)
+	timer_update(&reshuffler.cooldown, RESHUFFLE_COOLDOWN * 0.5)
 	testing.expect_value(t, reshuffler.cooldown.active, true)
 
 	// after full duration, cooldown expires
-	update_timer(&reshuffler.cooldown, RESHUFFLE_COOLDOWN * 1.5)
+	timer_update(&reshuffler.cooldown, RESHUFFLE_COOLDOWN * 1.5)
 	testing.expect_value(t, reshuffler.cooldown.active, false)
 }
 
 @(test)
 reshuffler_cooldown_resets_test :: proc(t: ^testing.T) {
 	using main
-	reshuffler := init_reshuffler()
-	defer destroy_reshuffler(&reshuffler)
+	reshuffler := reshuffler_init()
+	defer reshuffler_destroy(&reshuffler)
 
 	// first cooldown cycle
-	start_timer(&reshuffler.cooldown)
-	update_timer(&reshuffler.cooldown, RESHUFFLE_COOLDOWN)
+	timer_start(&reshuffler.cooldown)
+	timer_update(&reshuffler.cooldown, RESHUFFLE_COOLDOWN)
 	testing.expect_value(t, reshuffler.cooldown.active, false)
 
 	// can start again
-	start_timer(&reshuffler.cooldown)
+	timer_start(&reshuffler.cooldown)
 	testing.expect_value(t, reshuffler.cooldown.active, true)
 	testing.expect_value(t, reshuffler.cooldown.elapsed, 0)
 }

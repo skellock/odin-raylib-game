@@ -26,7 +26,7 @@ Actions :: struct {
 	console:      ConsoleAction,
 }
 
-update_actions :: proc(game: ^Game) {
+actions_update :: proc(game: ^Game) {
 	// start by resetting the actions entirely
 	game.actions = Actions{}
 
@@ -46,7 +46,7 @@ update_actions :: proc(game: ^Game) {
 
 		// map console input to a command
 		if kb.enter_pressed {
-			switch get_console_value(con) {
+			switch console_get_value(con) {
 			case "quit": acts.quit_game = true
 			case "pause": acts.toggle_pause = true
 			case "load": acts.load_game = true

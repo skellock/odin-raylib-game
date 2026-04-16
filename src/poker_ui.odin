@@ -2,7 +2,7 @@ package main
 
 import rl "vendor:raylib"
 
-draw_poker_hand_type_text :: proc(game: ^Game) {
+poker_hand_draw_type_text :: proc(game: ^Game) {
 	text := game.poker_hand.hand_type_text
 
 	FONT_SIZE :: f32(50)
@@ -24,7 +24,7 @@ draw_poker_hand_type_text :: proc(game: ^Game) {
 	rl.DrawTextEx(font, text, {x, y}, FONT_SIZE, SPACING, rl.WHITE)
 }
 
-get_poker_hand_type_text :: proc(hand_type: PokerHandType) -> cstring {
+poker_hand_get_type_text :: proc(hand_type: PokerHandType) -> cstring {
 	switch hand_type {
 	case .Nothing: return "Nothing"
 	case .HighCard: return "High Card"

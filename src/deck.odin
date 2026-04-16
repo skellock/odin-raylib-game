@@ -115,39 +115,39 @@ card_suit_codes := [CardSuit]string {
 	.Diamond = "d",
 }
 
-init_deck :: proc() -> Deck {
+deck_init :: proc() -> Deck {
 	return Deck{STANDARD_DECK}
 }
 
-get_card_code :: proc(card: Card, allocator := context.allocator) -> string {
+card_get_code :: proc(card: Card, allocator := context.allocator) -> string {
 	return strings.concatenate({card_pip_codes[card.pip], card_suit_codes[card.suit]}, allocator)
 }
 
-shuffle_deck :: proc(deck: ^Deck) {
+deck_shuffle :: proc(deck: ^Deck) {
 	rand.shuffle(deck.cards[:])
 }
 
-init_shuffled_deck :: proc() -> Deck {
-	deck := init_deck()
-	shuffle_deck(&deck)
+deck_init_shuffled :: proc() -> Deck {
+	deck := deck_init()
+	deck_shuffle(&deck)
 	return deck
 }
 
-init_card_map :: proc() -> map[string]Card {
+card_map_init :: proc() -> map[string]Card {
 	result := make(map[string]Card)
 	for card in STANDARD_DECK {
-		code := get_card_code(card)
+		code := card_get_code(card)
 		result[code] = card
 	}
 	return result
 }
 
-destroy_card_map :: proc(card_map: map[string]Card) {
+card_map_destroy :: proc(card_map: map[string]Card) {
 	for k, _ in card_map { delete(k) }
 	delete(card_map)
 }
 
-init_cards :: proc(card_string: string, card_map: map[string]Card) -> [dynamic]Card {
+card_init_all :: proc(card_string: string, card_map: map[string]Card) -> [dynamic]Card {
 	result := make([dynamic]Card)
 
 	// jet if the string is empty
@@ -166,7 +166,7 @@ init_cards :: proc(card_string: string, card_map: map[string]Card) -> [dynamic]C
 	return result
 }
 
-init_card_pip_map :: proc(cards: []Card, allocator := context.allocator) -> map[CardPip]int {
+card_init_pip_map :: proc(cards: []Card, allocator := context.allocator) -> map[CardPip]int {
 	pip_map := make(map[CardPip]int, allocator)
 	for card in cards {
 		pip_map[card.pip] += 1
@@ -174,7 +174,7 @@ init_card_pip_map :: proc(cards: []Card, allocator := context.allocator) -> map[
 	return pip_map
 }
 
-init_card_suit_map :: proc(cards: []Card, allocator := context.allocator) -> map[CardSuit]int {
+card_init_suit_map :: proc(cards: []Card, allocator := context.allocator) -> map[CardSuit]int {
 	suit_map := make(map[CardSuit]int, allocator)
 	for card in cards {
 		suit_map[card.suit] += 1

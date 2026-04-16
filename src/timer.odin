@@ -8,16 +8,16 @@ Timer :: struct {
 	one_shot: bool,
 }
 
-init_timer :: proc(duration: f32, one_shot := false) -> Timer {
+timer_init :: proc(duration: f32, one_shot := false) -> Timer {
 	return Timer{duration = duration, one_shot = one_shot}
 }
 
-start_timer :: proc(timer: ^Timer) {
+timer_start :: proc(timer: ^Timer) {
 	timer.elapsed = 0
 	timer.active = true
 }
 
-update_timer :: proc(timer: ^Timer, dt: f32) {
+timer_update :: proc(timer: ^Timer, dt: f32) {
 	if !timer.active { return }
 	if timer.paused { return }
 	timer.elapsed += dt
@@ -31,7 +31,7 @@ update_timer :: proc(timer: ^Timer, dt: f32) {
 	}
 }
 
-destroy_timer :: proc(timer: ^Timer) {
+timer_destroy :: proc(timer: ^Timer) {
 	timer.active = false
 	timer.elapsed = 0
 }
