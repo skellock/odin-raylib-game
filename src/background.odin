@@ -11,11 +11,11 @@ background_draw :: proc(game: ^Game) {
 	rl.DrawRectangle(x, 0, x, game.viewport.height, rl.SKYBLUE)
 	rl.DrawRectangle(x - 1, 0, 2, game.viewport.height, rl.ColorAlpha(rl.WHITE, 0.5))
 
-	background_checkerboard_draw(game)
+	background_draw_checkboard(game)
 }
 
 @(private = "file")
-background_checkerboard_draw :: proc(game: ^Game) {
+background_draw_checkboard :: proc(game: ^Game) {
 	SIZE :: 48
 	OFFSET :: SIZE / 2
 	color1 := rl.ColorAlpha(rl.WHITE, 0.1)
