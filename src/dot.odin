@@ -15,6 +15,13 @@ DotColor :: enum {
 	Green,
 }
 
+@(private = "file")
+dot_color_map := [DotColor]rl.Color {
+	.Yellow = rl.YELLOW,
+	.Red    = rl.RED,
+	.Green  = rl.GREEN,
+}
+
 Dot :: struct {
 	color:         DotColor,
 	size:          f32,
@@ -43,12 +50,7 @@ dot_update :: proc(game: ^Game) {
 }
 
 dot_get_drawing_color :: proc(game: ^Game) -> rl.Color {
-	switch game.dot.color {
-	case .Red: return rl.RED
-	case .Green: return rl.GREEN
-	case .Yellow: return rl.YELLOW
-	}
-	return rl.WHITE
+	return dot_color_map[game.dot.color]
 }
 
 dot_draw :: proc(game: ^Game) {
