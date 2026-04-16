@@ -57,9 +57,9 @@ scarfy_draw :: proc(game: ^Game) {
 
 scarfy_get_rect :: proc(game: ^Game) -> rl.Rectangle {
 	return rl.Rectangle {
-		x = game.scarfy.pos.x,
-		y = game.scarfy.pos.y,
-		width = game.scarfy.animator.frame_width,
-		height = game.scarfy.animator.frame_height,
+		game.scarfy.pos.x,
+		game.scarfy.pos.y,
+		game.scarfy.animator.frame_width,
+		game.scarfy.animator.frame_height,
 	}
 }
