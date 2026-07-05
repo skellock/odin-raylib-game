@@ -44,7 +44,7 @@ actions_gameplay_update :: proc(game: ^Game, keyboard: Keyboard, mouse: Mouse) {
 }
 
 // Process the actions when the console is up.
-actions_console_update :: proc(game: ^Game, keyboard: Keyboard, mouse: Mouse) {
+actions_console_update :: proc(game: ^Game, keyboard: Keyboard) {
 	actions := Actions{}
 
 	actions.console.hide = keyboard.escape_pressed || keyboard.enter_pressed
@@ -68,7 +68,7 @@ actions_console_update :: proc(game: ^Game, keyboard: Keyboard, mouse: Mouse) {
 
 actions_update :: proc(game: ^Game, keyboard: Keyboard, mouse: Mouse) {
 	if game.console.active {
-		actions_console_update(game, keyboard, mouse)
+		actions_console_update(game, keyboard)
 	} else {
 		actions_gameplay_update(game, keyboard, mouse)
 	}

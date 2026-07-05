@@ -90,18 +90,18 @@ main :: proc() {
 			}
 
 			music_update()
-			console_update(&game, mouse)
+			console_update(&game.console, game.actions, mouse)
 			save_game_update(&game)
 
 			// skip game updates if we're paused
 			if !game.paused {
 				clock_update(&game.clock)
 				scarfy_update(&game.scarfy)
-				dot_update(&game, mouse)
+				dot_update(&game.dot, game.actions, mouse)
 				card_view_update_all_positions(&game)
 				card_view_update_all_collisions(&game)
 				tooltip_update(&game, mouse)
-				reshuffler_update(&game)
+				reshuffler_update(&game, mouse)
 			}
 		}
 
@@ -120,7 +120,7 @@ main :: proc() {
 			poker_hand_draw_type_text(game)
 			poker_odds_draw(game)
 			dot_draw(game.dot, !game.console.active)
-			reshuffler_draw(game, mouse)
+			reshuffler_draw(game.reshuffler)
 			tooltip_draw(game)
 			clock_draw(game.clock)
 			if game.paused { pause_draw() }

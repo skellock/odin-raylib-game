@@ -5,15 +5,17 @@ import rl "vendor:raylib"
 RESHUFFLE_COOLDOWN :: f32(1.0)
 
 Reshuffler :: struct {
-	cooldown: Timer,
+	cooldown:  Timer,
+	mouse_pos: rl.Vector2,
 }
 
 reshuffler_init :: proc() -> Reshuffler {
 	return Reshuffler{cooldown = timer_init(RESHUFFLE_COOLDOWN, one_shot = true)}
 }
 
-reshuffler_update :: proc(game: ^Game) {
+reshuffler_update :: proc(game: ^Game, mouse: Mouse) {
 	timer_update(&game.reshuffler.cooldown, rl.GetFrameTime())
+	game.reshuffler.mouse_pos = mouse.world_pos
 
 	if game.actions.reshuffle {
 		deck_shuffle(&game.deck)
@@ -22,9 +24,8 @@ reshuffler_update :: proc(game: ^Game) {
 	}
 }
 
-reshuffler_draw :: proc(game: Game, mouse: Mouse) {
-	cooldown := game.reshuffler.cooldown
-	if !cooldown.active { return }
+reshuffler_draw :: proc(self: Reshuffler) {
+	if !self.cooldown.active { return }
 
 	RADIUS :: f32(16)
 	OFFSET_Y :: f32(-6)
@@ -32,11 +33,11 @@ reshuffler_draw :: proc(game: Game, mouse: Mouse) {
 	BG_COLOR := rl.ColorAlpha(rl.BLACK, 0.3)
 	FG_COLOR := rl.WHITE
 
-	cx := mouse.world_pos.x
-	cy := mouse.world_pos.y + OFFSET_Y
+	cx := self.mouse_pos.x
+	cy := self.mouse_pos.y + OFFSET_Y
 
 	// elapsed fraction (0.0 = start, 1.0 = done)
-	fraction := cooldown.elapsed / cooldown.duration
+	fraction := self.cooldown.elapsed / self.cooldown.duration
 
 	// background circle
 	rl.DrawCircleV({cx, cy}, RADIUS, BG_COLOR)

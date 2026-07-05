@@ -27,9 +27,9 @@ console_destroy :: proc(console: ^Console) {
 }
 
 // TODO: split this into 2 functions - one for capturing the string value and the other for everything else
-console_update :: proc(game: ^Game, mouse: Mouse) {
-	c := &game.console
-	ca := &game.actions.console
+console_update :: proc(self: ^Console, actions: Actions, mouse: Mouse) {
+	c := self
+	ca := actions.console
 
 	if ca.show { c.active = true }
 	if ca.hide { c.active = false }

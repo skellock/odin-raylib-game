@@ -31,11 +31,11 @@ dot_update_reshuffle_cycles_color_test :: proc(t: ^testing.T) {
 	expect_value(t, game.dot.color, DotColor.Yellow)
 
 	game.actions.reshuffle = true
-	dot_update(&game, mouse)
+	dot_update(&game.dot, game.actions, mouse)
 	expect_value(t, game.dot.color, DotColor.Red)
 
 	game.actions.reshuffle = false
-	dot_update(&game, mouse)
+	dot_update(&game.dot, game.actions, mouse)
 	expect_value(t, game.dot.color, DotColor.Red)
 }
 
@@ -52,14 +52,14 @@ dot_update_move_dot_sets_tween_test :: proc(t: ^testing.T) {
 
 	mouse.world_pos = {100, 200}
 	game.actions.move_dot = {true, mouse.world_pos}
-	dot_update(&game, mouse)
+	dot_update(&game.dot, game.actions, mouse)
 
 	// after a move_dot action, tweens are created but dot hasn't moved yet without dt
 	expect_value(t, game.dot.current_pos.x, f32(0))
 	expect_value(t, game.dot.current_pos.y, f32(0))
 
 	game.actions.move_dot = {}
-	dot_update(&game, mouse)
+	dot_update(&game.dot, game.actions, mouse)
 	dot_update_tweens(&game.dot, 1.0) // simulate time passing to let tweens update
 
 	// dot should have moved toward the target
@@ -78,10 +78,10 @@ dot_update_targeting_pos_test :: proc(t: ^testing.T) {
 	expect_value(t, game.dot.targeting_pos, rl.Vector2{0, 0})
 
 	mouse.world_pos = {50, 75}
-	dot_update(&game, mouse)
+	dot_update(&game.dot, game.actions, mouse)
 	expect_value(t, game.dot.targeting_pos, rl.Vector2{50, 75})
 
 	mouse.world_pos = {200, 300}
-	dot_update(&game, mouse)
+	dot_update(&game.dot, game.actions, mouse)
 	expect_value(t, game.dot.targeting_pos, rl.Vector2{200, 300})
 }
