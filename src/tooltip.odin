@@ -15,7 +15,7 @@ tooltip_update :: proc(game: ^Game, mouse: Mouse) {
 	tooltip_update_all_hovered_cards(game, mouse.world_pos)
 	tooltip_update_position(game, mouse.world_pos)
 	tooltip_update_text(game)
-	tooltip_update_alpha(game)
+	tooltip_update_alpha(game, rl.GetFrameTime())
 }
 
 tooltip_draw :: proc(game: Game) {
