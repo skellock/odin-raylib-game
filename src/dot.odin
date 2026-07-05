@@ -34,7 +34,7 @@ dot_init :: proc() -> Dot {
 	return Dot{color = .Yellow, size = NORMAL_DOT_SIZE, tweens = ease.flux_init(f32)}
 }
 
-dot_update :: proc(game: ^Game) {
+dot_update :: proc(game: ^Game, dt: f32 = 0.0) {
 	if game.actions.move_dot.active {
 		dot_move_location(&game.dot, game.actions.move_dot.pos)
 	}
@@ -45,8 +45,8 @@ dot_update :: proc(game: ^Game) {
 	}
 
 	game.dot.targeting_pos = game.mouse.world_pos
-	dot_update_size(&game.dot, game.time.dt)
-	dot_update_tweens(&game.dot, game.time.dt)
+	dot_update_size(&game.dot, dt)
+	dot_update_tweens(&game.dot, dt)
 }
 
 dot_get_drawing_color :: proc(self: Dot) -> rl.Color {

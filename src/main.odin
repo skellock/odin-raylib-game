@@ -74,7 +74,6 @@ main :: proc() {
 		// -- updates ---------------------------------------------------------------
 		{
 			// update the basic state that other update_* functions rely on
-			time_update(&game.time)
 			keyboard_update(&game.keyboard)
 			mouse_update(&game.mouse, game.camera)
 
@@ -88,7 +87,7 @@ main :: proc() {
 			}
 
 			music_update()
-			console_update(&game)
+			console_update(&game, rl.GetFrameTime())
 
 			// load & save game stuff TODO: likely the wrong spot for this
 			if game.actions.load_game {
@@ -104,11 +103,11 @@ main :: proc() {
 			if !game.paused {
 				clock_update(&game.clock)
 				scarfy_update(&game.scarfy)
-				dot_update(&game)
+				dot_update(&game, rl.GetFrameTime())
 				card_view_update_all_positions(&game)
 				card_view_update_all_collisions(&game)
 				tooltip_update(&game)
-				reshuffler_update(&game)
+				reshuffler_update(&game, rl.GetFrameTime())
 			}
 		}
 

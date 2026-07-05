@@ -48,16 +48,16 @@ tooltip_draw :: proc(game: Game) {
 }
 
 @(private = "file")
-tooltip_update_alpha :: proc(game: ^Game) {
+tooltip_update_alpha :: proc(game: ^Game, dt: f32 = 0.0) {
 	if game.tooltip.alpha <= 0 { return }
 	if game.hovered_card >= 0 { return }
 
 	// move the tooltip along with mouse as it fades
 	FADE_DELAY :: f32(0.25)
 	FADE_SPEED :: f32(4.0)
-	game.tooltip.delay += game.time.dt
+	game.tooltip.delay += dt
 	if game.tooltip.delay >= FADE_DELAY {
-		game.tooltip.alpha -= FADE_SPEED * game.time.dt
+		game.tooltip.alpha -= FADE_SPEED * dt
 	}
 	if game.tooltip.alpha < 0 { game.tooltip.alpha = 0 }
 }
