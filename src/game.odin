@@ -5,8 +5,6 @@ import rl "vendor:raylib"
 Game :: struct {
 	clock:        Clock,
 	time:         Time,
-	screen:       Screen,
-	viewport:     Viewport,
 	keyboard:     Keyboard,
 	mouse:        Mouse,
 	actions:      Actions,
@@ -29,7 +27,7 @@ game_init :: proc() -> Game {
 		clock = clock_init(),
 		dot = dot_init(),
 		camera = rl.Camera2D{zoom = 1},
-		// camera = rl.Camera2D{zoom = f32(rl.GetRenderHeight() / VIEWPORT_HEIGHT)},
+		// camera = rl.Camera2D{zoom = f32(rl.GetRenderHeight() / GAME_HEIGHT)},
 		deck = deck_init_shuffled(),
 		reshuffler = reshuffler_init(),
 		scarfy = scarfy_init(),
@@ -58,23 +56,4 @@ game_destroy :: proc(game: ^Game) {
 	tiling_destroy(&game.tiling)
 	console_destroy(&game.console)
 	poker_hand_destroy(&game.poker_hand)
-}
-
-game_restore_save_game :: proc(game: ^Game, save: ^SaveGame) {
-	game.deck.cards = save.cards
-	game.dot.current_pos = {save.dot_x, save.dot_y}
-	game.dot.color = save.dot_color
-
-	// update dependent game state
-	dot_clear_tweens(game)
-	game_deal_to_hand(game)
-}
-
-game_build_save_game :: proc(game: ^Game) -> SaveGame {
-	return SaveGame {
-		cards = game.deck.cards,
-		dot_x = game.dot.current_pos[0],
-		dot_y = game.dot.current_pos[1],
-		dot_color = game.dot.color,
-	}
 }

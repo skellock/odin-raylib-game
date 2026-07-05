@@ -45,56 +45,54 @@ dot_update :: proc(game: ^Game) {
 	}
 
 	game.dot.targeting_pos = game.mouse.world_pos
-	dot_update_size(game)
-	dot_update_tweens(game)
+	dot_update_size(&game.dot, game.time.dt)
+	dot_update_tweens(&game.dot, game.time.dt)
 }
 
-dot_get_drawing_color :: proc(game: ^Game) -> rl.Color {
-	return dot_color_map[game.dot.color]
+dot_get_drawing_color :: proc(self: Dot) -> rl.Color {
+	return dot_color_map[self.color]
 }
 
-dot_draw :: proc(game: ^Game) {
-	dot := game.dot
-	dot_color := dot_get_drawing_color(game)
-	if !game.console.active {
-		rl.DrawLineEx(dot.current_pos, dot.targeting_pos, 2, rl.ColorAlpha(rl.WHITE, 0.25))
+dot_draw :: proc(self: Dot, include_line: bool) {
+	if include_line {
+		rl.DrawLineEx(self.current_pos, self.targeting_pos, 2, rl.ColorAlpha(rl.WHITE, 0.25))
 	}
-	rl.DrawCircleV(dot.current_pos, dot.size, dot_color)
+	rl.DrawCircleV(self.current_pos, self.size, dot_get_drawing_color(self))
 }
 
 @(private = "file")
-dot_update_tweens :: proc(game: ^Game) {
-	ease.flux_update(&game.dot.tweens, f64(game.time.dt))
+dot_update_tweens :: proc(self: ^Dot, dt: f32) {
+	ease.flux_update(&self.tweens, f64(dt))
 }
 
 @(private = "file")
-dot_update_size :: proc(game: ^Game) {
-	big := game.dot.current_pos.x < f32(game.viewport.width / 2)
+dot_update_size :: proc(self: ^Dot, dt: f32) {
+	big := self.current_pos.x < f32(GAME_WIDTH / 2)
 	to_size := f32(big ? BIG_DOT_SIZE : NORMAL_DOT_SIZE)
 
-	game.dot.size = math.lerp(game.dot.size, to_size, DOT_GROW_SPEED * game.time.dt)
+	self.size = math.lerp(self.size, to_size, DOT_GROW_SPEED * dt)
 }
 
 @(private = "file")
-dot_move_location :: proc(dot: ^Dot, pos: rl.Vector2) {
+dot_move_location :: proc(self: ^Dot, pos: rl.Vector2) {
 	DURATION :: time.Millisecond * 500
 	EASE :: ease.Ease.Quadratic_Out
 	DELAY: f64 : 0
 
-	_ = ease.flux_to(&dot.tweens, &dot.current_pos.x, pos.x, EASE, DURATION, DELAY)
-	_ = ease.flux_to(&dot.tweens, &dot.current_pos.y, pos.y, EASE, DURATION, DELAY)
+	_ = ease.flux_to(&self.tweens, &self.current_pos.x, pos.x, EASE, DURATION, DELAY)
+	_ = ease.flux_to(&self.tweens, &self.current_pos.y, pos.y, EASE, DURATION, DELAY)
 }
 
-dot_cycle_color :: proc(dot: ^Dot) {
-	current := int(dot.color)
+dot_cycle_color :: proc(self: ^Dot) {
+	current := int(self.color)
 	next_color := current >= len(DotColor) - 1 ? 0 : current + 1
-	dot.color = DotColor(next_color)
+	self.color = DotColor(next_color)
 }
 
-dot_destroy :: proc(dot: ^Dot) {
-	ease.flux_destroy(dot.tweens)
+dot_destroy :: proc(self: ^Dot) {
+	ease.flux_destroy(self.tweens)
 }
 
-dot_clear_tweens :: proc(game: ^Game) {
-	ease.flux_clear(&game.dot.tweens)
+dot_clear_tweens :: proc(self: ^Dot) {
+	ease.flux_clear(&self.tweens)
 }

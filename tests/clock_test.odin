@@ -9,7 +9,7 @@ clock_init_test :: proc(t: ^testing.T) {
 	using main, testing
 
 	clock := clock_init()
-	expect_value(t, clock.elapsed, f64(0.0))
+	expect_value(t, clock.elapsed, 0.0)
 }
 
 @(test)

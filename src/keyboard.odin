@@ -36,18 +36,16 @@ keyboard_read_characters :: proc() -> string {
 	return strings.clone(string(typed_buf[:typed_len]), context.temp_allocator)
 }
 
-keyboard_update :: proc(game: ^Game) {
-	k := &game.keyboard
-
+keyboard_update :: proc(keyboard: ^Keyboard) {
 	ctrl_down := rl.IsKeyDown(.LEFT_CONTROL) || rl.IsKeyDown(.RIGHT_CONTROL)
-	k.escape_pressed = rl.IsKeyPressed(.ESCAPE)
-	k.enter_pressed = rl.IsKeyPressed(.ENTER)
-	k.slash_pressed = rl.IsKeyPressed(.SLASH)
-	k.backspace_pressed = !ctrl_down && (rl.IsKeyPressed(.BACKSPACE) || rl.IsKeyPressedRepeat(.BACKSPACE))
-	k.backspace_word_pressed = ctrl_down && (rl.IsKeyPressed(.W) || rl.IsKeyPressed(.BACKSPACE))
-	k.quit_pressed = rl.IsKeyPressed(.Q)
-	k.pause_pressed = rl.IsKeyPressed(.P)
-	k.load_pressed = rl.IsKeyPressed(.L)
-	k.save_pressed = rl.IsKeyPressed(.S)
-	k.typed = keyboard_read_characters()
+	keyboard.escape_pressed = rl.IsKeyPressed(.ESCAPE)
+	keyboard.enter_pressed = rl.IsKeyPressed(.ENTER)
+	keyboard.slash_pressed = rl.IsKeyPressed(.SLASH)
+	keyboard.backspace_pressed = !ctrl_down && (rl.IsKeyPressed(.BACKSPACE) || rl.IsKeyPressedRepeat(.BACKSPACE))
+	keyboard.backspace_word_pressed = ctrl_down && (rl.IsKeyPressed(.W) || rl.IsKeyPressed(.BACKSPACE))
+	keyboard.quit_pressed = rl.IsKeyPressed(.Q)
+	keyboard.pause_pressed = rl.IsKeyPressed(.P)
+	keyboard.load_pressed = rl.IsKeyPressed(.L)
+	keyboard.save_pressed = rl.IsKeyPressed(.S)
+	keyboard.typed = keyboard_read_characters()
 }

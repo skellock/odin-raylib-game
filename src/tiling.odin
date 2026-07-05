@@ -77,8 +77,8 @@ tiling_load_layer :: proc(instance: ldtk.Layer_Instance, level: ldtk.Level) -> T
 	return layer
 }
 
-tiling_load :: proc(tiling: ^Tiling) {
-	tiling.texture = rl.LoadTexture("tiles/Cavernas_by_Adam_Saltsman.png")
+tiling_load :: proc(self: ^Tiling) {
+	self.texture = rl.LoadTexture("tiles/Cavernas_by_Adam_Saltsman.png")
 
 	if project, ok := ldtk.load_from_file("tiles/world.ldtk", context.temp_allocator).?; ok {
 		// NOTE: assume 1 level for now
@@ -87,7 +87,7 @@ tiling_load :: proc(tiling: ^Tiling) {
 				switch layer.type {
 				case .IntGrid:
 					layer := tiling_load_layer(layer, level)
-					tiling.layers[idx] = layer
+					self.layers[idx] = layer
 
 				case .Entities:
 				case .AutoLayer:
@@ -100,20 +100,20 @@ tiling_load :: proc(tiling: ^Tiling) {
 	}
 }
 
-tiling_destroy :: proc(tiling: ^Tiling) {
-	rl.UnloadTexture(tiling.texture)
+tiling_destroy :: proc(self: ^Tiling) {
+	rl.UnloadTexture(self.texture)
 
-	for &layer in tiling.layers {
+	for &layer in self.layers {
 		delete(layer.tiles)
 		delete(layer.collision_tiles)
 	}
 }
 
-tiling_draw :: proc(game: ^Game) {
-	for layer in game.tiling.layers {
+tiling_draw :: proc(self: Tiling) {
+	for layer in self.layers {
 		screen_offset := rl.Vector2 {
-			f32(game.viewport.width - (TILE_SIZE * layer.cols)) / 2.0,
-			f32(game.viewport.height - (TILE_SIZE * layer.rows)) / 2.0,
+			f32(GAME_WIDTH - (TILE_SIZE * layer.cols)) / 2.0,
+			f32(GAME_HEIGHT - (TILE_SIZE * layer.rows)) / 2.0,
 		}
 		origin := rl.Vector2{f32(TILE_SIZE / 2), f32(TILE_SIZE / 2)}
 
@@ -138,7 +138,7 @@ tiling_draw :: proc(game: ^Game) {
 				height = f32(TILE_SIZE),
 			}
 
-			rl.DrawTexturePro(game.tiling.texture, src_rect, dst_rect, origin, 0, rl.WHITE)
+			rl.DrawTexturePro(self.texture, src_rect, dst_rect, origin, 0, rl.WHITE)
 		}
 	}
 }

@@ -14,20 +14,29 @@ music_init :: proc() -> Music {
 	return music
 }
 
-play_music :: proc(music: ^Music) {
+music_play :: proc(music: ^Music) {
 	if rl.IsMusicValid(music.cvb) {
 		rl.PlayMusicStream(music.cvb)
 	}
 }
 
-music_update :: proc(game: ^Game) {
-	if game.actions.toggle_pause {
-		if game.paused {
-			rl.PauseMusicStream(assets.music.cvb)
-		} else {
-			rl.ResumeMusicStream(assets.music.cvb)
-		}
+music_toggle :: proc(pause: bool) {
+	if pause {
+		music_pause()
+	} else {
+		music_resume()
 	}
+}
+
+music_pause :: proc() {
+	rl.PauseMusicStream(assets.music.cvb)
+}
+
+music_resume :: proc() {
+	rl.ResumeMusicStream(assets.music.cvb)
+}
+
+music_update :: proc() {
 	rl.UpdateMusicStream(assets.music.cvb)
 }
 

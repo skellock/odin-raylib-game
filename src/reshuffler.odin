@@ -22,7 +22,7 @@ reshuffler_update :: proc(game: ^Game) {
 	}
 }
 
-reshuffler_draw :: proc(game: ^Game) {
+reshuffler_draw :: proc(game: Game) {
 	cooldown := game.reshuffler.cooldown
 	if !cooldown.active { return }
 

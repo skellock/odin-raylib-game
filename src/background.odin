@@ -3,25 +3,25 @@ package main
 import "core:math"
 import rl "vendor:raylib"
 
-background_draw :: proc(game: ^Game) {
+background_draw :: proc() {
 	rl.ClearBackground(rl.WHITE)
 
-	x := game.viewport.width / 2
-	rl.DrawRectangle(0, 0, x, game.viewport.height, rl.BLUE)
-	rl.DrawRectangle(x, 0, x, game.viewport.height, rl.SKYBLUE)
-	rl.DrawRectangle(x - 1, 0, 2, game.viewport.height, rl.ColorAlpha(rl.WHITE, 0.5))
+	x := GAME_WIDTH / 2
+	rl.DrawRectangle(0, 0, x, GAME_HEIGHT, rl.BLUE)
+	rl.DrawRectangle(x, 0, x, GAME_HEIGHT, rl.SKYBLUE)
+	rl.DrawRectangle(x - 1, 0, 2, GAME_HEIGHT, rl.ColorAlpha(rl.WHITE, 0.5))
 
-	background_draw_checkboard(game)
+	background_draw_checkboard()
 }
 
 @(private = "file")
-background_draw_checkboard :: proc(game: ^Game) {
+background_draw_checkboard :: proc() {
 	SIZE :: 48
 	OFFSET :: SIZE / 2
 	color1 := rl.ColorAlpha(rl.WHITE, 0.1)
 	color2 := rl.ColorAlpha(rl.WHITE, 0.05)
-	rows := math.floor_div(game.viewport.height, SIZE) + 1
-	cols := math.floor_div(game.viewport.width, SIZE) + 1
+	rows := math.floor_div(GAME_HEIGHT, SIZE) + 1
+	cols := math.floor_div(GAME_WIDTH, SIZE) + 1
 	color: rl.Color
 
 	for r in 0 ..< rows {

@@ -4,8 +4,10 @@ import "core:log"
 import "core:mem"
 import rl "vendor:raylib"
 
-WINDOW_WIDTH :: 1920
-WINDOW_HEIGHT :: 1080
+GAME_WIDTH :: i32(1920)
+GAME_HEIGHT :: i32(1080)
+WINDOW_WIDTH :: GAME_WIDTH
+WINDOW_HEIGHT :: GAME_HEIGHT
 
 assets: Assets
 tracking_allocator: mem.Tracking_Allocator
@@ -62,7 +64,7 @@ main :: proc() {
 	scarfy_load(&game.scarfy)
 	tiling_load(&game.tiling)
 
-	play_music(&assets.music)
+	music_play(&assets.music)
 
 	// main game loop
 	for {
@@ -72,26 +74,36 @@ main :: proc() {
 		// -- updates ---------------------------------------------------------------
 		{
 			// update the basic state that other update_* functions rely on
-			time_update(&game)
-			screen_update(&game)
-			viewport_update(&game)
-			keyboard_update(&game)
-			mouse_update(&game)
+			time_update(&game.time)
+			keyboard_update(&game.keyboard)
+			mouse_update(&game.mouse, game.camera)
 
 			// determine what the user wants to do
 			actions_update(&game)
 
-			pause_update(&game)
-			console_update(&game)
-			music_update(&game)
+			// are we toggling pause this frame?
+			if game.actions.toggle_pause {
+				game.paused = !game.paused
+				music_toggle(game.paused)
+			}
 
-			if game.actions.load_game { save_game_read(&game) }
-			if game.actions.save_game { save_game_write(&game) }
+			music_update()
+			console_update(&game)
+
+			// load & save game stuff TODO: likely the wrong spot for this
+			if game.actions.load_game {
+				if save, ok := save_game_read(); ok {
+					save_game_restore(save, &game)
+				}
+			}
+			if game.actions.save_game {
+				save_game_write(save_game_init(game))
+			}
 
 			// skip game updates if we're paused
 			if !game.paused {
-				clock_update(&game)
-				scarfy_update(&game)
+				clock_update(&game.clock)
+				scarfy_update(&game.scarfy)
 				dot_update(&game)
 				card_view_update_all_positions(&game)
 				card_view_update_all_collisions(&game)
@@ -108,20 +120,20 @@ main :: proc() {
 			rl.BeginMode2D(game.camera)
 			defer rl.EndMode2D()
 
-			background_draw(&game)
-			tiling_draw(&game)
-			scarfy_draw(&game)
-			card_view_draw_all(&game)
-			poker_hand_draw_type_text(&game)
-			poker_odds_draw(&game)
-			dot_draw(&game)
-			reshuffler_draw(&game)
-			tooltip_draw(&game)
-			clock_draw(&game)
-			if game.paused { pause_draw(&game) }
-			debug_draw(&game)
-			cursor_draw(&game)
-			console_draw(&game)
+			background_draw()
+			tiling_draw(game.tiling)
+			scarfy_draw(game.scarfy, game.dot)
+			card_view_draw_all(game)
+			poker_hand_draw_type_text(game)
+			poker_odds_draw(game)
+			dot_draw(game.dot, !game.console.active)
+			reshuffler_draw(game)
+			tooltip_draw(game)
+			clock_draw(game.clock)
+			if game.paused { pause_draw() }
+			debug_draw()
+			cursor_draw(game)
+			console_draw(game.console)
 		}
 
 		// -- quitting the game ------------------------------------------------------

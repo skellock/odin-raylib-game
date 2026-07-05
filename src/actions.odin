@@ -1,7 +1,5 @@
 package main
 
-import rl "vendor:raylib"
-
 ConsoleAction :: struct {
 	show:           bool,
 	hide:           bool,
@@ -13,7 +11,7 @@ ConsoleAction :: struct {
 
 MoveDotAction :: struct {
 	active: bool,
-	pos:    rl.Vector2,
+	pos:    [2]f32,
 }
 
 Actions :: struct {
@@ -31,37 +29,37 @@ actions_update :: proc(game: ^Game) {
 	game.actions = Actions{}
 
 	// establish some shortcuts
-	kb := &game.keyboard
+	keyboard := &game.keyboard
 	mouse := &game.mouse
-	con := &game.console
-	acts := &game.actions
+	console := game.console
+	actions := &game.actions
 
-	if con.active {
+	if console.active {
 		// console is up
-		acts.console.hide = kb.escape_pressed || kb.enter_pressed
-		acts.console.clear = acts.console.hide
-		acts.console.backspace = kb.backspace_pressed
-		acts.console.backspace_word = kb.backspace_word_pressed
-		acts.console.typed = kb.typed
+		actions.console.hide = keyboard.escape_pressed || keyboard.enter_pressed
+		actions.console.clear = actions.console.hide
+		actions.console.backspace = keyboard.backspace_pressed
+		actions.console.backspace_word = keyboard.backspace_word_pressed
+		actions.console.typed = keyboard.typed
 
 		// map console input to a command
-		if kb.enter_pressed {
-			switch console_get_value(con) {
-			case "quit": acts.quit_game = true
-			case "pause": acts.toggle_pause = true
-			case "load": acts.load_game = true
-			case "save": acts.save_game = true
+		if keyboard.enter_pressed {
+			switch console_get_value(console) {
+			case "quit": actions.quit_game = true
+			case "pause": actions.toggle_pause = true
+			case "load": actions.load_game = true
+			case "save": actions.save_game = true
 			}
 		}
 	} else {
 		// regular game play
-		acts.console.show = kb.slash_pressed
-		acts.quit_game = kb.quit_pressed
-		acts.load_game = kb.load_pressed
-		acts.save_game = kb.save_pressed
-		acts.toggle_pause = kb.pause_pressed
+		actions.console.show = keyboard.slash_pressed
+		actions.quit_game = keyboard.quit_pressed
+		actions.load_game = keyboard.load_pressed
+		actions.save_game = keyboard.save_pressed
+		actions.toggle_pause = keyboard.pause_pressed
 
-		if mouse.right_pressed && !game.reshuffler.cooldown.active { acts.reshuffle = true }
-		if mouse.left_pressed { acts.move_dot = {true, mouse.world_pos} }
+		if mouse.right_pressed && !game.reshuffler.cooldown.active { actions.reshuffle = true }
+		if mouse.left_pressed { actions.move_dot = {true, mouse.world_pos} }
 	}
 }

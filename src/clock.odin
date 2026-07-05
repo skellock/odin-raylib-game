@@ -4,20 +4,19 @@ import "core:fmt"
 import rl "vendor:raylib"
 
 Clock :: struct {
-	elapsed: f64, // seconds accumulated since the clock was started
+	elapsed: f32, // seconds accumulated since the clock was started
 }
 
 clock_init :: proc() -> Clock {
 	return Clock{}
 }
 
-// Accumulates delta time every frame regardless of pause state.
-clock_update :: proc(game: ^Game) {
-	game.clock.elapsed += f64(game.time.dt)
+clock_update :: proc(clock: ^Clock) {
+	clock.elapsed += rl.GetFrameTime()
 }
 
 // Formats the elapsed time.
-clock_format_elapsed :: proc(elapsed: f64, buf: []byte) -> string {
+clock_format_elapsed :: proc(elapsed: f32, buf: []byte) -> string {
 	total_seconds := int(elapsed)
 	hours := total_seconds / 3600
 	minutes := (total_seconds % 3600) / 60
@@ -32,7 +31,7 @@ clock_format_elapsed :: proc(elapsed: f64, buf: []byte) -> string {
 	return fmt.bprintf(buf, "%d.%d", seconds, tenths)
 }
 
-clock_draw :: proc(game: ^Game) {
+clock_draw :: proc(self: Clock) {
 	FONT_SIZE :: f32(24)
 	FONT_SPACING :: f32(2)
 	EDGE_OFFSET :: f32(8) // gap between screen edge and the box
@@ -45,7 +44,7 @@ clock_draw :: proc(game: ^Game) {
 
 	// create the text
 	buf: [32]byte
-	text := fmt.ctprintf("%s", clock_format_elapsed(game.clock.elapsed, buf[:]))
+	text := fmt.ctprintf("%s", clock_format_elapsed(self.elapsed, buf[:]))
 
 	// measure it
 	font := assets.fonts.body
@@ -57,7 +56,7 @@ clock_draw :: proc(game: ^Game) {
 	box_w := tw + H_PADDING * 2
 	box_h := th + V_PADDING * 2
 	box_x := EDGE_OFFSET
-	box_y := f32(game.viewport.height) - box_h - EDGE_OFFSET
+	box_y := f32(GAME_HEIGHT) - box_h - EDGE_OFFSET
 	box_rect := rl.Rectangle{box_x, box_y, box_w, box_h}
 	rl.DrawRectangleRounded(box_rect, BOX_ROUNDNESS, BOX_SEGMENTS, BG_COLOR)
 

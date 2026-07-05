@@ -34,32 +34,21 @@ scarfy_destroy :: proc(scarfy: ^Scarfy) {
 	}
 }
 
-scarfy_update :: proc(game: ^Game) {
-	vw := f32(game.viewport.width)
-	vh := f32(game.viewport.height)
-	fw := game.scarfy.animator.frame_rec.width
-	fh := game.scarfy.animator.frame_rec.height
-	x := (vw - fw) / 2
-	y := (vh - fh) / 2
-	game.scarfy.pos = {x, y}
+scarfy_update :: proc(self: ^Scarfy) {
+	fw := self.animator.frame_rec.width
+	fh := self.animator.frame_rec.height
+	x := (f32(GAME_WIDTH) - fw) / 2
+	y := (f32(GAME_HEIGHT) - fh) / 2
+	self.pos = {x, y}
 
-	anim.play(&game.scarfy.animator)
+	anim.play(&self.animator)
 }
 
-scarfy_draw :: proc(game: ^Game) {
-	animator := &game.scarfy.animator
-	scarfy_rect := scarfy_get_rect(game)
-	collided := rl.CheckCollisionCircleRec(game.dot.current_pos, game.dot.size, scarfy_rect)
+scarfy_draw :: proc(self: Scarfy, dot: Dot) {
+	animator := self.animator
+	rect := rl.Rectangle{self.pos.x, self.pos.y, self.animator.frame_width, self.animator.frame_height}
+	collided := rl.CheckCollisionCircleRec(dot.current_pos, dot.size, rect)
 	color := collided ? rl.ColorAlpha(rl.WHITE, 0.5) : rl.WHITE
 
-	rl.DrawTextureRec(animator.sprite, animator.frame_rec, game.scarfy.pos, color)
-}
-
-scarfy_get_rect :: proc(game: ^Game) -> rl.Rectangle {
-	return rl.Rectangle {
-		game.scarfy.pos.x,
-		game.scarfy.pos.y,
-		game.scarfy.animator.frame_width,
-		game.scarfy.animator.frame_height,
-	}
+	rl.DrawTextureRec(animator.sprite, animator.frame_rec, self.pos, color)
 }

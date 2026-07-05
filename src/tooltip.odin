@@ -18,7 +18,7 @@ tooltip_update :: proc(game: ^Game) {
 	tooltip_update_alpha(game)
 }
 
-tooltip_draw :: proc(game: ^Game) {
+tooltip_draw :: proc(game: Game) {
 	tooltip := game.tooltip
 	if tooltip.alpha <= 0 { return }
 

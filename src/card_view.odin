@@ -16,12 +16,12 @@ card_view_init :: proc(card: Card, texture: rl.Texture2D) -> CardView {
 	return CardView{card = card, texture = texture}
 }
 
-card_view_draw_all :: proc(game: ^Game) {
+card_view_draw_all :: proc(game: Game) {
 	SHADOW_OFFSET :: rl.Vector2{1, 1}
 
 	for cv, idx in game.card_views {
 		rl.DrawTextureEx(cv.texture, cv.pos + SHADOW_OFFSET, 0, CARD_SCALE, rl.ColorAlpha(rl.BLACK, 0.1))
-		color := cv.collided ? dot_get_drawing_color(game) : rl.WHITE
+		color := cv.collided ? dot_get_drawing_color(game.dot) : rl.WHITE
 		rl.DrawTextureEx(cv.texture, cv.pos, 0, CARD_SCALE, color)
 
 		if idx == game.hovered_card {

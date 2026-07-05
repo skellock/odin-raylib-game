@@ -26,6 +26,7 @@ console_destroy :: proc(console: ^Console) {
 	strings.builder_destroy(&console.builder)
 }
 
+// TODO: split this into 2 functions - one for capturing the string value and the other for everything else
 console_update :: proc(game: ^Game) {
 	c := &game.console
 	ca := &game.actions.console
@@ -64,8 +65,8 @@ console_update :: proc(game: ^Game) {
 	// clicking outside the console hides it
 	if game.mouse.left_pressed {
 		box := rl.Rectangle {
-			f32(game.viewport.width / 2 - CONSOLE_WIDTH / 2),
-			f32(game.viewport.height - CONSOLE_HEIGHT - 10),
+			f32(GAME_WIDTH / 2 - CONSOLE_WIDTH / 2),
+			f32(GAME_HEIGHT - CONSOLE_HEIGHT - 10),
 			CONSOLE_WIDTH,
 			CONSOLE_HEIGHT,
 		}
@@ -82,7 +83,7 @@ console_update :: proc(game: ^Game) {
 	}
 }
 
-console_get_value :: proc(c: ^Console) -> string {
+console_get_value :: proc(c: Console) -> string {
 	return strings.to_string(c.builder)
 }
 
@@ -90,7 +91,7 @@ console_clear :: proc(c: ^Console) {
 	strings.builder_reset(&c.builder)
 }
 
-console_draw :: proc(game: ^Game) {
+console_draw :: proc(console: Console) {
 	FONT_SIZE :: f32(24)
 	FONT_SPACING :: f32(2)
 	H_PADDING :: i32(12)
@@ -100,11 +101,10 @@ console_draw :: proc(game: ^Game) {
 	INDICATOR :: ">"
 	CARET_BLINK_RATE :: 2
 
-	c := &game.console
-	if c.animation <= 0 { return }
+	if console.animation <= 0 { return }
 
 	font := assets.fonts.body
-	text := fmt.ctprintf("%s", console_get_value(c))
+	text := fmt.ctprintf("%s", console_get_value(console))
 
 	text_size := rl.MeasureTextEx(font, text, FONT_SIZE, FONT_SPACING)
 	min_height := rl.MeasureTextEx(font, "A", FONT_SIZE, FONT_SPACING).y
@@ -112,10 +112,10 @@ console_draw :: proc(game: ^Game) {
 
 	box_w := i32(CONSOLE_WIDTH)
 	box_h := th + V_PADDING * 2
-	box_x := game.viewport.width / 2 - box_w / 2
-	rest_y := game.viewport.height - box_h - 10
-	offscreen_y := game.viewport.height
-	box_y := rest_y + i32(f32(offscreen_y - rest_y) * (1.0 - c.animation))
+	box_x := GAME_WIDTH / 2 - box_w / 2
+	rest_y := GAME_HEIGHT - box_h - 10
+	offscreen_y := GAME_HEIGHT
+	box_y := rest_y + i32(f32(offscreen_y - rest_y) * (1.0 - console.animation))
 
 	// center text vertically inside the box
 	tx := box_x + H_PADDING
@@ -143,7 +143,7 @@ console_draw :: proc(game: ^Game) {
 	rl.DrawTextEx(font, text, {text_draw_x, f32(ty)}, FONT_SIZE, FONT_SPACING, TEXT_COLOR)
 
 	// blinking caret if the console is fully visible
-	if int(game.time.elapsed * CARET_BLINK_RATE) % 2 == 0 && c.animation == 1 {
+	if int(rl.GetTime() * CARET_BLINK_RATE) % 2 == 0 && console.animation == 1 {
 		caret_x := text_draw_x + text_size.x + 2
 		caret_h := th
 		caret_y := f32(ty)

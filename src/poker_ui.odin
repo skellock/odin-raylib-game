@@ -2,7 +2,7 @@ package main
 
 import rl "vendor:raylib"
 
-poker_hand_draw_type_text :: proc(game: ^Game) {
+poker_hand_draw_type_text :: proc(game: Game) {
 	text := game.poker_hand.hand_type_text
 
 	FONT_SIZE :: f32(50)
