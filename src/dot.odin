@@ -15,7 +15,6 @@ DotColor :: enum {
 	Green,
 }
 
-@(private = "file")
 dot_color_map := [DotColor]rl.Color {
 	.Yellow = rl.YELLOW,
 	.Red    = rl.RED,
@@ -34,7 +33,8 @@ dot_init :: proc() -> Dot {
 	return Dot{color = .Yellow, size = NORMAL_DOT_SIZE, tweens = ease.flux_init(f32)}
 }
 
-dot_update :: proc(game: ^Game, dt: f32 = 0.0) {
+dot_update :: proc(game: ^Game) {
+	dt := rl.GetFrameTime()
 	if game.actions.move_dot.active {
 		dot_move_location(&game.dot, game.actions.move_dot.pos)
 	}
@@ -60,12 +60,10 @@ dot_draw :: proc(self: Dot, include_line: bool) {
 	rl.DrawCircleV(self.current_pos, self.size, dot_get_drawing_color(self))
 }
 
-@(private = "file")
 dot_update_tweens :: proc(self: ^Dot, dt: f32) {
 	ease.flux_update(&self.tweens, f64(dt))
 }
 
-@(private = "file")
 dot_update_size :: proc(self: ^Dot, dt: f32) {
 	big := self.current_pos.x < f32(GAME_WIDTH / 2)
 	to_size := f32(big ? BIG_DOT_SIZE : NORMAL_DOT_SIZE)
@@ -73,7 +71,6 @@ dot_update_size :: proc(self: ^Dot, dt: f32) {
 	self.size = math.lerp(self.size, to_size, DOT_GROW_SPEED * dt)
 }
 
-@(private = "file")
 dot_move_location :: proc(self: ^Dot, pos: rl.Vector2) {
 	DURATION :: time.Millisecond * 500
 	EASE :: ease.Ease.Quadratic_Out

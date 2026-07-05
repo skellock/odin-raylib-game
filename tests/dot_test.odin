@@ -56,9 +56,9 @@ dot_update_move_dot_sets_tween_test :: proc(t: ^testing.T) {
 	expect_value(t, game.dot.current_pos.x, f32(0))
 	expect_value(t, game.dot.current_pos.y, f32(0))
 
-	// simulate time passing to let tweens update
 	game.actions.move_dot = {}
-	dot_update(&game, 1.0)
+	dot_update(&game)
+	dot_update_tweens(&game.dot, 1.0) // simulate time passing to let tweens update
 
 	// dot should have moved toward the target
 	expect(t, game.dot.current_pos.x > 0, "dot.current_pos.x should have moved toward target")

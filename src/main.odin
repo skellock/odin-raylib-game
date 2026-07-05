@@ -87,18 +87,18 @@ main :: proc() {
 			}
 
 			music_update()
-			console_update(&game, rl.GetFrameTime())
+			console_update(&game)
 			save_game_update(&game)
 
 			// skip game updates if we're paused
 			if !game.paused {
 				clock_update(&game.clock)
 				scarfy_update(&game.scarfy)
-				dot_update(&game, rl.GetFrameTime())
+				dot_update(&game)
 				card_view_update_all_positions(&game)
 				card_view_update_all_collisions(&game)
 				tooltip_update(&game)
-				reshuffler_update(&game, rl.GetFrameTime())
+				reshuffler_update(&game)
 			}
 		}
 

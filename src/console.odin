@@ -27,7 +27,7 @@ console_destroy :: proc(console: ^Console) {
 }
 
 // TODO: split this into 2 functions - one for capturing the string value and the other for everything else
-console_update :: proc(game: ^Game, dt: f32 = 0.0) {
+console_update :: proc(game: ^Game) {
 	c := &game.console
 	ca := &game.actions.console
 
@@ -37,7 +37,7 @@ console_update :: proc(game: ^Game, dt: f32 = 0.0) {
 
 	// animate
 	target: f32 = 1.0 if c.active else 0.0
-	c.animation = c.animation + (target - c.animation) * min(CONSOLE_ANIM_SPEED * dt, 1.0)
+	c.animation = c.animation + (target - c.animation) * min(CONSOLE_ANIM_SPEED * rl.GetFrameTime(), 1.0)
 	if c.animation < 0.01 { c.animation = 0 }
 	if c.animation > 0.99 { c.animation = 1 }
 

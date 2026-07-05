@@ -12,8 +12,8 @@ reshuffler_init :: proc() -> Reshuffler {
 	return Reshuffler{cooldown = timer_init(RESHUFFLE_COOLDOWN, one_shot = true)}
 }
 
-reshuffler_update :: proc(game: ^Game, dt: f32) {
-	timer_update(&game.reshuffler.cooldown, dt)
+reshuffler_update :: proc(game: ^Game) {
+	timer_update(&game.reshuffler.cooldown, rl.GetFrameTime())
 
 	if game.actions.reshuffle {
 		deck_shuffle(&game.deck)
