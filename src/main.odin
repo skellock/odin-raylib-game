@@ -88,16 +88,7 @@ main :: proc() {
 
 			music_update()
 			console_update(&game, rl.GetFrameTime())
-
-			// load & save game stuff TODO: likely the wrong spot for this
-			if game.actions.load_game {
-				if save, ok := save_game_read(); ok {
-					save_game_restore(save, &game)
-				}
-			}
-			if game.actions.save_game {
-				save_game_write(save_game_init(game))
-			}
+			save_game_update(&game)
 
 			// skip game updates if we're paused
 			if !game.paused {

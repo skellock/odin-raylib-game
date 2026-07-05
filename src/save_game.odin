@@ -13,7 +13,7 @@ SaveGame :: struct {
 	dot_color: DotColor,
 }
 
-save_game_init :: proc(game: Game) -> SaveGame {
+save_game_init :: proc(game: ^Game) -> SaveGame {
 	return SaveGame {
 		cards = game.deck.cards,
 		dot_x = game.dot.current_pos[0],
@@ -67,4 +67,19 @@ save_game_restore :: proc(self: SaveGame, game: ^Game) {
 	// update dependent game state
 	dot_clear_tweens(&game.dot)
 	game_deal_to_hand(game)
+}
+
+// Checks to see if the user wants to load & save this frame.
+save_game_update :: proc(game: ^Game) {
+	// should we load the game?
+	if game.actions.load_game {
+		if save, ok := save_game_read(); ok {
+			save_game_restore(save, game)
+		}
+	}
+
+	// should we save the game?
+	if game.actions.save_game {
+		save_game_write(save_game_init(game))
+	}
 }
