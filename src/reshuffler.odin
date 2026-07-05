@@ -22,7 +22,7 @@ reshuffler_update :: proc(game: ^Game) {
 	}
 }
 
-reshuffler_draw :: proc(game: Game) {
+reshuffler_draw :: proc(game: Game, mouse: Mouse) {
 	cooldown := game.reshuffler.cooldown
 	if !cooldown.active { return }
 
@@ -32,8 +32,8 @@ reshuffler_draw :: proc(game: Game) {
 	BG_COLOR := rl.ColorAlpha(rl.BLACK, 0.3)
 	FG_COLOR := rl.WHITE
 
-	cx := game.mouse.world_pos.x
-	cy := game.mouse.world_pos.y + OFFSET_Y
+	cx := mouse.world_pos.x
+	cy := mouse.world_pos.y + OFFSET_Y
 
 	// elapsed fraction (0.0 = start, 1.0 = done)
 	fraction := cooldown.elapsed / cooldown.duration

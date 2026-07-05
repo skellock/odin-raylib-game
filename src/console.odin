@@ -27,7 +27,7 @@ console_destroy :: proc(console: ^Console) {
 }
 
 // TODO: split this into 2 functions - one for capturing the string value and the other for everything else
-console_update :: proc(game: ^Game) {
+console_update :: proc(game: ^Game, mouse: Mouse) {
 	c := &game.console
 	ca := &game.actions.console
 
@@ -63,14 +63,14 @@ console_update :: proc(game: ^Game) {
 	if !c.active { return }
 
 	// clicking outside the console hides it
-	if game.mouse.left_pressed {
+	if mouse.left_pressed {
 		box := rl.Rectangle {
 			f32(GAME_WIDTH / 2 - CONSOLE_WIDTH / 2),
 			f32(GAME_HEIGHT - CONSOLE_HEIGHT - 10),
 			CONSOLE_WIDTH,
 			CONSOLE_HEIGHT,
 		}
-		if !rl.CheckCollisionPointRec(game.mouse.screen_pos, box) {
+		if !rl.CheckCollisionPointRec(mouse.screen_pos, box) {
 			c.active = false
 			console_clear(c)
 		}

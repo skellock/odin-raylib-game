@@ -25,36 +25,36 @@ Actions :: struct {
 }
 
 // Process the actions related to the game.
-actions_gameplay_update :: proc(game: ^Game) {
+actions_gameplay_update :: proc(game: ^Game, keyboard: Keyboard, mouse: Mouse) {
 	actions := Actions{}
-	actions.console.show = game.keyboard.slash_pressed
-	actions.quit_game = game.keyboard.quit_pressed
-	actions.load_game = game.keyboard.load_pressed
-	actions.save_game = game.keyboard.save_pressed
-	actions.toggle_pause = game.keyboard.pause_pressed
+	actions.console.show = keyboard.slash_pressed
+	actions.quit_game = keyboard.quit_pressed
+	actions.load_game = keyboard.load_pressed
+	actions.save_game = keyboard.save_pressed
+	actions.toggle_pause = keyboard.pause_pressed
 
-	if game.mouse.right_pressed && !game.reshuffler.cooldown.active {
+	if mouse.right_pressed && !game.reshuffler.cooldown.active {
 		actions.reshuffle = true
 	}
-	if game.mouse.left_pressed {
-		actions.move_dot = {true, game.mouse.world_pos}
+	if mouse.left_pressed {
+		actions.move_dot = {true, mouse.world_pos}
 	}
 
 	game.actions = actions
 }
 
 // Process the actions when the console is up.
-actions_console_update :: proc(game: ^Game) {
+actions_console_update :: proc(game: ^Game, keyboard: Keyboard, mouse: Mouse) {
 	actions := Actions{}
 
-	actions.console.hide = game.keyboard.escape_pressed || game.keyboard.enter_pressed
+	actions.console.hide = keyboard.escape_pressed || keyboard.enter_pressed
 	actions.console.clear = actions.console.hide
-	actions.console.backspace = game.keyboard.backspace_pressed
-	actions.console.backspace_word = game.keyboard.backspace_word_pressed
-	actions.console.typed = game.keyboard.typed
+	actions.console.backspace = keyboard.backspace_pressed
+	actions.console.backspace_word = keyboard.backspace_word_pressed
+	actions.console.typed = keyboard.typed
 
 	// map console input to a command
-	if game.keyboard.enter_pressed {
+	if keyboard.enter_pressed {
 		switch console_get_value(game.console) {
 		case "quit": actions.quit_game = true
 		case "pause": actions.toggle_pause = true
@@ -66,10 +66,10 @@ actions_console_update :: proc(game: ^Game) {
 	game.actions = actions
 }
 
-actions_update :: proc(game: ^Game) {
+actions_update :: proc(game: ^Game, keyboard: Keyboard, mouse: Mouse) {
 	if game.console.active {
-		actions_console_update(game)
+		actions_console_update(game, keyboard, mouse)
 	} else {
-		actions_gameplay_update(game)
+		actions_gameplay_update(game, keyboard, mouse)
 	}
 }

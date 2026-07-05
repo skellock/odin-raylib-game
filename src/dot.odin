@@ -33,7 +33,7 @@ dot_init :: proc() -> Dot {
 	return Dot{color = .Yellow, size = NORMAL_DOT_SIZE, tweens = ease.flux_init(f32)}
 }
 
-dot_update :: proc(game: ^Game) {
+dot_update :: proc(game: ^Game, mouse: Mouse) {
 	dt := rl.GetFrameTime()
 	if game.actions.move_dot.active {
 		dot_move_location(&game.dot, game.actions.move_dot.pos)
@@ -44,7 +44,7 @@ dot_update :: proc(game: ^Game) {
 		sounds_play(assets.sounds.blip)
 	}
 
-	game.dot.targeting_pos = game.mouse.world_pos
+	game.dot.targeting_pos = mouse.world_pos
 	dot_update_size(&game.dot, dt)
 	dot_update_tweens(&game.dot, dt)
 }

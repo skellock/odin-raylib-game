@@ -66,6 +66,9 @@ main :: proc() {
 
 	music_play(&assets.music)
 
+	keyboard := Keyboard{}
+	mouse := Mouse{}
+
 	// main game loop
 	for {
 		// free the temp allocator each loop
@@ -73,12 +76,12 @@ main :: proc() {
 
 		// -- updates ---------------------------------------------------------------
 		{
-			// update the basic state that other update_* functions rely on
-			keyboard_update(&game.keyboard)
-			mouse_update(&game.mouse, game.camera)
+			// process input
+			keyboard_update(&keyboard)
+			mouse_update(&mouse, game.camera)
 
 			// determine what the user wants to do
-			actions_update(&game)
+			actions_update(&game, keyboard, mouse)
 
 			// are we toggling pause this frame?
 			if game.actions.toggle_pause {
@@ -87,17 +90,17 @@ main :: proc() {
 			}
 
 			music_update()
-			console_update(&game)
+			console_update(&game, mouse)
 			save_game_update(&game)
 
 			// skip game updates if we're paused
 			if !game.paused {
 				clock_update(&game.clock)
 				scarfy_update(&game.scarfy)
-				dot_update(&game)
+				dot_update(&game, mouse)
 				card_view_update_all_positions(&game)
 				card_view_update_all_collisions(&game)
-				tooltip_update(&game)
+				tooltip_update(&game, mouse)
 				reshuffler_update(&game)
 			}
 		}
@@ -117,7 +120,7 @@ main :: proc() {
 			poker_hand_draw_type_text(game)
 			poker_odds_draw(game)
 			dot_draw(game.dot, !game.console.active)
-			reshuffler_draw(game)
+			reshuffler_draw(game, mouse)
 			tooltip_draw(game)
 			clock_draw(game.clock)
 			if game.paused { pause_draw() }

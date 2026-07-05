@@ -11,9 +11,9 @@ Tooltip :: struct {
 	delay:    f32,
 }
 
-tooltip_update :: proc(game: ^Game) {
-	tooltip_update_all_hovered_cards(game)
-	tooltip_update_position(game)
+tooltip_update :: proc(game: ^Game, mouse: Mouse) {
+	tooltip_update_all_hovered_cards(game, mouse)
+	tooltip_update_position(game, mouse)
 	tooltip_update_text(game)
 	tooltip_update_alpha(game)
 }
@@ -63,8 +63,8 @@ tooltip_update_alpha :: proc(game: ^Game, dt: f32 = 0.0) {
 }
 
 @(private = "file")
-tooltip_update_all_hovered_cards :: proc(game: ^Game) {
-	mouse := game.mouse.world_pos
+tooltip_update_all_hovered_cards :: proc(game: ^Game, mouse: Mouse) {
+	mouse := mouse.world_pos
 	game.hovered_card = -1
 
 	for i := len(game.card_views) - 1; i >= 0; i -= 1 {
@@ -89,9 +89,9 @@ tooltip_update_text :: proc(game: ^Game) {
 }
 
 @(private = "file")
-tooltip_update_position :: proc(game: ^Game) {
+tooltip_update_position :: proc(game: ^Game, mouse: Mouse) {
 	OFFSET :: rl.Vector2{10, 10}
-	game.tooltip.pos = game.mouse.world_pos + OFFSET
+	game.tooltip.pos = mouse.world_pos + OFFSET
 }
 
 @(private = "file")
