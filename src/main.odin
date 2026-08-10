@@ -4,10 +4,10 @@ import "core:log"
 import "core:mem"
 import rl "vendor:raylib"
 
-GAME_WIDTH :: i32(1920)
-GAME_HEIGHT :: i32(1080)
-WINDOW_WIDTH :: GAME_WIDTH
-WINDOW_HEIGHT :: GAME_HEIGHT
+GAME_WIDTH :: i32(1920 * 2)
+GAME_HEIGHT :: i32(1080 * 2)
+WINDOW_WIDTH :: i32(1920)
+WINDOW_HEIGHT :: i32(1080)
 
 assets: Assets
 tracking_allocator: mem.Tracking_Allocator
