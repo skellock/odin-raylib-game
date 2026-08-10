@@ -56,7 +56,7 @@ clock_draw :: proc(self: Clock) {
 	box_w := tw + H_PADDING * 2
 	box_h := th + V_PADDING * 2
 	box_x := EDGE_OFFSET
-	box_y := f32(GAME_HEIGHT) - box_h - EDGE_OFFSET
+	box_y := f32(rl.GetRenderHeight()) - box_h - EDGE_OFFSET
 	box_rect := rl.Rectangle{box_x, box_y, box_w, box_h}
 	rl.DrawRectangleRounded(box_rect, BOX_ROUNDNESS, BOX_SEGMENTS, BG_COLOR)
 

@@ -110,11 +110,11 @@ tiling_destroy :: proc(self: ^Tiling) {
 }
 
 tiling_draw :: proc(self: Tiling) {
+	gw := rl.GetRenderWidth()
+	gh := rl.GetRenderHeight()
+
 	for layer in self.layers {
-		screen_offset := rl.Vector2 {
-			f32(GAME_WIDTH - (TILE_SIZE * layer.cols)) / 2.0,
-			f32(GAME_HEIGHT - (TILE_SIZE * layer.rows)) / 2.0,
-		}
+		screen_offset := rl.Vector2{f32(gw - (TILE_SIZE * layer.cols)) / 2.0, f32(gh - (TILE_SIZE * layer.rows)) / 2.0}
 		origin := rl.Vector2{f32(TILE_SIZE / 2), f32(TILE_SIZE / 2)}
 
 		for tile in layer.tiles {

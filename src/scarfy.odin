@@ -37,8 +37,8 @@ scarfy_destroy :: proc(scarfy: ^Scarfy) {
 scarfy_update :: proc(self: ^Scarfy) {
 	fw := self.animator.frame_rec.width
 	fh := self.animator.frame_rec.height
-	x := (f32(GAME_WIDTH) - fw) / 2
-	y := (f32(GAME_HEIGHT) - fh) / 2
+	x := (f32(rl.GetRenderWidth()) - fw) / 2
+	y := (f32(rl.GetRenderHeight()) - fh) / 2
 	self.pos = {x, y}
 
 	anim.play(&self.animator)

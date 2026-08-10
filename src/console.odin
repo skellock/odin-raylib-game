@@ -28,6 +28,8 @@ console_destroy :: proc(console: ^Console) {
 
 // TODO: split this into 2 functions - one for capturing the string value and the other for everything else
 console_update :: proc(self: ^Console, actions: Actions, mouse: Mouse) {
+	gw := rl.GetRenderWidth()
+	gh := rl.GetRenderHeight()
 	c := self
 	ca := actions.console
 
@@ -65,8 +67,8 @@ console_update :: proc(self: ^Console, actions: Actions, mouse: Mouse) {
 	// clicking outside the console hides it
 	if mouse.left_pressed {
 		box := rl.Rectangle {
-			f32(GAME_WIDTH / 2 - CONSOLE_WIDTH / 2),
-			f32(GAME_HEIGHT - CONSOLE_HEIGHT - 10),
+			f32(gw / 2 - CONSOLE_WIDTH / 2),
+			f32(gh - CONSOLE_HEIGHT - 10),
 			CONSOLE_WIDTH,
 			CONSOLE_HEIGHT,
 		}
@@ -101,6 +103,9 @@ console_draw :: proc(console: Console) {
 	INDICATOR :: ">"
 	CARET_BLINK_RATE :: 2
 
+	gw := rl.GetRenderWidth()
+	gh := rl.GetRenderHeight()
+
 	if console.animation <= 0 { return }
 
 	font := assets.fonts.body
@@ -112,9 +117,9 @@ console_draw :: proc(console: Console) {
 
 	box_w := i32(CONSOLE_WIDTH)
 	box_h := th + V_PADDING * 2
-	box_x := GAME_WIDTH / 2 - box_w / 2
-	rest_y := GAME_HEIGHT - box_h - 10
-	offscreen_y := GAME_HEIGHT
+	box_x := gw / 2 - box_w / 2
+	rest_y := gh - box_h - 10
+	offscreen_y := gh
 	box_y := rest_y + i32(f32(offscreen_y - rest_y) * (1.0 - console.animation))
 
 	// center text vertically inside the box

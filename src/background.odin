@@ -6,22 +6,26 @@ import rl "vendor:raylib"
 background_draw :: proc() {
 	rl.ClearBackground(rl.WHITE)
 
-	x := GAME_WIDTH / 2
-	rl.DrawRectangle(0, 0, x, GAME_HEIGHT, rl.BLUE)
-	rl.DrawRectangle(x, 0, x, GAME_HEIGHT, rl.SKYBLUE)
-	rl.DrawRectangle(x - 1, 0, 2, GAME_HEIGHT, rl.ColorAlpha(rl.WHITE, 0.5))
+	gw := rl.GetRenderWidth()
+	gh := rl.GetRenderHeight()
+	x := gw / 2
+	rl.DrawRectangle(0, 0, x, gh, rl.BLUE)
+	rl.DrawRectangle(x, 0, x, gh, rl.SKYBLUE)
+	rl.DrawRectangle(x - 1, 0, 2, gh, rl.ColorAlpha(rl.WHITE, 0.5))
 
 	background_draw_checkboard()
 }
 
 @(private = "file")
 background_draw_checkboard :: proc() {
-	SIZE :: 48
+	gw := rl.GetRenderWidth()
+	gh := rl.GetRenderHeight()
+	SIZE :: 96
 	OFFSET :: SIZE / 2
 	color1 := rl.ColorAlpha(rl.WHITE, 0.1)
 	color2 := rl.ColorAlpha(rl.WHITE, 0.05)
-	rows := math.floor_div(GAME_HEIGHT, SIZE) + 1
-	cols := math.floor_div(GAME_WIDTH, SIZE) + 1
+	rows := math.floor_div(gh, SIZE) + 1
+	cols := math.floor_div(gw, SIZE) + 1
 	color: rl.Color
 
 	for r in 0 ..< rows {

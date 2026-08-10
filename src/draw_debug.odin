@@ -5,8 +5,8 @@ import rl "vendor:raylib"
 
 // Draws an FPS thingy.
 debug_draw :: proc() {
-	FONT_SIZE :: 16
-	FONT_SPACING :: 2
+	FONT_SIZE := 16 * rl.GetWindowScaleDPI().y
+	FONT_SPACING := 2 * rl.GetWindowScaleDPI().y
 	H_MARGIN :: f32(4)
 	V_MARGIN :: f32(4)
 	BG_COLOR: rl.Color : {0, 0, 0, 128}
@@ -21,7 +21,7 @@ debug_draw :: proc() {
 	text_size := rl.MeasureTextEx(font, text, FONT_SIZE, FONT_SPACING)
 	tw := text_size.x
 	th := text_size.y
-	tx := f32(GAME_WIDTH) - H_MARGIN * 2 - tw
+	tx := f32(rl.GetRenderWidth()) - H_MARGIN * 2 - tw
 	ty := V_MARGIN
 	box_rect := rl.Rectangle{tx - H_MARGIN, ty - V_MARGIN, tw + H_MARGIN * 4, th + V_MARGIN * 2}
 

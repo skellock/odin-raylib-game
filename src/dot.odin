@@ -6,8 +6,8 @@ import "core:time"
 import rl "vendor:raylib"
 
 DOT_GROW_SPEED :: 10.0
-NORMAL_DOT_SIZE :: 4.0
-BIG_DOT_SIZE :: 10.0
+NORMAL_DOT_SIZE :: 8.0
+BIG_DOT_SIZE :: 20.0
 
 DotColor :: enum {
 	Yellow,
@@ -65,7 +65,7 @@ dot_update_tweens :: proc(self: ^Dot, dt: f32) {
 }
 
 dot_update_size :: proc(self: ^Dot, dt: f32) {
-	big := self.current_pos.x < f32(GAME_WIDTH / 2)
+	big := self.current_pos.x < f32(rl.GetRenderWidth() / 2)
 	to_size := f32(big ? BIG_DOT_SIZE : NORMAL_DOT_SIZE)
 
 	self.size = math.lerp(self.size, to_size, DOT_GROW_SPEED * dt)

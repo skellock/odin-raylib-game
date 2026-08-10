@@ -4,11 +4,6 @@ import "core:log"
 import "core:mem"
 import rl "vendor:raylib"
 
-GAME_WIDTH :: i32(1920 * 2)
-GAME_HEIGHT :: i32(1080 * 2)
-WINDOW_WIDTH :: i32(1920)
-WINDOW_HEIGHT :: i32(1080)
-
 assets: Assets
 tracking_allocator: mem.Tracking_Allocator
 
@@ -36,6 +31,7 @@ main :: proc() {
 
 	// setup raylib
 	rl.SetTraceLogLevel(.NONE)
+	// rl.SetConfigFlags({.MSAA_4X_HINT})
 	rl.SetConfigFlags({.MSAA_4X_HINT, .WINDOW_HIGHDPI})
 	rl.SetTargetFPS(144)
 
@@ -45,6 +41,8 @@ main :: proc() {
 	defer rl.CloseAudioDevice()
 
 	// setup window
+	WINDOW_WIDTH :: i32(1920)
+	WINDOW_HEIGHT :: i32(1080)
 	rl.InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Game")
 	defer rl.CloseWindow()
 
