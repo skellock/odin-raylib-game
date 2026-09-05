@@ -68,7 +68,7 @@ dot_update_size :: proc(self: ^Dot, dt: f32) {
 	big := self.current_pos.x < f32(rl.GetRenderWidth() / 2)
 	to_size := f32(big ? BIG_DOT_SIZE : NORMAL_DOT_SIZE)
 
-	self.size = math.lerp(self.size, to_size, DOT_GROW_SPEED * dt)
+	self.size = math.lerp(self.size, to_size, clamp(DOT_GROW_SPEED * dt, 0.0, 1.0))
 }
 
 dot_move_location :: proc(self: ^Dot, pos: rl.Vector2) {

@@ -6,6 +6,30 @@ import "core:testing"
 import rl "vendor:raylib"
 
 @(test)
+dot_update_size_stays_between_start_and_target_test :: proc(t: ^testing.T) {
+	using main, testing
+
+	dot := dot_init()
+	defer dot_destroy(&dot)
+	center_x := f32(rl.GetRenderWidth() / 2)
+	deltas := [4]f32{0.0, 0.05, 0.2, 1.0}
+	shrink_sizes := [4]f32{20.0, 14.0, 8.0, 8.0}
+	grow_sizes := [4]f32{8.0, 14.0, 20.0, 20.0}
+
+	for dt, i in deltas {
+		dot.current_pos.x = center_x + 1
+		dot.size = BIG_DOT_SIZE
+		dot_update_size(&dot, dt)
+		expect_value(t, dot.size, shrink_sizes[i])
+
+		dot.current_pos.x = center_x - 1
+		dot.size = NORMAL_DOT_SIZE
+		dot_update_size(&dot, dt)
+		expect_value(t, dot.size, grow_sizes[i])
+	}
+}
+
+@(test)
 dot_cycle_color_test :: proc(t: ^testing.T) {
 	using main, testing
 
