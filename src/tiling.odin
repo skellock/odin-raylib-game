@@ -1,6 +1,7 @@
 package main
 
 import "core:log"
+import "core:strings"
 import "ldtk"
 import rl "vendor:raylib"
 
@@ -40,10 +41,9 @@ tiling_init :: proc() -> Tiling {
 	return tiling
 }
 
-@(private = "file")
-tiling_load_layer :: proc(instance: ldtk.Layer_Instance, level: ldtk.Level) -> TileLayer {
+tile_layer_init :: proc(instance: ldtk.Layer_Instance, level: ldtk.Level) -> TileLayer {
 	layer := TileLayer {
-		identifier   = instance.identifier,
+		identifier   = strings.clone(instance.identifier),
 		cols         = i32(instance.c_width),
 		rows         = i32(instance.c_height),
 		offset       = {f32(instance.px_total_offset_x), f32(instance.px_total_offset_y)},
@@ -77,6 +77,12 @@ tiling_load_layer :: proc(instance: ldtk.Layer_Instance, level: ldtk.Level) -> T
 	return layer
 }
 
+tile_layer_destroy :: proc(layer: ^TileLayer) {
+	delete(layer.identifier)
+	delete(layer.tiles)
+	delete(layer.collision_tiles)
+}
+
 tiling_load :: proc(self: ^Tiling) {
 	self.texture = rl.LoadTexture("tiles/Cavernas_by_Adam_Saltsman.png")
 
@@ -86,7 +92,7 @@ tiling_load :: proc(self: ^Tiling) {
 			for layer, idx in level.layer_instances {
 				switch layer.type {
 				case .IntGrid:
-					layer := tiling_load_layer(layer, level)
+					layer := tile_layer_init(layer, level)
 					self.layers[idx] = layer
 
 				case .Entities:
@@ -104,8 +110,7 @@ tiling_destroy :: proc(self: ^Tiling) {
 	rl.UnloadTexture(self.texture)
 
 	for &layer in self.layers {
-		delete(layer.tiles)
-		delete(layer.collision_tiles)
+		tile_layer_destroy(&layer)
 	}
 }
 
