@@ -4,7 +4,9 @@ import "core:fmt"
 import rl "vendor:raylib"
 
 Clock :: struct {
-	elapsed: f32, // seconds accumulated since the clock was started
+	elapsed:     f32, // seconds accumulated since the clock was started
+	text:        TextCache,
+	text_tenths: int,
 }
 
 clock_init :: proc() -> Clock {
@@ -31,7 +33,15 @@ clock_format_elapsed :: proc(elapsed: f32, buf: []byte) -> string {
 	return fmt.bprintf(buf, "%d.%d", seconds, tenths)
 }
 
-clock_draw :: proc(self: Clock) {
+clock_cache_text :: proc(clock: ^Clock) {
+	tenths := int(clock.elapsed * 10)
+	if clock.text.length > 0 && clock.text_tenths == tenths { return }
+	buf: [32]byte
+	text_cache_set(&clock.text, clock_format_elapsed(clock.elapsed, buf[:]))
+	clock.text_tenths = tenths
+}
+
+clock_draw :: proc(game: ^Game) {
 	FONT_SIZE :: f32(24)
 	FONT_SPACING :: f32(2)
 	EDGE_OFFSET :: f32(8) // gap between screen edge and the box
@@ -43,12 +53,13 @@ clock_draw :: proc(self: Clock) {
 	BOX_SEGMENTS :: i32(8)
 
 	// create the text
-	buf: [32]byte
-	text := fmt.ctprintf("%s", clock_format_elapsed(self.elapsed, buf[:]))
+	clock := &game.clock
+	clock_cache_text(clock)
+	text := text_cache_cstring(&clock.text)
 
 	// measure it
 	font := assets.fonts.body
-	text_size := rl.MeasureTextEx(font, text, FONT_SIZE, FONT_SPACING)
+	text_size := text_cache_measure(&clock.text, font, FONT_SIZE, FONT_SPACING)
 	tw := text_size.x
 	th := text_size.y
 

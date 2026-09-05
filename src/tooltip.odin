@@ -4,8 +4,9 @@ import "core:fmt"
 import rl "vendor:raylib"
 
 Tooltip :: struct {
-	text_buf: [256]byte,
-	text_len: int,
+	text:     TextCache,
+	card:     Card,
+	has_card: bool,
 	pos:      rl.Vector2,
 	alpha:    f32,
 	delay:    f32,
@@ -18,8 +19,8 @@ tooltip_update :: proc(game: ^Game, mouse: Mouse) {
 	tooltip_update_alpha(game, rl.GetFrameTime())
 }
 
-tooltip_draw :: proc(game: Game) {
-	tooltip := game.tooltip
+tooltip_draw :: proc(game: ^Game) {
+	tooltip := &game.tooltip
 	if tooltip.alpha <= 0 { return }
 
 	FONT_SIZE :: f32(16)
@@ -29,10 +30,10 @@ tooltip_draw :: proc(game: Game) {
 	font := assets.fonts.body
 
 	// make a cstring for the raylib text
-	text := fmt.ctprintf("%s", tooltip.text_buf[:tooltip.text_len])
+	text := text_cache_cstring(&tooltip.text)
 
 	// calculate text size
-	text_size := rl.MeasureTextEx(font, text, FONT_SIZE, SPACING)
+	text_size := text_cache_measure(&tooltip.text, font, FONT_SIZE, SPACING)
 
 	// the background
 	bg_rect := rl.Rectangle {
@@ -84,7 +85,7 @@ tooltip_update_text :: proc(game: ^Game) {
 	if game.hovered_card < 0 { return }
 
 	card := game.card_views[game.hovered_card].card
-	tooltip_set_text(&game.tooltip, fmt.tprintf("%v of %vs", card.pip, card.suit))
+	tooltip_cache_card(&game.tooltip, card)
 }
 
 @(private = "file")
@@ -93,10 +94,13 @@ tooltip_update_position :: proc(game: ^Game, mouse_pos: rl.Vector2) {
 	game.tooltip.pos = mouse_pos + OFFSET
 }
 
-@(private = "file")
-tooltip_set_text :: proc(tooltip: ^Tooltip, text: string) {
+tooltip_cache_card :: proc(tooltip: ^Tooltip, card: Card) {
+	// Keep the tooltip visible even when its text is already cached.
 	tooltip.alpha = 1.0
 	tooltip.delay = 0
-	tooltip.text_len = min(len(text), len(tooltip.text_buf))
-	copy(tooltip.text_buf[:tooltip.text_len], text[:tooltip.text_len])
+	if tooltip.has_card && tooltip.card == card { return }
+	buf: [256]byte
+	text_cache_set(&tooltip.text, fmt.bprintf(buf[:], "%v of %vs", card.pip, card.suit))
+	tooltip.card = card
+	tooltip.has_card = true
 }

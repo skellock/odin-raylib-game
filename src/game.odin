@@ -4,6 +4,7 @@ import rl "vendor:raylib"
 
 Game :: struct {
 	clock:        Clock,
+	debug:        Debug,
 	actions:      Actions,
 	dot:          Dot,
 	camera:       rl.Camera2D,

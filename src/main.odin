@@ -132,10 +132,10 @@ main :: proc() {
 			poker_odds_draw(game)
 			dot_draw(game.dot, !game.console.active)
 			reshuffler_draw(game.reshuffler)
-			tooltip_draw(game)
-			clock_draw(game.clock)
+			tooltip_draw(&game)
+			clock_draw(&game)
 			if game.paused { pause_draw() }
-			debug_draw()
+			debug_draw(&game)
 			cursor_draw(game)
 			console_draw(game.console)
 		}
