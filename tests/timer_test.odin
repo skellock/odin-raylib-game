@@ -60,9 +60,35 @@ timer_update_multi_wraps_test :: proc(t: ^testing.T) {
 
 	timer := timer_init(1.0)
 	timer.active = true
-	timer_update(&timer, 1.3)
+	timer_update(&timer, 2.3)
 	expect_value(t, timer.active, true)
 	expect(t, timer.elapsed > 0.29 && timer.elapsed < 0.31, "expected elapsed ~0.3")
+}
+
+@(test)
+timer_update_exact_multiple_test :: proc(t: ^testing.T) {
+	using main, testing
+
+	timer := timer_init(0.5)
+	timer_start(&timer)
+	timer_update(&timer, 0.25)
+	timer_update(&timer, 1.25)
+	expect_value(t, timer.elapsed, f32(0.0))
+	expect_value(t, timer.active, true)
+}
+
+@(test)
+timer_update_nonpositive_duration_test :: proc(t: ^testing.T) {
+	using main, testing
+
+	durations := [2]f32{0.0, -1.0}
+	for duration in durations {
+		timer := timer_init(duration)
+		timer_start(&timer)
+		timer_update(&timer, 0.5)
+		expect_value(t, timer.elapsed, f32(0.0))
+		expect_value(t, timer.active, false)
+	}
 }
 
 @(test)

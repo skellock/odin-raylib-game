@@ -1,5 +1,7 @@
 package main
 
+import "core:math"
+
 Timer :: struct {
 	elapsed:  f32,
 	duration: f32,
@@ -20,13 +22,18 @@ timer_start :: proc(timer: ^Timer) {
 timer_update :: proc(timer: ^Timer, dt: f32) {
 	if !timer.active { return }
 	if timer.paused { return }
+	if timer.duration <= 0 {
+		timer.active = false
+		timer.elapsed = 0
+		return
+	}
 	timer.elapsed += dt
 	if timer.elapsed >= timer.duration {
 		if timer.one_shot {
 			timer.active = false
 			timer.elapsed = timer.duration
 		} else {
-			timer.elapsed -= timer.duration
+			timer.elapsed = math.mod(timer.elapsed, timer.duration)
 		}
 	}
 }
