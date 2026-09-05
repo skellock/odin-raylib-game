@@ -6,6 +6,53 @@ import "core:strings"
 import "core:testing"
 
 @(test)
+console_update_limits_input_test :: proc(t: ^testing.T) {
+	using main, testing
+
+	console := console_init()
+	defer console_destroy(&console)
+	console.active = true
+	input: [CONSOLE_MAX_CHARS * 2]byte
+	for &ch in input { ch = 'x' }
+	actions: Actions
+	actions.console.typed = string(input[:CONSOLE_MAX_CHARS - 1])
+	console_update(&console, actions, Mouse{})
+	actions.console.typed = "abc"
+	console_update(&console, actions, Mouse{})
+	value := console_get_value(console)
+	expect_value(t, len(value), CONSOLE_MAX_CHARS)
+	expect_value(t, value[CONSOLE_MAX_CHARS - 1], u8('a'))
+	console_update(&console, actions, Mouse{})
+	expect_value(t, len(console_get_value(console)), CONSOLE_MAX_CHARS)
+
+	console_clear(&console)
+	actions.console.typed = string(input[:])
+	console_update(&console, actions, Mouse{})
+	expect_value(t, console_get_value(console), string(input[:CONSOLE_MAX_CHARS]))
+}
+
+@(test)
+console_update_backspace_makes_room_at_limit_test :: proc(t: ^testing.T) {
+	using main, testing
+
+	console := console_init()
+	defer console_destroy(&console)
+	console.active = true
+	input: [CONSOLE_MAX_CHARS]byte
+	for &ch in input { ch = 'x' }
+	actions: Actions
+	actions.console.typed = string(input[:])
+	console_update(&console, actions, Mouse{})
+	actions.console.backspace = true
+	actions.console.typed = "yz"
+	console_update(&console, actions, Mouse{})
+	value := console_get_value(console)
+	expect_value(t, len(value), CONSOLE_MAX_CHARS)
+	expect_value(t, value[:CONSOLE_MAX_CHARS - 1], string(input[:CONSOLE_MAX_CHARS - 1]))
+	expect_value(t, value[CONSOLE_MAX_CHARS - 1], u8('y'))
+}
+
+@(test)
 console_update_backspace_test :: proc(t: ^testing.T) {
 	using main, testing
 

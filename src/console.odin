@@ -81,7 +81,12 @@ console_update :: proc(self: ^Console, actions: Actions, mouse: Mouse) {
 	// Don't gather input on the same frame of showing. This prevents the slash character
 	// from showing up when we use it to active the console.
 	if !ca.show {
-		strings.write_string(&c.builder, ca.typed)
+		// Keyboard input is ASCII, so each byte is one console character.
+		remaining := max(CONSOLE_MAX_CHARS - len(c.builder.buf), 0)
+		count := min(len(ca.typed), remaining)
+		if count > 0 {
+			strings.write_string(&c.builder, ca.typed[:count])
+		}
 	}
 }
 
