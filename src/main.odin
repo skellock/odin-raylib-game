@@ -30,8 +30,7 @@ main :: proc() {
 	}
 
 	// setup raylib
-	rl.SetTraceLogLevel(.NONE)
-	// rl.SetConfigFlags({.MSAA_4X_HINT})
+	rl.SetTraceLogLevel(.WARNING)
 	rl.SetConfigFlags({.MSAA_4X_HINT, .WINDOW_HIGHDPI})
 	rl.SetTargetFPS(144)
 
@@ -45,6 +44,20 @@ main :: proc() {
 	WINDOW_HEIGHT :: i32(1080)
 	rl.InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Game")
 	defer rl.CloseWindow()
+
+	// An oversized window can start off-screen; fit and center it on the monitor.
+	monitor := rl.GetCurrentMonitor()
+	monitor_pos := rl.GetMonitorPosition(monitor)
+	monitor_width := rl.GetMonitorWidth(monitor)
+	monitor_height := rl.GetMonitorHeight(monitor)
+	window_width := min(WINDOW_WIDTH, monitor_width * 9 / 10)
+	window_height := min(WINDOW_HEIGHT, monitor_height * 9 / 10)
+	rl.SetWindowPosition(i32(monitor_pos.x), i32(monitor_pos.y))
+	rl.SetWindowSize(window_width, window_height)
+	rl.SetWindowPosition(
+		i32(monitor_pos.x) + (monitor_width - window_width) / 2,
+		i32(monitor_pos.y) + (monitor_height - window_height) / 2,
+	)
 
 	// configure raylib settings that should be set after window initialization
 	rl.SetExitKey(.KEY_NULL)
